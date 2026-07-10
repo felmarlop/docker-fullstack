@@ -5,4 +5,10 @@ FROM python:3.13-slim
 # Set the default working folder
 WORKDIR /app
 
-CMD ["python", "--version"]
+# Host: backend/requirements.txt
+# Container /app/requirements.txt
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["bash", "-c", "echo 'Backend container started'; python --version; sleep infinity"]

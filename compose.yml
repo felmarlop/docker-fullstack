@@ -1,0 +1,14 @@
+services:
+  backend:
+    image: docker-fullstack-backend:dev
+
+    build:
+      # Send the content in /backend to daemon
+      context: ./backend
+      
+    container_name: backend
+
+    volumes:
+      # Host: /backend
+      # Container: /app (defined in Dockerfile)
+      - ./backend:/app
