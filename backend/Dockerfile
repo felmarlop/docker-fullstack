@@ -2,6 +2,10 @@
 # Most common option, only needed requirements and excellent compatibility.
 FROM python:3.13-slim
 
+# Python best practices
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
 # Set the default working folder
 WORKDIR /app
 
@@ -11,4 +15,6 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["bash", "-c", "echo 'Backend container started'; python --version; sleep infinity"]
+WORKDIR /app/src
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

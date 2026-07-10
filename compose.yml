@@ -1,11 +1,13 @@
 services:
   backend:
+    ports:
+      - "8010:8000"
     image: docker-fullstack-backend:dev
 
     build:
       # Send the content in /backend to daemon
       context: ./backend
-      
+
     container_name: backend
 
     volumes:
