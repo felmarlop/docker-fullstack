@@ -19,7 +19,7 @@ The boilerplate is developed incrementally, following modern best practices for 
 Clone the repository and start the development environment.
 
 ```bash
-git clone ...
+git clone https://github.com/felmarlop/docker-fullstack.git
 
 cd docker-fullstack
 
