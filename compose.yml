@@ -1,7 +1,9 @@
 services:
   backend:
     image: docker-fullstack-backend:dev
-    container_name: backend
+    container_name: docker-fullstack-backend
+
+    restart: unless-stopped
 
     build:
       # Send the content in /backend to daemon
@@ -11,7 +13,8 @@ services:
       - "${BACKEND_PORT}:8000"
 
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
     volumes:
       # Host: /backend
@@ -20,7 +23,9 @@ services:
   
   postgres:
     image: postgres:17
-    container_name: postgres
+    container_name: docker-fullstack-postgres
+
+    restart: unless-stopped
 
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -32,6 +37,22 @@ services:
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      # Check whether PostgreSQL is ready
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+
+      # Check every 5 seconds
+      interval: 5s
+
+      # Maximum time for each check
+      timeout: 5s
+
+      # Retry 5 times
+      retries: 5
+
+      # Grace period while PostgreSQL starts
+      start_period: 10s
   
 volumes:
   postgres_data:
