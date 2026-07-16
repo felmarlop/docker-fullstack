@@ -5,6 +5,8 @@
 # --
 
 COMPOSE = docker compose --env-file backend/.env
+BACKEND = $(COMPOSE) exec backend
+
 .PHONY: \
 	help \
 	up \
@@ -29,9 +31,6 @@ help:
 up:
 	$(COMPOSE) up
 
-shell:
-	$(COMPOSE) exec backend bash
-
 rebuild:
 	$(COMPOSE) up --build
 
@@ -39,3 +38,14 @@ down:
 	$(COMPOSE) down
 
 restart: down up
+
+shell:
+	$(BACKEND) bash
+
+lint:
+	$(BACKEND) ruff check .
+	$(BACKEND) ruff format . --check
+
+lint-fix:
+	$(BACKEND) ruff check . --fix
+	$(BACKEND) ruff format .

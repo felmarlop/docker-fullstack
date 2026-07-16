@@ -1,4 +1,3 @@
-
 from rest_framework.serializers import ModelSerializer as BaseModelSerializer
 
 from app.authentication.models import User
@@ -15,4 +14,6 @@ class UserSerializer(BaseModelSerializer):
             "id",
             "username",
             "email",
+            "is_staff",
+            "is_superuser",
         )
