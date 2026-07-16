@@ -38,15 +38,16 @@ docker-fullstack/
 └── README.md
 ```
 
-## 📌 Important versions
+## 📌 Supported versions
 
 | Component      | Version |
 | -------------- | ------- |
-| Docker Engine  | >= 29   |
-| Docker Compose | >= 5    |
+| Docker Engine  | 29.3    |
+| Docker Compose | 5.1     |
 | Python         | 3.13    |
 | Django         | 5.2     |
 | PostgreSQL     | 17      |
+| Ruff           | 0.15.20 |
 
 ## ✨ Features
 

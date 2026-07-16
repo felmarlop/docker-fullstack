@@ -1,7 +1,7 @@
 services:
   backend:
-    image: docker-fullstack-backend:dev
-    container_name: docker-fullstack-backend
+    image: ${COMPOSE_PROJECT_NAME}-backend:dev
+    container_name: ${COMPOSE_PROJECT_NAME}-backend
 
     restart: unless-stopped
 
@@ -23,7 +23,7 @@ services:
   
   postgres:
     image: postgres:17
-    container_name: docker-fullstack-postgres
+    container_name: ${COMPOSE_PROJECT_NAME}-postgres
 
     restart: unless-stopped
 
