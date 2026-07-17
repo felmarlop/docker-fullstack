@@ -15,11 +15,11 @@ Available authentication endpoints:
 
 ## Django Admin
 
-- Create a superuser
+Create a superuser:
 
 ```bash
 make shell
-python manage.py createsuperuser
+>> python manage.py createsuperuser
 ```
 
 Then access the Django Admin at:
