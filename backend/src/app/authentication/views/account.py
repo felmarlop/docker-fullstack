@@ -1,3 +1,7 @@
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView as BaseTokenObtainPairView,
 )
@@ -5,7 +9,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView as BaseTokenRefreshView,
 )
 
-from app.authentication.serializers.account import LoginSerializer
+from app.authentication.serializers.account import LoginSerializer, LogoutSerializer
 
 
 class LoginView(BaseTokenObtainPairView):
@@ -22,3 +26,18 @@ class RefreshTokenView(BaseTokenRefreshView):
     """
 
     pass
+
+
+class LogoutView(APIView):
+    """
+    Logout the user by invalidating the refresh token.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = LogoutSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
