@@ -9,7 +9,11 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView as BaseTokenRefreshView,
 )
 
-from app.authentication.serializers.account import LoginSerializer, LogoutSerializer
+from app.authentication.serializers.account import (
+    ChangePasswordSerializer,
+    LoginSerializer,
+    LogoutSerializer,
+)
 
 
 class LoginView(BaseTokenObtainPairView):
@@ -26,6 +30,24 @@ class RefreshTokenView(BaseTokenRefreshView):
     """
 
     pass
+
+
+class ChangePasswordView(APIView):
+    """
+    Change the authenticated user's password.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(
+            data=request.data,
+            context={"request": request},
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LogoutView(APIView):
