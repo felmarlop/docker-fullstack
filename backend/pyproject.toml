@@ -37,6 +37,9 @@ select = [
     # Annotations
     "ANN",
 ]
+ignore = [
+    "ANN401",
+]
 
 [tool.ruff.format]
 quote-style = "double"

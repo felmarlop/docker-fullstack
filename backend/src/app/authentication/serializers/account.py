@@ -51,7 +51,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         validate_password(attrs["new_password"], user)
         return attrs
 
-    def save(self, **kwargs) -> None:  # noqa
+    def save(self, **kwargs: Any) -> None:  # noqa: ARG002
         user = self.context["request"].user
         pwd = self.validated_data["new_password"]  # type: ignore
         user.set_password(pwd)
@@ -65,7 +65,7 @@ class LogoutSerializer(serializers.Serializer):
 
     refresh = serializers.CharField(write_only=True)
 
-    def save(self, **kwargs) -> None:  # noqa
+    def save(self, **kwargs: Any) -> None:  # noqa: ARG002
         refresh = self.validated_data["refresh"]  # type: ignore
 
         try:
