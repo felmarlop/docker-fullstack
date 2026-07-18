@@ -1,70 +1,112 @@
 # Backend
 
-This project contains the Django backend built with Django REST Framework.
+Django backend application built with **Django REST Framework**.
 
-## Authentication
+This service provides the REST API, authentication layer, business logic and database integration.
 
-The API uses JWT authentication with access and refresh tokens.
+## 🔐 Authentication
+
+The API uses **JWT authentication** with access and refresh tokens.
 
 Available authentication endpoints:
 
-- `/api/auth/login/`
-- `/api/auth/refresh/`
-- `/api/auth/change-password/`
-- `/api/auth/logout/`
+| Endpoint                     | Description                      |
+| ---------------------------- | -------------------------------- |
+| `/api/auth/login/`           | Obtain access and refresh tokens |
+| `/api/auth/refresh/`         | Refresh access token             |
+| `/api/auth/change-password/` | Change user password             |
+| `/api/auth/logout/`          | Invalidate refresh token         |
 
-## Django Admin
+## 🛠️ Django Admin
 
 Create a superuser:
 
 ```bash
 make shell
->> python manage.py createsuperuser
+
+python manage.py createsuperuser
 ```
 
-Then access the Django Admin at:
+Access the administration panel:
 
-```
+```text
 /admin/
 ```
 
-## Development
+## 🛠️ Development
 
-### Code quality
+### Code Quality
 
-- Ruff is used for linting, formatting and import sorting.
-- Pyright is used for static type checking.
-- Run all quality checks before pushing changes.
-  ```
-  make lint
-  make type-check
-  ```
+The project uses:
 
-### Type hints
+- **Ruff** for linting, formatting and import sorting.
+- **Pyright** for static type checking.
 
-- Type all function arguments.
-- Type all return values.
-- Use modern Python type hints.
-- Prefer `dict[str, Any]` over `Dict[str, Any]`.
-- Prefer `list[str]` over `List[str]`.
-- Use `Any` only when the type is genuinely unknown or represents arbitrary data.
-- Avoid `cast()` unless there is no cleaner solution.
-- Avoid `pyright: ignore[...]` except for documented false positives in third-party libraries.
+Run quality checks:
 
-### Code style
-
-- Ruff is used for linting, formatting and import sorting.
-- Follow the configured Ruff rules and formatting.
-- Use absolute imports (for example, `app.authentication.serializers.user`).
-
-### Testing
-
-- Pytest is used for all backend tests.
-- Reuse shared fixtures from the global `conftest.py`.
-- Prefer one test per behavior.
-
-Run the test suite with:
-
+```bash
+make lint
+make type-check
 ```
+
+---
+
+### Type Hints
+
+Follow modern Python typing practices:
+
+- Type all function arguments and return values.
+- Prefer built-in generic types:
+
+```python
+list[str]
+dict[str, Any]
+```
+
+instead of:
+
+```python
+List[str]
+Dict[str, Any]
+```
+
+Additional guidelines:
+
+- Use `Any` only when the type is genuinely unknown.
+- Avoid `cast()` unless necessary.
+- Avoid `pyright: ignore[...]` unless documenting a verified false positive.
+
+---
+
+### Code Style
+
+The project follows the configured Ruff rules.
+
+Guidelines:
+
+- Use absolute imports.
+
+Example:
+
+```python
+from app.authentication.serializers.user import UserSerializer
+```
+
+- Keep imports sorted automatically with Ruff.
+- Prefer explicit and readable code.
+
+## ✅ Testing
+
+The backend uses **Pytest** for automated testing.
+
+Guidelines:
+
+- Reuse shared fixtures from `conftest.py`.
+- Prefer one test per behavior.
+- Keep tests focused and maintainable.
+
+Run the test suite:
+
+```bash
 make test
 ```

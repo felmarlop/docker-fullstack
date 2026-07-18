@@ -1,44 +1,111 @@
-# Docker Fullstack Boilerplate
+# 🚀 Docker Fullstack Boilerplate
+
+[![Python](https://img.shields.io/badge/python-3.13-blue.svg)]()
+[![Django](https://img.shields.io/badge/django-5.2-green.svg)]()
+[![PostgreSQL](https://img.shields.io/badge/postgresql-17-blue.svg)]()
+[![Docker](https://img.shields.io/badge/docker-compose-blue.svg)]()
+
+A modern full-stack boilerplate for building Django applications with Docker, Django REST Framework and Nuxt.
+
+The goal of this project is to provide a clean, reusable and scalable foundation for future applications, following modern development practices and software architecture principles.
 
 ## 📖 Overview
 
-Docker Fullstack Boilerplate is a professional starting point for modern Django applications.
+Docker Fullstack Boilerplate is developed incrementally with a focus on:
 
-The goal of this project is to provide a clean, reusable and production-ready foundation for future Django applications.
+- Containerized development workflows
+- Clean backend architecture
+- Modern frontend integration
+- Automated code quality checks
+- Production-oriented configuration
 
-The boilerplate is developed incrementally, following modern best practices for Docker, Django and software architecture.
+The project provides a complete foundation including backend, frontend and infrastructure services.
+
+### Architecture
+
+```mermaid
+flowchart LR
+
+    Browser[Browser]
+
+    Browser --> Nginx[Nginx Reverse Proxy]
+
+    Nginx --> Frontend[Nuxt Frontend]
+    Nginx --> Backend[Django REST Framework API]
+
+    Backend --> Database[(PostgreSQL)]
+    Backend --> Redis[(Redis)]
+
+    Redis --> Celery[Celery Worker]
+```
+
+## 🛠️ Tech Stack
+
+### Backend
+
+- Python 3.13
+- Django 5.2
+- Django REST Framework
+- PostgreSQL
+- Redis
+- Celery
+
+### Frontend
+
+- Vue 3
+- Nuxt
+
+### Infrastructure
+
+- Docker
+- Docker Compose
+- Nginx
+- Makefile
+
+### Development Tools
+
+- Ruff
+- Pyright
+- Pytest
+
+## 📂 Project Structure
+
+```text
+.
+├── backend/
+├── frontend/
+├── nginx/
+├── compose.dev.yml
+├── compose.prod.yml
+├── Makefile
+└── README.md
+```
 
 ## ⚙️ Requirements
+
+Before starting, make sure you have installed:
 
 - Docker Engine
 - Docker Compose v2
 - Git
 
-## 🚀 Getting started
+## 🚀 Getting Started
 
-Clone the repository and start the development environment.
+Clone the repository:
 
 ```bash
 git clone https://github.com/felmarlop/docker-fullstack.git
 
 cd docker-fullstack
+```
 
+Build the development environment:
+
+```bash
 make build
 ```
 
-## 📂 Project structure
-
-```
-docker-fullstack/
-
-├── backend/
-├── frontend/
-├── compose.yml
-├── Makefile
-└── README.md
-```
-
-## 📌 Supported versions
+## 📌 Supported Versions
 
 | Component      | Version |
 | -------------- | ------- |
@@ -52,12 +119,32 @@ docker-fullstack/
 ## ✨ Features
 
 - Docker Compose development environment
-- Django backend
+- Django REST Framework backend
+- Nuxt frontend integration
 - PostgreSQL database
+- Redis service
+- Celery background workers
 - Environment-based configuration
 - Persistent database storage
 - PostgreSQL health checks
-- Makefile shortcuts
+- Makefile development commands
+- Automated linting and type checking
+
+## 🧰 Commands
+
+The project provides a set of Makefile shortcuts to manage the development environment.
+
+| Command           | Description                                 |
+| ----------------- | ------------------------------------------- |
+| `make start`      | Start the containers                        |
+| `make stop`       | Stop the containers                         |
+| `make restart`    | Restart the containers                      |
+| `make build`      | Rebuild the images and start the containers |
+| `make shell`      | Open a shell in the backend container       |
+| `make lint`       | Check code formatting and linting with Ruff |
+| `make lint-fix`   | Apply Ruff formatting and lint fixes        |
+| `make test`       | Run the test suite                          |
+| `make type-check` | Run Pyright static type checking            |
 
 ## 📄 License
 
