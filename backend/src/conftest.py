@@ -6,7 +6,7 @@ from app.authentication.models import User
 
 
 @pytest.fixture
-def user():
+def user() -> User:
     return User.objects.create_user(
         username="fmartin",
         email="fmartin@test.com",
@@ -15,16 +15,14 @@ def user():
 
 
 @pytest.fixture
-def public_api_client():
+def public_api_client() -> APIClient:
     return APIClient()
 
 
 @pytest.fixture
-def authenticated_api_client(user):
+def authenticated_api_client(user: User) -> APIClient:
     client = APIClient()
     refresh = RefreshToken.for_user(user)
-    client.credentials(
-        HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}"
-    )
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
 
     return client

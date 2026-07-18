@@ -23,7 +23,7 @@ git clone https://github.com/felmarlop/docker-fullstack.git
 
 cd docker-fullstack
 
-make rebuild
+make build
 ```
 
 ## 📂 Project structure

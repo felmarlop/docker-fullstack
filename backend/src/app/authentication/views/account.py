@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import (
@@ -37,9 +38,9 @@ class ChangePasswordView(APIView):
     Change the authenticated user's password.
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # noqa
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = ChangePasswordSerializer(
             data=request.data,
             context={"request": request},
@@ -55,9 +56,9 @@ class LogoutView(APIView):
     Logout the user by invalidating the refresh token.
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # noqa
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = LogoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

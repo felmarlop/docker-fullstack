@@ -4,9 +4,38 @@ target-version = "py313"
 
 [tool.ruff.lint]
 select = [
+    # pycodestyle
     "E",
+
+    # Pyflakes
     "F",
+
+    # isort
     "I",
+
+    # flake8-bugbear
+    "B",
+
+    # flake8-comprehensions
+    "C4",
+
+    # pyupgrade
+    "UP",
+
+    # flake8-simplify
+    "SIM",
+
+    # flake8-return
+    "RET",
+
+    # flake8-unused-arguments
+    "ARG",
+
+    # Ruff-specific rules
+    "RUF",
+
+    # Annotations
+    "ANN",
 ]
 
 [tool.ruff.format]
@@ -16,4 +45,22 @@ line-ending = "lf"
 skip-magic-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
-"**/migrations/*.py" = ["E501"]
+"**/migrations/*.py" = [
+    "E501",
+    "RUF012",
+]
+
+[tool.pyright]
+pythonVersion = "3.13"
+typeCheckingMode = "standard"
+
+include = ["src"]
+
+exclude = [
+    "**/__pycache__",
+    "**/migrations",
+    "**/tests**/",
+    "**/admin.py",
+]
+
+reportMissingTypeStubs = "none"

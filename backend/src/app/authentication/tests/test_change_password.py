@@ -1,10 +1,15 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APIClient
+
+from app.authentication.models import User
 
 
 @pytest.mark.django_db
-def test_change_password_success(authenticated_api_client, public_api_client, user):
+def test_change_password_success(
+    authenticated_api_client: APIClient, public_api_client: APIClient, user: User
+) -> None:
     response = authenticated_api_client.post(
         reverse("change-password"),
         {
@@ -29,7 +34,9 @@ def test_change_password_success(authenticated_api_client, public_api_client, us
 
 
 @pytest.mark.django_db
-def test_change_password_invalid_old_password(authenticated_api_client):
+def test_change_password_invalid_old_password(
+    authenticated_api_client: APIClient,
+) -> None:
     response = authenticated_api_client.post(
         reverse("change-password"),
         {
@@ -45,7 +52,9 @@ def test_change_password_invalid_old_password(authenticated_api_client):
 
 
 @pytest.mark.django_db
-def test_change_password_invalid_new_password(authenticated_api_client):
+def test_change_password_invalid_new_password(
+    authenticated_api_client: APIClient,
+) -> None:
     response = authenticated_api_client.post(
         reverse("change-password"),
         {
@@ -59,7 +68,7 @@ def test_change_password_invalid_new_password(authenticated_api_client):
 
 
 @pytest.mark.django_db
-def test_change_password_same_new_password(authenticated_api_client):
+def test_change_password_same_new_password(authenticated_api_client: APIClient) -> None:
     response = authenticated_api_client.post(
         reverse("change-password"),
         {
@@ -75,7 +84,7 @@ def test_change_password_same_new_password(authenticated_api_client):
 
 
 @pytest.mark.django_db
-def test_change_password_requires_authentication(public_api_client):
+def test_change_password_requires_authentication(public_api_client: APIClient) -> None:
     response = public_api_client.post(
         reverse("change-password"),
         {

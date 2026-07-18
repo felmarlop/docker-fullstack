@@ -1,10 +1,13 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APIClient
+
+from app.authentication.models import User
 
 
 @pytest.mark.django_db
-def test_login_success(public_api_client, user):
+def test_login_success(public_api_client: APIClient, user: User) -> None:
     response = public_api_client.post(
         reverse("login"),
         {
@@ -26,7 +29,7 @@ def test_login_success(public_api_client, user):
 
 
 @pytest.mark.django_db
-def test_login_invalid_password(public_api_client, user):
+def test_login_invalid_password(public_api_client: APIClient, user: User) -> None:
     response = public_api_client.post(
         reverse("login"),
         {

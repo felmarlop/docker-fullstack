@@ -9,6 +9,11 @@ ENV PYTHONUNBUFFERED=1
 # Set the default working folder
 WORKDIR /app
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libatomic1 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Host: backend/requirements.txt
 # Container /app/requirements.txt
 COPY requirements.txt .

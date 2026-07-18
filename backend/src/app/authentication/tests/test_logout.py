@@ -1,11 +1,14 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from app.authentication.models import User
 
 
 @pytest.mark.django_db
-def test_logout_success(authenticated_api_client, user):
+def test_logout_success(authenticated_api_client: APIClient, user: User) -> None:
     refresh = str(RefreshToken.for_user(user))
     response = authenticated_api_client.post(
         reverse("logout"),
@@ -19,7 +22,7 @@ def test_logout_success(authenticated_api_client, user):
 
 
 @pytest.mark.django_db
-def test_logout_invalid_refresh(authenticated_api_client):
+def test_logout_invalid_refresh(authenticated_api_client: APIClient) -> None:
     response = authenticated_api_client.post(
         reverse("logout"),
         {
@@ -34,7 +37,9 @@ def test_logout_invalid_refresh(authenticated_api_client):
 
 
 @pytest.mark.django_db
-def test_logout_requires_authentication(public_api_client, user):
+def test_logout_requires_authentication(
+    public_api_client: APIClient, user: User
+) -> None:
     refresh = str(RefreshToken.for_user(user))
     response = public_api_client.post(
         reverse("logout"),
@@ -49,8 +54,8 @@ def test_logout_requires_authentication(public_api_client, user):
 
 @pytest.mark.django_db
 def test_logout_blacklists_refresh_token(
-    authenticated_api_client, public_api_client, user
-):
+    authenticated_api_client: APIClient, public_api_client: APIClient, user: User
+) -> None:
     refresh = str(RefreshToken.for_user(user))
     response = authenticated_api_client.post(
         reverse("logout"),

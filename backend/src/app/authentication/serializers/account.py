@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
@@ -14,10 +16,9 @@ class LoginSerializer(BaseTokenObtainPairSerializer):
     Authenticate a user and return JWT tokens.
     """
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         data = super().validate(attrs)
-        data["user"] = UserSerializer(self.user).data
-        return data
+        return {**data, "user": UserSerializer(self.user).data}
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -28,7 +29,7 @@ class ChangePasswordSerializer(serializers.Serializer):
     current_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         user = self.context["request"].user
 
         if user.check_password(attrs["new_password"]):
@@ -39,7 +40,8 @@ class ChangePasswordSerializer(serializers.Serializer):
                     ],
                 }
             )
-        elif not user.check_password(attrs["current_password"]):
+
+        if not user.check_password(attrs["current_password"]):
             raise serializers.ValidationError(
                 {
                     "current_password": ["Current password is incorrect."],
@@ -49,9 +51,9 @@ class ChangePasswordSerializer(serializers.Serializer):
         validate_password(attrs["new_password"], user)
         return attrs
 
-    def save(self):
+    def save(self, **kwargs) -> None:  # noqa
         user = self.context["request"].user
-        pwd = self.validated_data["new_password"]
+        pwd = self.validated_data["new_password"]  # type: ignore
         user.set_password(pwd)
         user.save(update_fields=["password"])
 
@@ -63,8 +65,8 @@ class LogoutSerializer(serializers.Serializer):
 
     refresh = serializers.CharField(write_only=True)
 
-    def save(self):
-        refresh = self.validated_data["refresh"]
+    def save(self, **kwargs) -> None:  # noqa
+        refresh = self.validated_data["refresh"]  # type: ignore
 
         try:
             RefreshToken(refresh).blacklist()

@@ -8,7 +8,7 @@ class PingView(APIView):
     Simple endpoint used to verify that the API is running.
     """
 
-    def get(self, request):
+    def get(self) -> Response:
         return Response(
             {
                 "status": "ok",
