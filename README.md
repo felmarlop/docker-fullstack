@@ -97,7 +97,10 @@ Clone the repository:
 git clone https://github.com/felmarlop/docker-fullstack.git
 
 cd docker-fullstack
+cp .env.example .env
 ```
+
+Review the `.env` file and adjust the configuration to match your local environment if needed.
 
 Build the development environment:
 
@@ -145,6 +148,18 @@ The project provides a set of Makefile shortcuts to manage the development envir
 | `make lint-fix`   | Apply Ruff formatting and lint fixes        |
 | `make test`       | Run the test suite                          |
 | `make type-check` | Run Pyright static type checking            |
+
+## 🚦 Continuous Integration
+
+Every push and pull request automatically runs the backend quality checks using GitHub Actions.
+
+The CI pipeline executes:
+
+- **make lint**: Ruff (linting, formatting and import sorting)
+- **make type-check**: Pyright (static type checking)
+- **make test**: Pytest (test suite)
+
+The workflow uses the same Docker environment as local development, ensuring consistent behavior across local machines and CI.
 
 ## 📄 License
 

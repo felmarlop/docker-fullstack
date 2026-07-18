@@ -6,6 +6,8 @@
 
 COMPOSE = docker compose --env-file backend/.env
 BACKEND = $(COMPOSE) exec backend
+CI_COMPOSE = docker compose --env-file backend/.env.example
+CI_BACKEND = $(CI_COMPOSE) run --rm backend
 
 .PHONY: \
 	help \
@@ -59,3 +61,20 @@ test:
 
 type-check:
 	$(BACKEND) pyright
+
+# Continuous Integration commands (Github Actions)
+ci-build:
+	$(CI_COMPOSE) up -d --build
+
+ci-stop:
+	$(CI_COMPOSE) down
+
+ci-lint:
+	$(CI_BACKEND) ruff check .
+	$(CI_BACKEND) ruff format . --check
+
+ci-test:
+	$(CI_BACKEND) pytest
+
+ci-type-check:
+	$(CI_BACKEND) pyright

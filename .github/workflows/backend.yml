@@ -1,0 +1,42 @@
+name: Backend Continuous Integration
+
+on:
+  # Run the workflow manually in Github
+  workflow_dispatch:
+
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  backend:
+    name: Backend Quality
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Prepare environment
+        run: cp backend/.env.example backend/.env
+
+      - name: Build Docker images
+        run: make ci-build
+
+      - name: Run Ruff
+        run: make ci-lint
+
+      - name: Run Pyright
+        run: make ci-type-check
+
+      - name: Run Pytest
+        run: make ci-test
+
+      - name: Stop Docker containers
+        if: always()
+        run: make ci-stop
