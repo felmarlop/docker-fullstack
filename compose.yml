@@ -24,6 +24,27 @@ services:
       # Container: /app (defined in Dockerfile)
       - ./backend:/app
 
+  celery-worker:
+    image: ${COMPOSE_PROJECT_NAME}-backend:dev
+    container_name: ${COMPOSE_PROJECT_NAME}-celery
+
+    restart: unless-stopped
+
+    build:
+      context: ./backend
+
+    command: celery -A app worker --loglevel=info
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+    volumes:
+      - ./backend:/app
+
   postgres:
     image: postgres:17
     container_name: ${COMPOSE_PROJECT_NAME}-postgres
