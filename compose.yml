@@ -16,6 +16,9 @@ services:
       postgres:
         condition: service_healthy
 
+      redis:
+        condition: service_healthy
+
     volumes:
       # Host: /backend
       # Container: /app (defined in Dockerfile)
@@ -53,6 +56,21 @@ services:
 
       # Grace period while PostgreSQL starts
       start_period: 10s
+
+  redis:
+    image: redis:7.4.9-alpine
+    container_name: ${COMPOSE_PROJECT_NAME}-redis
+
+    restart: unless-stopped
+
+    ports:
+      - "${REDIS_HOST_PORT}:6379"
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:

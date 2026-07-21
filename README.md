@@ -125,7 +125,7 @@ make build
 - Django REST Framework backend
 - Nuxt frontend integration
 - PostgreSQL database
-- Redis service
+- Redis message broker
 - Celery background workers
 - Environment-based configuration
 - Persistent database storage
