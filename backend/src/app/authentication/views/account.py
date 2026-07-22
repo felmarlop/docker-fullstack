@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -17,11 +18,13 @@ from app.authentication.serializers.account import (
 )
 
 
+@extend_schema(
+    summary="Authenticate user",
+    description="Authenticate a user and return JWT tokens and user information",
+    request=LoginSerializer,
+    responses={200: LoginSerializer},
+)
 class LoginView(BaseTokenObtainPairView):
-    """
-    Authenticate a user and return JWT tokens and user information
-    """
-
     serializer_class = LoginSerializer
 
 
@@ -33,11 +36,12 @@ class RefreshTokenView(BaseTokenRefreshView):
     pass
 
 
+@extend_schema(
+    summary="Change password",
+    description="Change the authenticated user's password",
+    request=ChangePasswordSerializer,
+)
 class ChangePasswordView(APIView):
-    """
-    Change the authenticated user's password.
-    """
-
     permission_classes = [IsAuthenticated]  # noqa
 
     def post(self, request: Request) -> Response:
