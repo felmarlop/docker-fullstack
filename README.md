@@ -33,10 +33,12 @@ flowchart LR
     Nginx --> Frontend[Nuxt Frontend]
     Nginx --> Backend[Django REST Framework API]
 
-    Backend --> Database[(PostgreSQL)]
+    Backend --> PostgreSQL[(PostgreSQL)]
     Backend --> Redis[(Redis)]
 
     Redis --> Celery[Celery Worker]
+
+    Celery --> Email[Email Backend]
 ```
 
 ## 🛠️ Tech Stack
@@ -132,22 +134,37 @@ make build
 - PostgreSQL health checks
 - Makefile development commands
 - Automated linting and type checking
+- Console email backend for local development
+- Production-ready SMTP configuration
 
 ## 🧰 Commands
 
 The project provides a set of Makefile shortcuts to manage the development environment.
 
-| Command           | Description                                 |
-| ----------------- | ------------------------------------------- |
-| `make start`      | Start the containers                        |
-| `make stop`       | Stop the containers                         |
-| `make restart`    | Restart the containers                      |
-| `make build`      | Rebuild the images and start the containers |
-| `make shell`      | Open a shell in the backend container       |
-| `make lint`       | Check code formatting and linting with Ruff |
-| `make lint-fix`   | Apply Ruff formatting and lint fixes        |
-| `make test`       | Run the test suite                          |
-| `make type-check` | Run Pyright static type checking            |
+| Command              | Description                                 |
+| -------------------- | ------------------------------------------- |
+| `make start`         | Start the containers                        |
+| `make stop`          | Stop the containers                         |
+| `make restart`       | Restart the containers                      |
+| `make build`         | Rebuild the images and start the containers |
+| `make shell`         | Open a shell in the backend container       |
+| `make logs`          | Show general logs                           |
+| `make logs-backend`  | Show backend logs                           |
+| `make logs-worker`   | Show celery worker logs                     |
+| `make logs-postgres` | Show postgreSQL logs                        |
+| `make logs-redis`    | Show Redis logs                             |
+| `make lint`          | Check code formatting and linting with Ruff |
+| `make lint-fix`      | Apply Ruff formatting and lint fixes        |
+| `make test`          | Run the test suite                          |
+| `make type-check`    | Run Pyright static type checking            |
+
+## ⚡ Background Tasks
+
+The project includes Celery and Redis configured out of the box.
+
+Background jobs are executed by a dedicated Celery worker using Redis as the message broker.
+
+Password reset emails are processed asynchronously through Celery and Redis.
 
 ## 🚦 Continuous Integration
 

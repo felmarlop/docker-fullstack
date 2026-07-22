@@ -17,6 +17,8 @@ Available authentication endpoints:
 | `/api/auth/change-password/` | Change user password             |
 | `/api/auth/logout/`          | Invalidate refresh token         |
 
+Password reset emails are sent asynchronously using Celery.
+
 ## 🛠️ Django Admin
 
 Create a superuser:
@@ -33,7 +35,7 @@ Access the administration panel:
 /admin/
 ```
 
-## 🛠️ Development
+## 🛠️ Development Guidelines
 
 ### Code Quality
 
@@ -95,6 +97,12 @@ from app.authentication.serializers.user import UserSerializer
 - Keep imports sorted automatically with Ruff.
 - Prefer explicit and readable code.
 
+## ✉️ Email
+
+Development uses Django's Console Email Backend by default, so outgoing emails are printed in the Celery worker logs.
+
+Switching to SMTP in production only requires updating the email-related environment variables.
+
 ## ✅ Testing
 
 The backend uses **Pytest** for automated testing.
@@ -104,6 +112,7 @@ Guidelines:
 - Reuse shared fixtures from `conftest.py`.
 - Prefer one test per behavior.
 - Keep tests focused and maintainable.
+- The CI pipeline executes the same test suite inside Docker containers.
 
 Run the test suite:
 
