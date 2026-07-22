@@ -33,6 +33,8 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
 
+FRONTEND_URL = env("FRONTEND_URL", default="")  # pyright: ignore[reportArgumentType]
+
 ALLOWED_HOSTS = []
 
 
@@ -122,6 +124,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": env.int("PASSWORD_MIN_LENGTH", default=8),  # pyright: ignore[reportArgumentType]
+        },
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
@@ -156,17 +161,17 @@ CELERY_TIMEZONE = TIME_ZONE
 # Email
 EMAIL_BACKEND = env(
     "EMAIL_BACKEND",
-    default="django.core.mail.backends.console.EmailBackend",
+    default="django.core.mail.backends.console.EmailBackend",  # pyright: ignore[reportArgumentType]
 )
-EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
-EMAIL_PORT = env.int("EMAIL_PORT", default=587)
-EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
-EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
-EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", default=False)
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")  # pyright: ignore[reportArgumentType]
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)  # pyright: ignore[reportArgumentType]
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")  # pyright: ignore[reportArgumentType]
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")  # pyright: ignore[reportArgumentType]
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)  # pyright: ignore[reportArgumentType]
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", default=False)  # pyright: ignore[reportArgumentType]
 DEFAULT_FROM_EMAIL = env(
     "DEFAULT_FROM_EMAIL",
-    default="noreply@example.com",
+    default="noreply@example.com",  # pyright: ignore[reportArgumentType]
 )
 
 

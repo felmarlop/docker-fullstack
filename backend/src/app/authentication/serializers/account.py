@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.serializers import (
@@ -48,7 +49,15 @@ class ChangePasswordSerializer(serializers.Serializer):
                 }
             )
 
-        validate_password(attrs["new_password"], user)
+        try:
+            validate_password(attrs["new_password"], user)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(
+                {
+                    "new_password": exc.messages,
+                }
+            ) from exc
+
         return attrs
 
     def save(self, **kwargs: Any) -> None:  # noqa: ARG002
