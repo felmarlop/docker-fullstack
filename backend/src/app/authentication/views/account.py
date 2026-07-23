@@ -1,3 +1,6 @@
+import logging
+from typing import Any
+
 from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -17,6 +20,8 @@ from app.authentication.serializers.account import (
     LoginSerializer,
     LogoutSerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @extend_schema(
@@ -38,7 +43,12 @@ from app.authentication.serializers.account import (
 )
 class LoginView(BaseTokenObtainPairView):
     serializer_class = LoginSerializer
-    pass
+
+    def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        username = request.data.get("username")  # type: ignore
+        response = super().post(request, *args, **kwargs)
+        logger.info(f"User {username} authenticated successfully.")
+        return response
 
 
 @extend_schema(
@@ -89,7 +99,7 @@ class ChangePasswordView(APIView):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
+        logger.info(f"Password changed successfully for user {request.user.username}.")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -116,5 +126,5 @@ class LogoutView(APIView):
         serializer = LogoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
+        logger.info(f"User {request.user.username} logged out.")
         return Response(status=status.HTTP_204_NO_CONTENT)

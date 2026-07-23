@@ -1,6 +1,10 @@
+import logging
+
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -12,10 +16,16 @@ def send_reset_password_email(email: str, url: str) -> None:
         f"{url}\n\n"
         "If you didn't request this change, you can safely ignore this email."
     )
-    email_msg = EmailMultiAlternatives(
-        subject="Reset your password",
-        body=msg,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[email],
-    )
-    email_msg.send()
+    try:
+        email_msg = EmailMultiAlternatives(
+            subject="Reset your password",
+            body=msg,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[email],
+        )
+        email_msg.send()
+    except Exception:
+        logger.exception(f"Failed to send password reset email to {email}.")
+        raise
+
+

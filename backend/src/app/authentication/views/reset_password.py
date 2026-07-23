@@ -1,3 +1,5 @@
+import logging
+
 from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import status
 from rest_framework.request import Request
@@ -8,6 +10,8 @@ from app.authentication.serializers.reset_password import (
     ForgotPasswordSerializer,
     ResetPasswordSerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @extend_schema(
@@ -33,7 +37,8 @@ class ForgotPasswordView(APIView):
         serializer = ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
+        email = serializer.validated_data["email"]  # type: ignore
+        logger.info(f"Password reset requested for {email}.")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -62,5 +67,5 @@ class ResetPasswordView(APIView):
         serializer = ResetPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
+        logger.info(f"Password reset completed for user {serializer.user.username}.")  # type: ignore
         return Response(status=status.HTTP_204_NO_CONTENT)
