@@ -1,9 +1,10 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.views import (
     TokenObtainPairView as BaseTokenObtainPairView,
 )
@@ -19,20 +20,45 @@ from app.authentication.serializers.account import (
 
 
 @extend_schema(
-    summary="Authenticate user",
-    description="Authenticate a user and return JWT tokens and user information",
+    summary="User login",
+    description="Authenticate a user and return JWT access and refresh tokens",
     request=LoginSerializer,
+    tags=["Authentication"],
     responses={200: LoginSerializer},
+    examples=[
+        OpenApiExample(
+            "Login request",
+            value={
+                "username": "fmartin",
+                "password": "myStrongPassword123",
+            },
+            request_only=True,
+        ),
+    ],
 )
 class LoginView(BaseTokenObtainPairView):
     serializer_class = LoginSerializer
+    pass
 
 
+@extend_schema(
+    summary="Refresh access token",
+    description="Generate a new access token using a valid refresh token",
+    request=TokenRefreshSerializer,
+    tags=["Authentication"],
+    responses={200: TokenRefreshSerializer},
+    examples=[
+        OpenApiExample(
+            "Refresh token",
+            value={
+                "refresh": "eyJhbGciOiJIUzI1NiIs...",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class RefreshTokenView(BaseTokenRefreshView):
-    """
-    Refresh an access token.
-    """
-
+    serializer_class = TokenRefreshSerializer
     pass
 
 
@@ -40,8 +66,20 @@ class RefreshTokenView(BaseTokenRefreshView):
     summary="Change password",
     description="Change the authenticated user's password",
     request=ChangePasswordSerializer,
+    tags=["Password"],
+    examples=[
+        OpenApiExample(
+            "Change password",
+            value={
+                "current_password": "myCurrentPassword123",
+                "new_password": "myNewPassword123",
+            },
+            request_only=True,
+        ),
+    ],
 )
 class ChangePasswordView(APIView):
+    serializer_class = ChangePasswordSerializer
     permission_classes = [IsAuthenticated]  # noqa
 
     def post(self, request: Request) -> Response:
@@ -55,11 +93,23 @@ class ChangePasswordView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(
+    summary="Logout user",
+    description="Invalidate a refresh token.",
+    request=LogoutSerializer,
+    tags=["Authentication"],
+    examples=[
+        OpenApiExample(
+            "Logout request",
+            value={
+                "refresh": "eyJhbGciOiJIUzI1NiIs...",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class LogoutView(APIView):
-    """
-    Logout the user by invalidating the refresh token.
-    """
-
+    serializer_class = LogoutSerializer
     permission_classes = [IsAuthenticated]  # noqa
 
     def post(self, request: Request) -> Response:

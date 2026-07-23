@@ -1,31 +1,65 @@
+from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from app.authentication.serializers import reset_password
+from app.authentication.serializers.reset_password import (
+    ForgotPasswordSerializer,
+    ResetPasswordSerializer,
+)
 
 
+@extend_schema(
+    auth=[],
+    summary="Request password reset",
+    description="Send instructions to reset the user's password",
+    request=ForgotPasswordSerializer,
+    tags=["Password"],
+    examples=[
+        OpenApiExample(
+            "Forgot password",
+            value={
+                "email": "fmartin@test.com",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class ForgotPasswordView(APIView):
-    """
-    Send instructions to reset password
-    """
+    serializer_class = ForgotPasswordSerializer
 
     def post(self, request: Request) -> Response:
-        serializer = reset_password.ForgotPasswordSerializer(data=request.data)
+        serializer = ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(
+    auth=[],
+    summary="Reset password",
+    description="Reset the user's password using a valid reset token",
+    request=ResetPasswordSerializer,
+    tags=["Password"],
+    examples=[
+        OpenApiExample(
+            "Reset password",
+            value={
+                "uid": "Mg",
+                "token": "dc4b1z-4e00cdd129eb33400327e67d3c426ca7",
+                "new_password": "myNewPassword123",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class ResetPasswordView(APIView):
-    """
-    Reset a user's password using a valid reset token.
-    """
+    serializer_class = ResetPasswordSerializer
 
     def post(self, request: Request) -> Response:
-        serializer = reset_password.ResetPasswordSerializer(data=request.data)
+        serializer = ResetPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
