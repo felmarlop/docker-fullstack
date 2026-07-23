@@ -36,9 +36,10 @@ flowchart LR
     Backend --> PostgreSQL[(PostgreSQL)]
     Backend --> Redis[(Redis)]
 
-    Redis --> Celery[Celery Worker]
+    Beat[Celery Beat] --> Redis
+    Redis --> Worker[Celery Worker]
 
-    Celery --> Email[Email Backend]
+    Worker --> Email[Email Backend]
 ```
 
 ## 🛠️ Tech Stack
@@ -160,11 +161,13 @@ The project provides a set of Makefile shortcuts to manage the development envir
 
 ## ⚡ Background Tasks
 
-The project includes Celery and Redis configured out of the box.
+The project includes Celery, Redis and Celery Beat configured out of the box.
 
-Background jobs are executed by a dedicated Celery worker using Redis as the message broker.
+- **Celery Worker** executes asynchronous background tasks.
+- **Celery Beat** schedules periodic tasks and sends them to the worker.
+- **Redis** acts as the message broker between Django, Beat and the Worker.
 
-Password reset emails are processed asynchronously through Celery and Redis.
+Password reset emails are processed asynchronously through Celery, while recurring jobs can be managed from the Django admin using `django-celery-beat`.
 
 ## 🚦 Continuous Integration
 

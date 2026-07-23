@@ -6,8 +6,9 @@
 
 COMPOSE = docker compose --env-file backend/.env
 BACKEND = $(COMPOSE) exec backend
-CI_COMPOSE = docker compose --env-file backend/.env.example
-CI_BACKEND = $(CI_COMPOSE) run --rm backend
+CELERY_BEAT = $(COMPOSE) exec celery-beat
+CELERY_WORKER = $(COMPOSE) exec celery-worker
+CI_BACKEND = $(COMPOSE) run --rm backend
 
 .PHONY: \
 	help \
@@ -16,8 +17,11 @@ CI_BACKEND = $(CI_COMPOSE) run --rm backend
 	stop \
 	restart \
 	shell \
+	beat-shell \
+	worker-shell \
 	logs \
 	logs-backend \
+	logs-beat \
 	logs-worker \
 	logs-postgres \
 	logs-redis \
@@ -42,9 +46,12 @@ help:
 	@echo "  \033[1m - make stop \033[0m           Stop the containers"
 	@echo "  \033[1m - make restart \033[0m        Restart the containers"
 	@echo "  \033[1m - make shell \033[0m          Open a shell in the backend container"
+	@echo "  \033[1m - make beat-shell \033[0m     Open a shell in the Celery Beat container"
+	@echo "  \033[1m - make worker-shell \033[0m   Open a shell in the Celery Worker container"
 	@echo "  \033[1m - make logs \033[0m           Show general logs"
 	@echo "  \033[1m - make logs-backend \033[0m   Show backend logs"
-	@echo "  \033[1m - make logs-worker \033[0m    Show celery wroker logs"
+	@echo "  \033[1m - make logs-worker \033[0m    Show Celery Worker logs"
+	@echo "  \033[1m - make logs-beat \033[0m      Show Celery Beat logs"
 	@echo "  \033[1m - make logs-postgres \033[0m  Show postgreSQL logs"
 	@echo "  \033[1m - make logs-redis \033[0m     Show Redis logs"
 	@echo "  \033[1m - make lint \033[0m           Check code formatting and linting with Ruff"
@@ -67,6 +74,12 @@ restart: stop start
 shell:
 	$(BACKEND) bash
 
+beat-shell:
+	$(CELERY_BEAT) bash
+
+worker-shell:
+	$(CELERY_WORKER) bash
+
 logs:
 	$(COMPOSE) logs -f
 
@@ -75,6 +88,9 @@ logs-backend:
 
 logs-worker:
 	$(COMPOSE) logs -f celery-worker
+
+logs-beat:
+	$(COMPOSE) logs -f celery-beat
 
 logs-postgres:
 	$(COMPOSE) logs -f postgres
@@ -97,12 +113,6 @@ type-check:
 	$(BACKEND) pyright
 
 # Continuous Integration commands (Github Actions)
-ci-build:
-	$(CI_COMPOSE) up -d --build
-
-ci-stop:
-	$(CI_COMPOSE) down
-
 ci-lint:
 	$(CI_BACKEND) ruff check .
 	$(CI_BACKEND) ruff format . --check

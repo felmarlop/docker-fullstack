@@ -26,7 +26,7 @@ jobs:
         run: cp backend/.env.example backend/.env
 
       - name: Build Docker images
-        run: make ci-build
+        run: make build
 
       - name: Run Ruff
         run: make ci-lint
@@ -39,4 +39,4 @@ jobs:
 
       - name: Stop Docker containers
         if: always()
-        run: make ci-stop
+        run: make stop

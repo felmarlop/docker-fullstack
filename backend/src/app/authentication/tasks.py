@@ -27,5 +27,3 @@ def send_reset_password_email(email: str, url: str) -> None:
     except Exception:
         logger.exception(f"Failed to send password reset email to {email}.")
         raise
-
-
