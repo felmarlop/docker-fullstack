@@ -5,8 +5,9 @@ services:
 
     restart: unless-stopped
 
-    environment:
-      RUN_INITIAL_COMMANDS: ${RUN_INITIAL_COMMANDS}
+    # Inject all environment variables from backend/.env into the container
+    env_file:
+      - backend/.env
 
     build:
       # Send the content in /backend to daemon
@@ -33,6 +34,10 @@ services:
 
     restart: unless-stopped
 
+    # Inject all environment variables from backend/.env into the container
+    env_file:
+      - backend/.env
+
     build:
       context: ./backend
 
@@ -53,6 +58,10 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-beat
 
     restart: unless-stopped
+
+    # Inject all environment variables from backend/.env into the container
+    env_file:
+      - backend/.env
 
     build:
       context: ./backend
