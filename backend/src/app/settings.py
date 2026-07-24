@@ -127,12 +127,7 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": True,
 }
 
-CORS_ALLOWED_ORIGINS = [
-    origin.strip()
-    for origin in env("CORS_ALLOWED_ORIGINS", default="").split(",")  # pyright: ignore[reportArgumentType]
-    if origin.strip()
-]
-
+CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])  # pyright: ignore[reportArgumentType]
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
