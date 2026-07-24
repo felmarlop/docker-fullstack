@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Third-party
+    "corsheaders",
     "django_celery_beat",
     "drf_spectacular",
     "rest_framework",
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -124,6 +126,12 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
     "UPDATE_LAST_LOGIN": True,
 }
+
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in env("CORS_ALLOWED_ORIGINS", default="").split(",")  # pyright: ignore[reportArgumentType]
+    if origin.strip()
+]
 
 
 # Database
