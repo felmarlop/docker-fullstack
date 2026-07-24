@@ -166,6 +166,7 @@ The project includes Celery, Redis and Celery Beat configured out of the box.
 - **Celery Worker** executes asynchronous background tasks.
 - **Celery Beat** schedules periodic tasks and sends them to the worker.
 - **Redis** acts as the message broker between Django, Beat and the Worker.
+- **django-celery-beat** allows periodic tasks to be managed through the Django admin without modifying application code.
 
 Password reset emails are processed asynchronously through Celery, while recurring jobs can be managed from the Django admin using `django-celery-beat`.
 

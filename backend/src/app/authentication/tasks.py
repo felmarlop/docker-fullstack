@@ -27,3 +27,11 @@ def send_reset_password_email(email: str, url: str) -> None:
     except Exception:
         logger.exception(f"Failed to send password reset email to {email}.")
         raise
+
+
+@shared_task
+def heartbeat() -> None:
+    """
+    Simple periodic task used to verify that Celery Beat is running.
+    """
+    logger.info("Heartbeat task executed successfully.")
