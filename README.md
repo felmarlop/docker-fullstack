@@ -159,6 +159,18 @@ The project provides a set of Makefile shortcuts to manage the development envir
 | `make test`          | Run the test suite                          |
 | `make type-check`    | Run Pyright static type checking            |
 
+## Environment Variables
+
+The backend configuration is managed through a `.env` file.
+
+Create your local configuration:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+All sensitive configuration (database credentials, email settings, JWT, CORS, etc.) is managed through environment variables using **django-environ**.
+
 ## ⚡ Background Tasks
 
 The project includes Celery, Redis and Celery Beat configured out of the box.
@@ -185,3 +197,7 @@ The workflow uses the same Docker environment as local development, ensuring con
 ## 📄 License
 
 License has not been defined yet.
+
+```
+
+```
