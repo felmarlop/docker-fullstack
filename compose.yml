@@ -5,6 +5,9 @@ services:
 
     restart: unless-stopped
 
+    environment:
+      RUN_INITIAL_COMMANDS: ${RUN_INITIAL_COMMANDS}
+
     build:
       # Send the content in /backend to daemon
       context: ./backend
