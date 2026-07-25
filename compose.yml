@@ -28,6 +28,23 @@ services:
       # Container: /app (defined in Dockerfile)
       - ./backend:/app
 
+  nginx:
+    image: nginx:stable-alpine3.24
+    container_name: ${COMPOSE_PROJECT_NAME}-nginx
+
+    restart: unless-stopped
+
+    ports:
+      - "${NGINX_PORT}:80"
+
+    volumes:
+      # :ro -> read-only
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+
+    depends_on:
+      - backend
+
   celery-worker:
     image: ${COMPOSE_PROJECT_NAME}-backend:dev
     container_name: ${COMPOSE_PROJECT_NAME}-worker

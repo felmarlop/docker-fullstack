@@ -25,7 +25,6 @@ Create a superuser:
 
 ```bash
 make shell
-
 python manage.py createsuperuser
 ```
 

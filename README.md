@@ -26,20 +26,20 @@ The project provides a complete foundation including backend, frontend and infra
 ```mermaid
 flowchart LR
 
-    Browser[Browser]
+    Browser --> Nginx
 
-    Browser --> Nginx[Nginx Reverse Proxy]
+    Nginx --> Frontend
+    Nginx --> Gunicorn
 
-    Nginx --> Frontend[Nuxt Frontend]
-    Nginx --> Backend[Django REST Framework API]
+    Gunicorn --> Django
 
-    Backend --> PostgreSQL[(PostgreSQL)]
-    Backend --> Redis[(Redis)]
+    Django --> PostgreSQL
+    Django --> Redis
 
-    Beat[Celery Beat] --> Redis
-    Redis --> Worker[Celery Worker]
+    Redis --> Worker
+    Beat --> Redis
 
-    Worker --> Email[Email Backend]
+    Worker --> Email
 ```
 
 ## 🛠️ Tech Stack
@@ -137,6 +137,8 @@ make build
 - Automated linting and type checking
 - Console email backend for local development
 - Production-ready SMTP configuration
+- Nginx reverse proxy
+- Static and media file serving
 
 ## 🧰 Commands
 
@@ -171,6 +173,21 @@ cp backend/.env.example backend/.env
 
 All sensitive configuration (database credentials, email settings, JWT, CORS, etc.) is managed through environment variables using **django-environ**.
 
+## 🌐 Reverse Proxy
+
+The project uses **Nginx** as the front-facing web server.
+
+Nginx sits between the client and the application, acting as a reverse proxy.
+
+Its responsibilities include:
+
+- Forwarding requests to the Django application.
+- Serving static files efficiently.
+- Serving user uploaded media files.
+- Preparing the project for HTTPS and production deployments.
+
+During development, Django's development server can still serve static assets, while Nginx becomes the entry point for production environments.
+
 ## ⚡ Background Tasks
 
 The project includes Celery, Redis and Celery Beat configured out of the box.
@@ -197,7 +214,3 @@ The workflow uses the same Docker environment as local development, ensuring con
 ## 📄 License
 
 License has not been defined yet.
-
-```
-
-```

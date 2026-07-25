@@ -6,6 +6,7 @@
 
 COMPOSE = docker compose --env-file backend/.env
 BACKEND = $(COMPOSE) exec backend
+NGINX = $(COMPOSE) exec nginx
 CELERY_BEAT = $(COMPOSE) exec celery-beat
 CELERY_WORKER = $(COMPOSE) exec celery-worker
 CI_BACKEND = $(COMPOSE) run --rm backend
@@ -19,18 +20,19 @@ CI_BACKEND = $(COMPOSE) run --rm backend
 	shell \
 	beat-shell \
 	worker-shell \
+	reload-nginx \
+	generate-secret-key \
 	logs \
 	logs-backend \
-	logs-beat \
+	logs-nginx \
 	logs-worker \
+	logs-beat \
 	logs-postgres \
 	logs-redis \
 	lint \
 	lint-fix \
 	test \
 	type-check \
-	ci-build \
-	ci-stop \
 	ci-lint \
 	ci-test \
 	ci-type-check
@@ -48,9 +50,11 @@ help:
 	@echo "  \033[1m - make shell \033[0m          	Open a shell in the backend container"
 	@echo "  \033[1m - make beat-shell \033[0m     	Open a shell in the Celery Beat container"
 	@echo "  \033[1m - make worker-shell \033[0m   	Open a shell in the Celery Worker container"
+	@echo "  \033[1m - make reload-nginx \033[0m 	Reload Nginx configuration"
 	@echo "  \033[1m - make generate-secret-key \033[0m 	Generate a new Django secret key"
 	@echo "  \033[1m - make logs \033[0m           	Show general logs"
 	@echo "  \033[1m - make logs-backend \033[0m   	Show backend logs"
+	@echo "  \033[1m - make logs-nginx \033[0m   	Show Nginx logs"
 	@echo "  \033[1m - make logs-worker \033[0m    	Show Celery Worker logs"
 	@echo "  \033[1m - make logs-beat \033[0m      	Show Celery Beat logs"
 	@echo "  \033[1m - make logs-postgres \033[0m  	Show postgreSQL logs"
@@ -81,6 +85,10 @@ beat-shell:
 worker-shell:
 	$(CELERY_WORKER) bash
 
+reload-nginx:
+	$(NGINX) nginx -t
+	$(NGINX) nginx -s reload
+
 generate-secret-key:
 	$(BACKEND) python manage.py generate_secret_key
 
@@ -89,6 +97,9 @@ logs:
 
 logs-backend:
 	$(COMPOSE) logs -f backend
+
+logs-nginx:
+	$(COMPOSE) logs -f nginx
 
 logs-worker:
 	$(COMPOSE) logs -f celery-worker
