@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$RUN_INITIAL_COMMANDS" = "True" ]; then
+if [ "$INIT_APP" = "True" ]; then
     echo "Applying database migrations..."
     python manage.py migrate --noinput
 

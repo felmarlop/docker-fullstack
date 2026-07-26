@@ -159,7 +159,7 @@ The project provides a set of Makefile shortcuts to manage the development envir
 | `make logs-backend`        | Show backend logs                           |
 | `make logs-nginx`          | Show Nginx logs                             |
 | `make logs-worker`         | Show celery worker logs                     |
-| `make logs-beat`           | Show Celery Beat logs.                      |
+| `make logs-beat`           | Show Celery Beat logs                       |
 | `make logs-postgres`       | Show postgreSQL logs                        |
 | `make logs-redis`          | Show Redis logs                             |
 | `make lint`                | Check code formatting and linting with Ruff |

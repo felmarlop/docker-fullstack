@@ -39,8 +39,13 @@ services:
 
     volumes:
       # :ro -> read-only
+      # Nginx configuration
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
+
+      # Static and media files
+      - ./backend/src/staticfiles:/app/src/staticfiles:ro
+      - ./backend/src/media:/app/src/media:ro
 
     depends_on:
       - backend
