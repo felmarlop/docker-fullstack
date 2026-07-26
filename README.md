@@ -166,7 +166,7 @@ The project provides a set of Makefile shortcuts to manage the development envir
 | `make lint-fix`            | Apply Ruff formatting and lint fixes        |
 | `make test`                | Run the test suite                          |
 | `make type-check`          | Run Pyright static type checking            |
-
+`
 ## Environment Variables
 
 The backend configuration is managed through a `.env` file.
