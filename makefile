@@ -4,7 +4,8 @@
 # Copyright (c) 2026 Felix Martin
 # --
 
-COMPOSE = docker compose --env-file backend/.env
+COMPOSE = docker compose -f compose.dev.yml --env-file backend/.env
+COMPOSE_PROD = docker compose -f compose.prod.yml --env-file backend/.env
 BACKEND = $(COMPOSE) exec backend
 NGINX = $(COMPOSE) exec nginx
 CELERY_BEAT = $(COMPOSE) exec celery-beat
@@ -64,6 +65,10 @@ help:
 	@echo "  \033[1m - make test \033[0m           	Run tests"
 	@echo "  \033[1m - make type-check \033[0m     	Run Pyright static type checking"
 	@echo ""
+
+# -----------------------------------------------------------------------------
+# Development commands
+# -----------------------------------------------------------------------------
 
 build:
 	$(COMPOSE) up -d --build
@@ -127,7 +132,10 @@ test:
 type-check:
 	$(BACKEND) pyright
 
+# -----------------------------------------------------------------------------
 # Continuous Integration commands (Github Actions)
+# -----------------------------------------------------------------------------
+
 ci-lint:
 	$(CI_BACKEND) ruff check .
 	$(CI_BACKEND) ruff format . --check
@@ -137,3 +145,21 @@ ci-test:
 
 ci-type-check:
 	$(CI_BACKEND) pyright
+
+# -----------------------------------------------------------------------------
+# Production commands
+# -----------------------------------------------------------------------------
+
+build-prod:
+	$(COMPOSE_PROD) up -d --build
+
+start-prod:
+	$(COMPOSE_PROD) up -d
+
+stop-prod:
+	$(COMPOSE_PROD) down
+
+restart-prod: stop-prod start-prod
+
+logs-prod:
+	$(COMPOSE_PROD) logs -f

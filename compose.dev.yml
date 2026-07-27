@@ -12,6 +12,7 @@ services:
     build:
       # Send the content in /backend to daemon
       context: ./backend
+      dockerfile: Dockerfile.dev
 
     ports:
       - "${BACKEND_PORT}:8000"
@@ -62,6 +63,7 @@ services:
 
     build:
       context: ./backend
+      dockerfile: Dockerfile.dev
 
     command: celery -A app worker --loglevel=info
 
@@ -87,6 +89,7 @@ services:
 
     build:
       context: ./backend
+      dockerfile: Dockerfile.dev
 
     command: celery -A app beat --loglevel=info
 
