@@ -1,0 +1,36 @@
+# Python 3.13 slim as the base image.
+FROM python:3.13-slim
+
+# Python best practices
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set the default working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libatomic1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application source
+COPY . .
+
+# Make entrypoint executable
+RUN chmod +x /app/entrypoint.sh
+
+# Application source
+WORKDIR /app/src
+
+# Collect static files during image build
+RUN python manage.py collectstatic --noinput
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+
+# Production WSGI server
+CMD ["gunicorn", "app.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]

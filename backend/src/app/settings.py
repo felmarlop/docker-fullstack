@@ -35,7 +35,7 @@ DEBUG = env.bool("DEBUG")
 
 FRONTEND_URL = env("FRONTEND_URL", default="")  # pyright: ignore[reportArgumentType]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])  # pyright: ignore[reportArgumentType]
 
 
 # Application definition

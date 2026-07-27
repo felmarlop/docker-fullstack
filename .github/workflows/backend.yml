@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Prepare environment
-        run: cp backend/.env.example backend/.env
+        run: cp backend/.env.ci backend/.env
 
       - name: Build Docker images
         run: make build

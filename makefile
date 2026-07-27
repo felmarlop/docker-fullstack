@@ -7,10 +7,11 @@
 COMPOSE = docker compose -f compose.dev.yml --env-file backend/.env
 COMPOSE_PROD = docker compose -f compose.prod.yml --env-file backend/.env
 BACKEND = $(COMPOSE) exec backend
+BACKEND_PROD = $(COMPOSE_PROD) exec backend
 NGINX = $(COMPOSE) exec nginx
 CELERY_BEAT = $(COMPOSE) exec celery-beat
 CELERY_WORKER = $(COMPOSE) exec celery-worker
-CI_BACKEND = $(COMPOSE) run --rm backend
+BACKEND_CI = $(COMPOSE) run --rm backend
 
 .PHONY: \
 	help \
@@ -137,14 +138,14 @@ type-check:
 # -----------------------------------------------------------------------------
 
 ci-lint:
-	$(CI_BACKEND) ruff check .
-	$(CI_BACKEND) ruff format . --check
+	$(BACKEND_CI) ruff check .
+	$(BACKEND_CI) ruff format . --check
 
 ci-test:
-	$(CI_BACKEND) pytest
+	$(BACKEND_CI) pytest
 
 ci-type-check:
-	$(CI_BACKEND) pyright
+	$(BACKEND_CI) pyright
 
 # -----------------------------------------------------------------------------
 # Production commands
@@ -160,6 +161,9 @@ stop-prod:
 	$(COMPOSE_PROD) down
 
 restart-prod: stop-prod start-prod
+
+shell-prod:
+	$(BACKEND_PROD) bash
 
 logs-prod:
 	$(COMPOSE_PROD) logs -f
