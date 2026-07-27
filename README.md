@@ -138,7 +138,7 @@ make build
 - Console email backend for local development
 - Production-ready SMTP configuration
 - Nginx reverse proxy
-- Static and media file serving
+- Static and media file serving through Nginx
 
 ## 🧰 Commands
 
@@ -166,7 +166,7 @@ The project provides a set of Makefile shortcuts to manage the development envir
 | `make lint-fix`            | Apply Ruff formatting and lint fixes        |
 | `make test`                | Run the test suite                          |
 | `make type-check`          | Run Pyright static type checking            |
-`
+
 ## Environment Variables
 
 The backend configuration is managed through a `.env` file.
@@ -192,7 +192,7 @@ Its responsibilities include:
 - Serving user uploaded media files.
 - Preparing the project for HTTPS and production deployments.
 
-During development, Django's development server can still serve static assets, while Nginx becomes the entry point for production environments.
+During development, Nginx is already used as the main entry point, while Django's development server remains accessible for debugging purposes.
 
 ## ⚡ Background Tasks
 
