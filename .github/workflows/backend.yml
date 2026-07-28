@@ -29,13 +29,13 @@ jobs:
         run: make build
 
       - name: Run Ruff
-        run: make ci-lint
+        run: make backend-ci-lint
 
       - name: Run Pyright
-        run: make ci-type-check
+        run: make backend-ci-type-check
 
       - name: Run Pytest
-        run: make ci-test
+        run: make backend-ci-test
 
       - name: Stop Docker containers
         if: always()

@@ -24,7 +24,7 @@ Password reset emails are sent asynchronously using Celery.
 Create a superuser:
 
 ```bash
-make shell
+make backend-shell
 
 python manage.py createsuperuser
 ```
@@ -93,8 +93,8 @@ The project uses:
 Run quality checks:
 
 ```bash
-make lint
-make type-check
+make backend-lint
+make backend-type-check
 ```
 
 ## ✉️ Email
@@ -117,5 +117,5 @@ Guidelines:
 Run the test suite:
 
 ```bash
-make test
+make backend-test
 ```

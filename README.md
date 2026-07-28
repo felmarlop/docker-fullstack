@@ -146,28 +146,28 @@ make build
 
 The project provides a set of Makefile shortcuts to manage the development environment.
 
-| Command                    | Description                                 |
-| -------------------------- | ------------------------------------------- |
-| `make start`               | Start the containers                        |
-| `make stop`                | Stop the containers                         |
-| `make restart`             | Restart the containers                      |
-| `make build`               | Rebuild the images and start the containers |
-| `make shell`               | Open a shell in the backend container       |
-| `make beat-shell`          | Open a shell in the Celery Beat container   |
-| `make worker-shell`        | Open a shell in the Celery Worker container |
-| `make reload-nginx`        | Check and reload Nginx configuration        |
-| `make generate-secret-key` | Generate a new Django secret key            |
-| `make logs`                | Show general logs                           |
-| `make logs-backend`        | Show backend logs                           |
-| `make logs-nginx`          | Show Nginx logs                             |
-| `make logs-worker`         | Show celery worker logs                     |
-| `make logs-beat`           | Show Celery Beat logs                       |
-| `make logs-postgres`       | Show postgreSQL logs                        |
-| `make logs-redis`          | Show Redis logs                             |
-| `make lint`                | Check code formatting and linting with Ruff |
-| `make lint-fix`            | Apply Ruff formatting and lint fixes        |
-| `make test`                | Run the test suite                          |
-| `make type-check`          | Run Pyright static type checking            |
+| Command                           | Description                                 |
+| --------------------------------- | ------------------------------------------- |
+| `make start`                      | Start the containers                        |
+| `make stop`                       | Stop the containers                         |
+| `make restart`                    | Restart the containers                      |
+| `make build`                      | Rebuild the images and start the containers |
+| `make backend-shell`              | Open a shell in the backend container       |
+| `make celery-beat-shell`          | Open a shell in the Celery Beat container   |
+| `make celery-worker-shell`        | Open a shell in the Celery Worker container |
+| `make reload-nginx`               | Check and reload the Nginx configuration    |
+| `make generate-django-secret-key` | Generate a new Django secret key            |
+| `make logs`                       | Show general logs                           |
+| `make logs-backend`               | Show backend logs                           |
+| `make logs-nginx`                 | Show Nginx logs                             |
+| `make logs-celery-worker`         | Show Celery Worker logs                     |
+| `make logs-celery-beat`           | Show Celery Beat logs                       |
+| `make logs-postgres`              | Show PostgreSQL logs                        |
+| `make logs-redis`                 | Show Redis logs                             |
+| `make backend-lint`               | Check code formatting and linting with Ruff |
+| `make backend-lint-fix`           | Apply Ruff formatting and lint fixes        |
+| `make backend-test`               | Run the test suite                          |
+| `make backend-type-check`         | Run Pyright static type checking            |
 
 ## Environment Variables
 

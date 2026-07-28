@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 env.read_env(BASE_DIR.parent / ".env")
 
-ENVIRONMENT = env("ENVIRONMENT", default="dev")
+ENVIRONMENT = env("ENVIRONMENT", default="dev")  # pyright: ignore[reportArgumentType]
 IS_PRODUCTION = ENVIRONMENT == "prod"
 
 # Quick-start development settings - unsuitable for production
