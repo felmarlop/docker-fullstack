@@ -21,6 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 env.read_env(BASE_DIR.parent / ".env")
 
+ENVIRONMENT = env("ENVIRONMENT", default="dev")
+IS_PRODUCTION = ENVIRONMENT == "prod"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -93,11 +96,6 @@ LOG_LEVEL = env("LOG_LEVEL", default="INFO")  # type: ignore
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "django": {
-        "handlers": ["console"],
-        "level": LOG_LEVEL,
-        "propagate": False,
-    },
     "formatters": {
         "verbose": {
             "format": f"[v{APP_VERSION}] "
@@ -111,6 +109,13 @@ LOGGING = {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
         },
     },
     "root": {
@@ -135,6 +140,17 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])  # pyright: ignore[reportArgumentType]
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])  # pyright: ignore[reportArgumentType]
+
+SESSION_COOKIE_SECURE = IS_PRODUCTION
+CSRF_COOKIE_SECURE = IS_PRODUCTION
+
+SECURE_SSL_REDIRECT = IS_PRODUCTION
+
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

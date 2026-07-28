@@ -98,9 +98,9 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/felmarlop/docker-fullstack.git
-
 cd docker-fullstack
-cp .env.example .env
+
+cp backend/.env.example backend/.env
 ```
 
 Review the `.env` file and adjust the configuration to match your local environment if needed.
@@ -116,7 +116,7 @@ make build
 | Component      | Version |
 | -------------- | ------- |
 | Docker Engine  | 29.3    |
-| Docker Compose | 5.1     |
+| Docker Compose | v2      |
 | Python         | 3.13    |
 | Django         | 5.2     |
 | PostgreSQL     | 17      |
@@ -139,6 +139,8 @@ make build
 - Production-ready SMTP configuration
 - Nginx reverse proxy
 - Static and media file serving through Nginx
+- Development and production Docker configurations
+- Gunicorn application server
 
 ## 🧰 Commands
 
@@ -170,6 +172,7 @@ The project provides a set of Makefile shortcuts to manage the development envir
 ## Environment Variables
 
 The backend configuration is managed through a `.env` file.
+The `.env.example` file contains every available configuration option with sensible development defaults.
 
 Create your local configuration:
 
@@ -178,6 +181,17 @@ cp backend/.env.example backend/.env
 ```
 
 All sensitive configuration (database credentials, email settings, JWT, CORS, etc.) is managed through environment variables using **django-environ**.
+
+### Production
+
+Additional commands are available for production deployments:
+
+- make build-prod
+- make start-prod
+- make stop-prod
+- make restart-prod
+- make shell-prod
+- make logs-prod
 
 ## 🌐 Reverse Proxy
 

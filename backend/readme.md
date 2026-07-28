@@ -25,6 +25,7 @@ Create a superuser:
 
 ```bash
 make shell
+
 python manage.py createsuperuser
 ```
 
@@ -36,19 +37,22 @@ Access the administration panel:
 
 ## 🛠️ Development Guidelines
 
-### Code Quality
+### Code Style
 
-The project uses:
+The project follows the configured Ruff rules.
 
-- **Ruff** for linting, formatting and import sorting.
-- **Pyright** for static type checking.
+Guidelines:
 
-Run quality checks:
+- Use absolute imports.
 
-```bash
-make lint
-make type-check
+Example:
+
+```python
+from app.authentication.serializers.user import UserSerializer
 ```
+
+- Keep imports sorted automatically with Ruff.
+- Prefer explicit and readable code.
 
 ---
 
@@ -79,22 +83,19 @@ Additional guidelines:
 
 ---
 
-### Code Style
+### Code Quality
 
-The project follows the configured Ruff rules.
+The project uses:
 
-Guidelines:
+- **Ruff** for linting, formatting and import sorting.
+- **Pyright** for static type checking.
 
-- Use absolute imports.
+Run quality checks:
 
-Example:
-
-```python
-from app.authentication.serializers.user import UserSerializer
+```bash
+make lint
+make type-check
 ```
-
-- Keep imports sorted automatically with Ruff.
-- Prefer explicit and readable code.
 
 ## ✉️ Email
 

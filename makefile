@@ -2,10 +2,11 @@
 # Docker Fullstack Boilerplate
 #
 # Copyright (c) 2026 Felix Martin
-# --
+# -----------------------------------------------------------------------------
 
-COMPOSE = docker compose -f compose.dev.yml --env-file backend/.env
-COMPOSE_PROD = docker compose -f compose.prod.yml --env-file backend/.env
+ENV_FILE = backend/.env
+COMPOSE = docker compose -f compose.dev.yml --env-file $(ENV_FILE)
+COMPOSE_PROD = docker compose -f compose.prod.yml --env-file $(ENV_FILE)
 BACKEND = $(COMPOSE) exec backend
 BACKEND_PROD = $(COMPOSE_PROD) exec backend
 NGINX = $(COMPOSE) exec nginx
@@ -37,7 +38,13 @@ BACKEND_CI = $(COMPOSE) run --rm backend
 	type-check \
 	ci-lint \
 	ci-test \
-	ci-type-check
+	ci-type-check \
+	build-prod \
+	start-prod \
+	stop-prod \
+	restart-prod \
+	shell-prod \
+	logs-prod
 
 help:
 	@echo ""
