@@ -93,9 +93,16 @@ LOG_LEVEL = env("LOG_LEVEL", default="INFO")  # type: ignore
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "django": {
+        "handlers": ["console"],
+        "level": LOG_LEVEL,
+        "propagate": False,
+    },
     "formatters": {
         "verbose": {
-            "format": "[{asctime}] {levelname:<8}{name} | {message}",
+            "format": f"[v{APP_VERSION}] "
+            "[{asctime}] "
+            "{levelname:<8}{name} | {message}",
             "datefmt": "%Y-%m-%d %H:%M:%S",
             "style": "{",
         },
@@ -226,6 +233,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 SPECTACULAR_SETTINGS = {
     "TITLE": f"{APP_NAME} API",
     "DESCRIPTION": f"REST API for the {APP_NAME} project",
-    "VERSION": "1.0.0",
+    "VERSION": APP_VERSION,
     "SERVE_INCLUDE_SCHEMA": False,
 }

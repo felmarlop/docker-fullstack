@@ -23,11 +23,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Host: backend/entrypoint.sh
 # Container /app/entrypoint.sh
 COPY entrypoint.sh .
-# Make it executable
 RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 WORKDIR /app/src
 
+# Development server
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

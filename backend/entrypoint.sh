@@ -9,7 +9,7 @@ if [ -z "$ENVIRONMENT" ]; then
 fi
 
 if [ "$ENVIRONMENT" = "dev" ] || [ "$ENVIRONMENT" = "prod" ]; then
-    echo "Applying database migrations..."
+    echo "Running database migrations..."
     python manage.py migrate --noinput
 
     echo "Setting up periodic tasks..."
@@ -21,5 +21,5 @@ if [ "$ENVIRONMENT" = "dev" ]; then
     python manage.py collectstatic --noinput
 fi
 
-echo "Starting application..."
+echo "Starting server..."
 exec "$@"

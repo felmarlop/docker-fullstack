@@ -30,7 +30,6 @@ WORKDIR /app/src
 # Collect static files during image build
 RUN python manage.py collectstatic --noinput
 
-ENTRYPOINT ["/app/entrypoint.sh"]
-
 # Production WSGI server
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["gunicorn", "app.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
