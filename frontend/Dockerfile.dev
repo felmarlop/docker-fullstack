@@ -1,0 +1,31 @@
+# Node 24 slim as the base image.
+FROM node:24-alpine
+
+# Set the default working directory
+WORKDIR /app
+
+# Enable pnpm via Corepack
+RUN corepack enable
+
+# Create the working directory and assign it to the node user
+RUN chown node:node /app
+
+# Switch to the non-root user
+USER node
+
+# Copy dependency files
+COPY --chown=node:node package.json pnpm-lock.yaml ./
+
+# Install dependencies
+RUN pnpm install
+
+# Copy the application source
+COPY --chown=node:node . .
+
+# Expose Vite development server
+EXPOSE 5173
+
+# Start the development server
+CMD ["pnpm", "dev", "--host"]
+
+

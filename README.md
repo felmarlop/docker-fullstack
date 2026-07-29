@@ -153,12 +153,14 @@ The project provides a set of Makefile shortcuts to manage the development envir
 | `make restart`                    | Restart the containers                      |
 | `make build`                      | Rebuild the images and start the containers |
 | `make backend-shell`              | Open a shell in the backend container       |
+| `make frontend-shell`             | Open a shell in the frontend container      |
 | `make celery-beat-shell`          | Open a shell in the Celery Beat container   |
 | `make celery-worker-shell`        | Open a shell in the Celery Worker container |
 | `make reload-nginx`               | Check and reload the Nginx configuration    |
 | `make generate-django-secret-key` | Generate a new Django secret key            |
 | `make logs`                       | Show general logs                           |
 | `make logs-backend`               | Show backend logs                           |
+| `make logs-frontend`              | Show frontend logs                          |
 | `make logs-nginx`                 | Show Nginx logs                             |
 | `make logs-celery-worker`         | Show Celery Worker logs                     |
 | `make logs-celery-beat`           | Show Celery Beat logs                       |

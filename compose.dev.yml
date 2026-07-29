@@ -29,6 +29,30 @@ services:
       # Container: /app (defined in Dockerfile)
       - ./backend:/app
 
+  frontend:
+    image: ${COMPOSE_PROJECT_NAME}-frontend:dev
+    container_name: ${COMPOSE_PROJECT_NAME}-frontend
+
+    restart: unless-stopped
+
+    build:
+      # Send the content in /frontend to daemon
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+
+    volumes:
+      # Host: /frontend
+      # Container: /app (defined in Dockerfile)
+      - ./frontend:/app
+
+      # Anonymous volume for node_modules.
+      # Prevents the bind mount above from overwriting
+      # the dependencies installed inside the container.
+      - /app/node_modules
+
+    ports:
+      - "${FRONTEND_PORT}:5173"
+
   nginx:
     image: nginx:stable-alpine3.24
     container_name: ${COMPOSE_PROJECT_NAME}-nginx
