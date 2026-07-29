@@ -1,4 +1,4 @@
-name: Backend Continuous Integration
+name: Build and Test
 
 on:
   # Run the workflow manually in Github
@@ -13,8 +13,8 @@ on:
       - master
 
 jobs:
-  backend:
-    name: Backend Quality
+  quality:
+    name: Code Quality
 
     runs-on: ubuntu-latest
 

@@ -42,6 +42,8 @@ BACKEND_CI = $(COMPOSE) run --rm backend
 	backend-lint \
 	backend-lint-fix \
 	backend-type-check \
+	frontend-lint \
+	frontend-lint-fix \
 	backend-test \
 	backend-ci-lint \
 	backend-ci-test \
@@ -78,11 +80,13 @@ help:
 	@echo "  \033[1m - make logs-nginx \033[0m   		Show Nginx logs"
 	@echo "  \033[1m - make logs-worker \033[0m    		Show Celery Worker logs"
 	@echo "  \033[1m - make logs-beat \033[0m      		Show Celery Beat logs"
-	@echo "  \033[1m - make logs-postgres \033[0m  		Show postgreSQL logs"
+	@echo "  \033[1m - make logs-postgres \033[0m  		Show PostgreSQL logs"
 	@echo "  \033[1m - make logs-redis \033[0m     		Show Redis logs"
 	@echo ""
-	@echo "  \033[1m - make backend-lint \033[0m			Check code formatting and linting with Ruff"
-	@echo "  \033[1m - make backend-lint-fix \033[0m		Apply Ruff lint and formatting fixes"
+	@echo "  \033[1m - make backend-lint \033[0m			Check code formatting and linting"
+	@echo "  \033[1m - make backend-lint-fix \033[0m		Apply lint and formatting fixes"
+	@echo "  \033[1m - make frontend-lint \033[0m			Check code formatting and linting"
+	@echo "  \033[1m - make frontend-lint-fix \033[0m		Apply lint and formatting fixes"
 	@echo "  \033[1m - make backend-type-check \033[0m		Run Pyright static type checking"
 	@echo "  \033[1m - make backend-test \033[0m			Run tests"
 	@echo ""
@@ -165,6 +169,14 @@ backend-lint:
 backend-lint-fix:
 	$(BACKEND) ruff check . --fix
 	$(BACKEND) ruff format .
+
+frontend-lint:
+	cd frontend && pnpm lint:check
+	cd frontend && pnpm format:check
+
+frontend-lint-fix:
+	cd frontend && pnpm lint
+	cd frontend && pnpm format
 
 backend-type-check:
 	$(BACKEND) pyright

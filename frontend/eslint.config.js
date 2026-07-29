@@ -1,6 +1,6 @@
 import { defineConfig, globalIgnores } from 'eslint/config'
-import globals from 'globals'
 import js from '@eslint/js'
+import globals from 'globals'
 import pluginVue from 'eslint-plugin-vue'
 import skipFormatting from 'eslint-config-prettier/flat'
 
@@ -20,8 +20,18 @@ export default defineConfig([
     },
   },
 
+  // JavaScript recommended rules
   js.configs.recommended,
+
+  // Vue recommended rules
   ...pluginVue.configs['flat/recommended'],
 
+  {
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
+
+  // Disable ESLint formatting rules in favour of Prettier
   skipFormatting,
 ])
