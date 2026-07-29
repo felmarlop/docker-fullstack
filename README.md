@@ -1,11 +1,11 @@
 # 🚀 Docker Fullstack Boilerplate
 
-[![Python](https://img.shields.io/badge/python-3.13-blue.svg)]()
-[![Django](https://img.shields.io/badge/django-5.2-green.svg)]()
-[![PostgreSQL](https://img.shields.io/badge/postgresql-17-blue.svg)]()
-[![Docker](https://img.shields.io/badge/docker-compose-blue.svg)]()
+![Python](https://img.shields.io/badge/python-3.13-blue.svg)
+![Django](https://img.shields.io/badge/django-5.2-green.svg)
+![PostgreSQL](https://img.shields.io/badge/postgresql-17-blue.svg)
+![Docker](https://img.shields.io/badge/docker-required-2496ED?logo=docker&logoColor=white)
 
-A modern full-stack boilerplate for building Django applications with Docker, Django REST Framework and Nuxt.
+A modern full-stack boilerplate built with Docker, Django REST Framework and Vue 3.
 
 The goal of this project is to provide a clean, reusable and scalable foundation for future applications, following modern development practices and software architecture principles.
 
