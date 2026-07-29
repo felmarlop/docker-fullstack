@@ -5,9 +5,9 @@ services:
 
     restart: unless-stopped
 
-    # Inject all environment variables from backend/.env into the container
+    # Inject environment variables
     env_file:
-      - backend/.env
+      - .env
 
     build:
       # Send the content in /backend to daemon
@@ -67,9 +67,9 @@ services:
 
     restart: unless-stopped
 
-    # Inject all environment variables from backend/.env into the container
+    # Inject environment variables
     env_file:
-      - backend/.env
+      - .env
 
     build:
       context: ./backend
@@ -93,9 +93,9 @@ services:
 
     restart: unless-stopped
 
-    # Inject all environment variables from backend/.env into the container
+    # Inject environment variables
     env_file:
-      - backend/.env
+      - .env
 
     build:
       context: ./backend

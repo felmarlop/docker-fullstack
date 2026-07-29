@@ -15,11 +15,14 @@ from pathlib import Path
 
 import environ
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Django project directory (backend/src)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Repository root
+ROOT_DIR = BASE_DIR.parent.parent
+
 env = environ.Env()
-env.read_env(BASE_DIR.parent / ".env")
+env.read_env(ROOT_DIR / ".env")
 
 ENVIRONMENT = env("ENVIRONMENT", default="dev")  # pyright: ignore[reportArgumentType]
 IS_PRODUCTION = ENVIRONMENT == "prod"

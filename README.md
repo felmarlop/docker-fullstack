@@ -100,7 +100,7 @@ Clone the repository:
 git clone https://github.com/felmarlop/docker-fullstack.git
 cd docker-fullstack
 
-cp backend/.env.example backend/.env
+cp .env.example .env
 ```
 
 Review the `.env` file and adjust the configuration to match your local environment if needed.
@@ -175,12 +175,6 @@ The project provides a set of Makefile shortcuts to manage the development envir
 
 The backend configuration is managed through a `.env` file.
 The `.env.example` file contains every available configuration option with sensible development defaults.
-
-Create your local configuration:
-
-```bash
-cp backend/.env.example backend/.env
-```
 
 All sensitive configuration (database credentials, email settings, JWT, CORS, etc.) is managed through environment variables using **django-environ**.
 

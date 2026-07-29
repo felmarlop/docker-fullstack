@@ -4,13 +4,13 @@
 # Copyright (c) 2026 Felix Martin
 # -----------------------------------------------------------------------------
 
-ENV_FILE = backend/.env
+ENV_FILE = .env
 
 include $(ENV_FILE)
 export
 
-COMPOSE = docker compose -f compose.dev.yml --env-file $(ENV_FILE)
-COMPOSE_PROD = docker compose -f compose.prod.yml --env-file $(ENV_FILE)
+COMPOSE = docker compose -f compose.dev.yml
+COMPOSE_PROD = docker compose -f compose.prod.yml
 BACKEND = $(COMPOSE) exec backend
 BACKEND_PROD = $(COMPOSE_PROD) exec backend
 FRONTEND = $(COMPOSE) exec frontend
