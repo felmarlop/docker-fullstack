@@ -12,25 +12,33 @@
           <v-chip v-if="formattedResponse" class="mt-6" color="success" prepend-icon="mdi-check-circle" variant="tonal">
             Backend connection successful
           </v-chip>
+          <v-chip v-else class="mt-6" color="error" prepend-icon="mdi-close-circle" variant="tonal">
+            Backend connection failed
+          </v-chip>
         </div>
 
-        <v-card v-if="formattedResponse" class="api-response mx-auto mt-6" max-width="520" variant="tonal">
+        <v-card
+          v-if="formattedResponse || error"
+          class="api-response mx-auto mt-6"
+          max-width="520"
+          variant="tonal"
+        >
           <v-card-title class="d-flex align-center justify-space-between">
             <span>GET /api/ping</span>
 
-            <v-chip color="success" size="small" variant="flat"> 200 OK </v-chip>
+            <v-chip
+              :color="error ? 'error' : 'success'"
+              size="small"
+              variant="flat"
+            >
+              {{ error ? `${error.status} ${error.code}` : '200 OK' }}
+            </v-chip>
           </v-card-title>
 
           <v-divider />
 
-          <pre>{{ formattedResponse }}</pre>
+          <pre>{{ error ? formattedError : formattedResponse }}</pre>
         </v-card>
-
-        <v-alert v-else-if="error" border="start" class="mx-auto mt-6" max-width="520" type="error" variant="tonal">
-          <template #title> GET /api/ping failed </template>
-
-          {{ error.message }}
-        </v-alert>
 
         <v-row class="my-10 justify-center">
           <v-col cols="12" class="text-center">
@@ -78,6 +86,17 @@ const response = ref(null)
 const error = ref(null)
 
 const formattedResponse = computed(() => (response.value ? JSON.stringify(response.value, null, 2) : ''))
+const formattedError = computed(() => {
+  if (error.value) {
+    let err = {
+      status: error.value.status || '',
+      code: error.value.code || '',
+      message: error.value.message || '',
+    }
+    return JSON.stringify(err, null, 2)
+  }
+  return ''
+})
 
 onMounted(async () => {
   try {
