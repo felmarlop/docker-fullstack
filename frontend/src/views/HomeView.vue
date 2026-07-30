@@ -6,7 +6,7 @@
 
     <v-container class="fill-height">
       <v-row align="center" class="fill-height" justify="center">
-        <v-col cols="12" lg="6" md="8">
+        <v-col cols="12" md="8" lg="6">
           <div class="text-center">
             <v-icon color="primary" icon="mdi-rocket-launch" size="96" />
 
@@ -16,10 +16,10 @@
 
             <v-chip
               v-if="formattedResponse"
+              class="mt-6"
               color="success"
               prepend-icon="mdi-check-circle"
               variant="tonal"
-              class="mt-6"
             >
               Backend connection successful
             </v-chip>
@@ -36,25 +36,45 @@
 
             <pre>{{ formattedResponse }}</pre>
           </v-card>
-          <v-alert v-else-if="error" class="mx-auto mt-6" max-width="520" type="error" variant="tonal" border="start">
+
+          <v-alert v-else-if="error" border="start" class="mx-auto mt-6" max-width="520" type="error" variant="tonal">
             <template #title> GET /api/ping failed </template>
 
             {{ error.message }}
           </v-alert>
 
-          <div class="d-flex justify-center ga-4 mt-10">
-            <v-btn color="primary" prepend-icon="mdi-login" to="/login"> Login </v-btn>
+          <v-row class="mt-10 justify-center">
+            <v-col cols="12" class="text-center">
+              <v-btn color="primary" min-width="180" prepend-icon="mdi-login" to="/login"> Login </v-btn>
+            </v-col>
 
-            <v-btn
-              href="https://github.com/felmarlop/docker-fullstack#-docker-fullstack-boilerplate"
-              prepend-icon="mdi-book-open-page-variant"
-              rel="noopener noreferrer"
-              target="_blank"
-              variant="outlined"
-            >
-              Documentation
-            </v-btn>
-          </div>
+            <v-col cols="12" class="d-flex justify-center flex-wrap ga-4 mt-2">
+              <v-btn
+                color="secondary"
+                href="/admin/"
+                min-width="180"
+                prepend-icon="mdi-shield-account"
+                variant="outlined"
+              >
+                Django Admin
+              </v-btn>
+
+              <v-btn color="secondary" href="/api/docs/" min-width="180" prepend-icon="mdi-api" variant="outlined">
+                API Docs
+              </v-btn>
+
+              <v-btn
+                href="https://github.com/felmarlop/docker-fullstack#-docker-fullstack-boilerplate"
+                min-width="180"
+                prepend-icon="mdi-book-open-page-variant"
+                rel="noopener noreferrer"
+                target="_blank"
+                variant="outlined"
+              >
+                Documentation
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
@@ -93,7 +113,6 @@ onMounted(async () => {
   overflow-x: auto;
 
   font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', monospace;
-
   font-size: 0.9rem;
   line-height: 1.6;
   white-space: pre-wrap;
