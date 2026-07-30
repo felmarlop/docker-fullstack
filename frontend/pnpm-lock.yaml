@@ -31,7 +31,7 @@ importers:
         specifier: ^6.0.8
         version: 6.0.8(vite@8.1.5(yaml@2.9.0))(vue@3.5.40)
       eslint:
-        specifier: ^10.7.0
+        specifier: ^10.8.0
         version: 10.8.0
       eslint-config-prettier:
         specifier: ^10.1.8
@@ -40,7 +40,7 @@ importers:
         specifier: ~10.9.2
         version: 10.9.2(eslint@10.8.0)(vue-eslint-parser@10.4.1(eslint@10.8.0))
       globals:
-        specifier: ^17.7.0
+        specifier: ^17.8.0
         version: 17.8.0
       prettier:
         specifier: 3.9.6

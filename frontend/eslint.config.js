@@ -7,7 +7,7 @@ import skipFormatting from 'eslint-config-prettier/flat'
 export default defineConfig([
   {
     name: 'app/files-to-lint',
-    files: ['**/*.{vue,js,mjs,jsx}'],
+    files: ['**/*.{js,mjs,cjs,vue}'],
   },
 
   globalIgnores([
@@ -22,24 +22,32 @@ export default defineConfig([
 
   {
     languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+
       globals: {
         ...globals.browser,
       },
     },
   },
 
-  // JavaScript recommended rules
+  // JavaScript
   js.configs.recommended,
 
-  // Vue recommended rules
+  // Vue
   ...pluginVue.configs['flat/recommended'],
 
+  // Project rules
   {
     rules: {
+      'no-console': 'warn',
+      'no-debugger': 'warn',
+
+      // We prefer App.vue, Home.vue, etc.
       'vue/multi-word-component-names': 'off',
     },
   },
 
-  // Disable ESLint formatting rules in favour of Prettier
+  // Prettier owns formatting
   skipFormatting,
 ])
