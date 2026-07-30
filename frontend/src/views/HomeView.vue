@@ -5,32 +5,26 @@
         <div class="text-center">
           <v-icon color="primary" icon="mdi-rocket-launch" size="96" />
 
-          <h1 class="text-h2 font-weight-bold mt-6">Welcome</h1>
+          <h1 class="text-h3 font-weight-bold mt-4">Docker Fullstack Boilerplate</h1>
 
-          <p class="text-h6 text-medium-emphasis mt-4">Your Vue 3 + Vite + Vuetify frontend is ready.</p>
-
-          <v-chip v-if="formattedResponse" class="mt-6" color="success" prepend-icon="mdi-check-circle" variant="tonal">
-            Backend connection successful
-          </v-chip>
-          <v-chip v-else class="mt-6" color="error" prepend-icon="mdi-close-circle" variant="tonal">
-            Backend connection failed
-          </v-chip>
+          <p class="text-h6 text-medium-emphasis mt-3">
+            Ready-to-use development environment for modern Django and Vue applications.
+          </p>
         </div>
 
-        <v-card
-          v-if="formattedResponse || error"
-          class="api-response mx-auto mt-6"
-          max-width="520"
-          variant="tonal"
-        >
+        <div class="d-flex align-center my-6">
+          <v-divider />
+
+          <span class="mx-4 text-caption text-medium-emphasis text-no-wrap"> Backend Status </span>
+
+          <v-divider />
+        </div>
+
+        <v-card v-if="formattedResponse || error" class="api-response mx-auto" max-width="580" variant="tonal">
           <v-card-title class="d-flex align-center justify-space-between">
             <span>GET /api/ping</span>
 
-            <v-chip
-              :color="error ? 'error' : 'success'"
-              size="small"
-              variant="flat"
-            >
+            <v-chip :color="error ? 'error' : 'success'" prepend-icon="mdi-check-circle" size="small" variant="flat">
               {{ error ? `${error.status} ${error.code}` : '200 OK' }}
             </v-chip>
           </v-card-title>
@@ -40,38 +34,46 @@
           <pre>{{ error ? formattedError : formattedResponse }}</pre>
         </v-card>
 
-        <v-row class="my-10 justify-center">
-          <v-col cols="12" class="text-center">
-            <v-btn color="primary" min-width="180" prepend-icon="mdi-login" to="/login"> Login </v-btn>
-          </v-col>
+        <div class="d-flex align-center my-6">
+          <v-divider />
 
-          <v-col cols="12" class="d-flex justify-center flex-wrap ga-4 mt-2">
-            <v-btn
-              color="secondary"
-              href="/admin/"
-              min-width="180"
-              prepend-icon="mdi-shield-account"
-              variant="outlined"
-            >
-              Django Admin
-            </v-btn>
+          <span class="mx-4 text-caption text-medium-emphasis text-no-wrap"> JWT Authentication </span>
 
-            <v-btn color="secondary" href="/api/docs/" min-width="180" prepend-icon="mdi-api" variant="outlined">
-              API Docs
-            </v-btn>
+          <v-divider />
+        </div>
 
-            <v-btn
-              href="https://github.com/felmarlop/docker-fullstack#-docker-fullstack-boilerplate"
-              min-width="180"
-              prepend-icon="mdi-book-open-page-variant"
-              rel="noopener noreferrer"
-              target="_blank"
-              variant="outlined"
-            >
-              Documentation
-            </v-btn>
-          </v-col>
-        </v-row>
+        <div class="text-center">
+          <v-btn color="primary" min-width="220" prepend-icon="mdi-login" size="large" to="/login"> Login </v-btn>
+        </div>
+
+        <div class="d-flex align-center my-6">
+          <v-divider />
+
+          <span class="mx-4 text-caption text-medium-emphasis text-no-wrap"> Developer Resources </span>
+
+          <v-divider />
+        </div>
+
+        <div class="d-flex justify-center flex-wrap ga-4 mb-6">
+          <v-btn color="secondary" href="/admin/" min-width="180" prepend-icon="mdi-shield-account" variant="outlined">
+            Django Admin
+          </v-btn>
+
+          <v-btn color="secondary" href="/api/docs/" min-width="180" prepend-icon="mdi-api" variant="outlined">
+            API Docs
+          </v-btn>
+
+          <v-btn
+            href="https://github.com/felmarlop/docker-fullstack#-docker-fullstack-boilerplate"
+            min-width="180"
+            prepend-icon="mdi-book-open-page-variant"
+            rel="noopener noreferrer"
+            target="_blank"
+            variant="outlined"
+          >
+            Documentation
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -86,16 +88,21 @@ const response = ref(null)
 const error = ref(null)
 
 const formattedResponse = computed(() => (response.value ? JSON.stringify(response.value, null, 2) : ''))
+
 const formattedError = computed(() => {
-  if (error.value) {
-    let err = {
+  if (!error.value) {
+    return ''
+  }
+
+  return JSON.stringify(
+    {
       status: error.value.status || '',
       code: error.value.code || '',
       message: error.value.message || '',
-    }
-    return JSON.stringify(err, null, 2)
-  }
-  return ''
+    },
+    null,
+    2,
+  )
 })
 
 onMounted(async () => {

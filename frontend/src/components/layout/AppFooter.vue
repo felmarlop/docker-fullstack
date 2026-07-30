@@ -1,5 +1,5 @@
 <template>
-  <v-footer border>
+  <v-footer border style="max-height: 100px">
     <v-container fluid>
       <div class="d-flex align-center justify-space-between flex-wrap ga-2">
         <span class="text-caption text-medium-emphasis"> Docker Fullstack Boilerplate © {{ currentYear }} </span>

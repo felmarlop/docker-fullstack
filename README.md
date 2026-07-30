@@ -5,9 +5,18 @@
 ![PostgreSQL](https://img.shields.io/badge/postgresql-17-blue.svg)
 ![Docker](https://img.shields.io/badge/docker-required-2496ED?logo=docker&logoColor=white)
 
-A modern full-stack boilerplate built with Docker, Django REST Framework and Vue 3.
+Ready-to-use development environment for modern Django and Vue applications.
 
 The goal of this project is to provide a clean, reusable and scalable foundation for future applications, following modern development practices and software architecture principles.
+
+<p align="center">
+  <img
+    src="assets/images/home.png"
+    width="500"
+    alt="Docker Fullstack Boilerplate"
+    style="border:1px solid #30363d;border-radius:6px;"
+  >
+</p>
 
 ## 📖 Overview
 
@@ -56,7 +65,6 @@ flowchart LR
 ### Frontend
 
 - Vue 3
-- Nuxt
 
 ### Infrastructure
 
@@ -86,7 +94,7 @@ flowchart LR
 
 ## ⚙️ Requirements
 
-Before starting, make sure you have installed:
+Before getting started, make sure you have the following installed:
 
 - Docker Engine
 - Docker Compose v2
@@ -109,39 +117,34 @@ Build the development environment and create a Django superuser:
 
 ```bash
 make build
+
 make create-superuser
 ```
 
-## 📌 Supported Versions
-
-| Component      | Version |
-| -------------- | ------- |
-| Docker Engine  | 29.3    |
-| Docker Compose | v2      |
-| Python         | 3.13    |
-| Django         | 5.2     |
-| PostgreSQL     | 17      |
-| Ruff           | 0.15.20 |
-
 ## ✨ Features
 
+### Infrastructure
 - Docker Compose development environment
+- Environment-based configuration
+- Makefile development commands
+- Automated linting and type checking
+- Nginx reverse proxy
+- Development and production Docker configurations
+- Gunicorn application server
+
+### Backend
 - Django REST Framework backend
-- Nuxt frontend integration
 - PostgreSQL database
 - Redis message broker
 - Celery background workers
-- Environment-based configuration
 - Persistent database storage
 - PostgreSQL health checks
-- Makefile development commands
-- Automated linting and type checking
 - Console email backend for local development
 - Production-ready SMTP configuration
-- Nginx reverse proxy
+
+### Frontend
+- Vue frontend integration
 - Static and media file serving through Nginx
-- Development and production Docker configurations
-- Gunicorn application server
 
 ## 🧰 Commands
 
@@ -175,7 +178,7 @@ The project provides a set of Makefile shortcuts to manage the development envir
 
 ## Environment Variables
 
-The backend configuration is managed through a `.env` file.
+The project configuration is managed through the root .env file.
 The `.env.example` file contains every available configuration option with sensible development defaults.
 
 All sensitive configuration (database credentials, email settings, JWT, CORS, etc.) is managed through environment variables using **django-environ**.
@@ -184,12 +187,12 @@ All sensitive configuration (database credentials, email settings, JWT, CORS, et
 
 Additional commands are available for production deployments:
 
-- make build-prod
-- make start-prod
-- make stop-prod
-- make restart-prod
-- make shell-prod
-- make logs-prod
+- `make build-prod`
+- `make start-prod`
+- `make stop-prod`
+- `make restart-prod`
+- `make shell-prod`
+- `make logs-prod`
 
 ## 🌐 Reverse Proxy
 
@@ -223,11 +226,22 @@ Every push and pull request automatically runs the backend quality checks using 
 
 The CI pipeline executes:
 
-- **make lint**: Ruff (linting, formatting and import sorting)
-- **make type-check**: Pyright (static type checking)
-- **make test**: Pytest (test suite)
+- **make backend-lint**: Ruff (linting, formatting and import sorting)
+- **make backend-type-check**: Pyright (static type checking)
+- **make backend-test**: Pytest (test suite)
 
 The workflow uses the same Docker environment as local development, ensuring consistent behavior across local machines and CI.
+
+## 📌 Supported Versions
+
+| Component      | Version |
+| -------------- | ------- |
+| Docker Engine  | 29.3    |
+| Docker Compose | v2      |
+| Python         | 3.13    |
+| Django         | 5.2     |
+| PostgreSQL     | 17      |
+| Ruff           | 0.15.20 |
 
 ## 📄 License
 
