@@ -36,6 +36,12 @@
 
             <pre>{{ formattedResponse }}</pre>
           </v-card>
+          <v-alert v-else-if="error" class="mx-auto mt-6" max-width="520" type="error" variant="tonal" border="start">
+            <template #title> GET /api/ping failed </template>
+
+            {{ error.message }}
+          </v-alert>
+
           <div class="d-flex justify-center ga-4 mt-10">
             <v-btn color="primary" prepend-icon="mdi-login" to="/login"> Login </v-btn>
 
@@ -61,12 +67,17 @@ import { computed, onMounted, ref } from 'vue'
 import api from '@/core/api'
 
 const response = ref(null)
+const error = ref(null)
 
 const formattedResponse = computed(() => (response.value ? JSON.stringify(response.value, null, 2) : ''))
 
 onMounted(async () => {
-  const { data } = await api.get('ping')
-  response.value = data
+  try {
+    const { data } = await api.get('ping')
+    response.value = data
+  } catch (err) {
+    error.value = err
+  }
 })
 </script>
 
