@@ -1,85 +1,41 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/css/logo.svg" width="125" height="125" />
+  <v-app>
+    <v-app-bar color="primary" elevation="1">
+      <v-app-bar-title>Docker Fullstack Boilerplate</v-app-bar-title>
+    </v-app-bar>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <v-main>
+      <v-container class="fill-height">
+        <v-row class="fill-height" align="center" justify="center">
+          <v-col cols="12" md="8" lg="6">
+            <div class="text-center">
+              <v-icon color="primary" icon="mdi-rocket-launch" size="96" />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+              <h1 class="text-h2 font-weight-bold mt-6">Welcome</h1>
 
-  <RouterView />
+              <p class="text-h6 text-medium-emphasis mt-4">Your Vue 3 + Vite + Vuetify frontend is ready.</p>
+
+              <div class="d-flex justify-center ga-4 mt-10">
+                <v-btn color="primary" prepend-icon="mdi-login"> Login </v-btn>
+
+                <v-btn
+                  href="https://github.com/felmarlop/docker-fullstack#-docker-fullstack-boilerplate"
+                  prepend-icon="mdi-book-open-page-variant"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  variant="outlined"
+                >
+                  Documentation
+                </v-btn>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+<script setup></script>
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
+<style scoped></style>
