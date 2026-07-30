@@ -105,10 +105,11 @@ cp .env.example .env
 
 Review the `.env` file and adjust the configuration to match your local environment if needed.
 
-Build the development environment:
+Build the development environment and create a Django superuser:
 
 ```bash
 make build
+make create-superuser
 ```
 
 ## 📌 Supported Versions
@@ -157,6 +158,7 @@ The project provides a set of Makefile shortcuts to manage the development envir
 | `make celery-beat-shell`          | Open a shell in the Celery Beat container   |
 | `make celery-worker-shell`        | Open a shell in the Celery Worker container |
 | `make reload-nginx`               | Check and reload the Nginx configuration    |
+| `make create-superuser`           | Create Django superuser                     |
 | `make generate-django-secret-key` | Generate a new Django secret key            |
 | `make logs`                       | Show general logs                           |
 | `make logs-backend`               | Show backend logs                           |

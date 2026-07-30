@@ -21,14 +21,6 @@ Password reset emails are sent asynchronously using Celery.
 
 ## 🛠️ Django Admin
 
-Create a superuser:
-
-```bash
-make backend-shell
-
-python manage.py createsuperuser
-```
-
 Access the administration panel:
 
 ```text

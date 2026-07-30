@@ -31,6 +31,7 @@ BACKEND_CI = $(COMPOSE) run --rm backend
 	beat-shell \
 	worker-shell \
 	reload-nginx \
+	create-superuser \
 	generate-django-secret-key \
 	logs \
 	logs-backend \
@@ -74,6 +75,7 @@ help:
 	@echo "  \033[1m - make worker-shell \033[0m   		Open a shell in the Celery Worker container"
 	@echo ""
 	@echo "  \033[1m - make reload-nginx \033[0m 		Reload Nginx configuration"
+	@echo "  \033[1m - make create-superuser \033[0m		Create Django superuser"
 	@echo "  \033[1m - make generate-django-secret-key \033[0m	Generate a new Django secret key"
 	@echo ""
 	@echo "  \033[1m - make logs \033[0m           		Show general logs"
@@ -142,6 +144,9 @@ worker-shell:
 reload-nginx:
 	$(NGINX) nginx -t
 	$(NGINX) nginx -s reload
+
+create-superuser:
+	$(BACKEND) python manage.py createsuperuser
 
 generate-django-secret-key:
 	$(BACKEND) python manage.py generate_secret_key
