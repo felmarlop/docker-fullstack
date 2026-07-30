@@ -1,17 +1,40 @@
-__pycache__
+# Python
+__pycache__/
+*.py[cod]
 .pytest_cache/
 .coverage
-.env
-.vscode (opcional)
-.idea
-db.sqlite3
-node_modules
-dist
-coverage
-*.log
-*.py[cod]
 htmlcov/
 
-# Django generated directories
-staticfiles/
-media/
+# Django
+backend/src/staticfiles/
+backend/src/media/
+db.sqlite3
+
+# Node
+frontend/node_modules/
+frontend/.pnpm-store/
+frontend/dist/
+frontend/dist-ssr/
+frontend/coverage/
+frontend/.eslintcache
+frontend/*.tsbuildinfo
+frontend/.vite/
+frontend/.vite-temp/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Local environment
+.env
+*.local

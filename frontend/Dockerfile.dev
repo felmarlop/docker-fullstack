@@ -1,7 +1,7 @@
-# Node 24 slim as the base image.
+# Node 24 Alpine as the base image
 FROM node:24-alpine
 
-# Set the default working directory
+# Set the working directory
 WORKDIR /app
 
 # Enable pnpm via Corepack
@@ -22,10 +22,8 @@ RUN pnpm install
 # Copy the application source
 COPY --chown=node:node . .
 
-# Expose Vite development server
+# Expose the Vite development server
 EXPOSE 5173
 
 # Start the development server
 CMD ["pnpm", "dev", "--host"]
-
-

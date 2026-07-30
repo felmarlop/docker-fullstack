@@ -49,11 +49,6 @@ services:
       # Container: /app (defined in Dockerfile)
       - ./frontend:/app
 
-      # Anonymous volume for node_modules.
-      # Prevents the bind mount above from overwriting
-      # the dependencies installed inside the container.
-      - /app/node_modules
-
     ports:
       - "${FRONTEND_PORT}:5173"
 

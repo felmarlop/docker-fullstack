@@ -22,6 +22,7 @@ BACKEND_CI = $(COMPOSE) run --rm backend
 .PHONY: \
 	help \
 	build \
+	rebuild \
 	start \
 	stop \
 	restart \
@@ -61,7 +62,8 @@ help:
 	@echo ""
 	@echo " \033[1mAvailable commands:\033[0m"
 	@echo ""
-	@echo "  \033[1m - make build \033[0m			Rebuild the images and start the containers"
+	@echo "  \033[1m - make build \033[0m			Build the images and start the containers"
+	@echo "  \033[1m - make rebuild \033[0m			Rebuild the images and start the containers without cache"
 	@echo "  \033[1m - make start \033[0m   			Start the containers"
 	@echo "  \033[1m - make stop \033[0m    			Stop the containers"
 	@echo "  \033[1m - make restart \033[0m 			Restart the containers"
@@ -85,7 +87,7 @@ help:
 	@echo ""
 	@echo "  \033[1m - make backend-lint \033[0m			Check code formatting and linting"
 	@echo "  \033[1m - make backend-lint-fix \033[0m		Apply lint and formatting fixes"
-	@echo "  \033[1m - make frontend-lint \033[0m			Check code formatting and linting"
+	@echo "  \033[1m - make frontend-lint \033[0m		Check code formatting and linting"
 	@echo "  \033[1m - make frontend-lint-fix \033[0m		Apply lint and formatting fixes"
 	@echo "  \033[1m - make backend-type-check \033[0m		Run Pyright static type checking"
 	@echo "  \033[1m - make backend-test \033[0m			Run tests"
@@ -107,7 +109,13 @@ show-dev-urls:
 # -----------------------------------------------------------------------------
 
 build:
-	$(COMPOSE) up -d --build
+	$(COMPOSE) build
+	$(COMPOSE) up -d
+	@$(MAKE) --no-print-directory show-dev-urls
+
+rebuild:
+	$(COMPOSE) build --no-cache
+	$(COMPOSE) up -d
 	@$(MAKE) --no-print-directory show-dev-urls
 
 start:
