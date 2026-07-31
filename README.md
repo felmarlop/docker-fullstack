@@ -125,11 +125,11 @@ make create-superuser
 
 ### Infrastructure
 - Docker Compose development environment
+- Development and production Docker configurations
 - Environment-based configuration
 - Makefile development commands
 - Automated linting and type checking
 - Nginx reverse proxy
-- Development and production Docker configurations
 - Gunicorn application server
 
 ### Backend

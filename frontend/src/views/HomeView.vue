@@ -44,6 +44,17 @@
 
         <div class="text-center">
           <v-btn color="primary" min-width="220" prepend-icon="mdi-login" size="large" to="/login"> Login </v-btn>
+          <div class="mt-3 text-body-2 text-medium-emphasis">
+            Don't have an account?
+            <v-btn
+              variant="text"
+              color="primary"
+              to="/signup"
+              class="mb-1 px-2"
+            >
+              Create one
+            </v-btn>
+          </div>
         </div>
 
         <div class="d-flex align-center my-6">
