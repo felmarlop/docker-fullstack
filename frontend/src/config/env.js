@@ -3,4 +3,6 @@ export default {
   appName: import.meta.env.VITE_APP_NAME,
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
+
+  snackbarTimeout: 6000,
 }
