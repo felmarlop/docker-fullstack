@@ -13,12 +13,11 @@ export function handleApiError(error, notify = false) {
     }
   } else {
     const { status, data } = error.response
-
     apiError = {
       status,
-      code: data.code || 'unknown_error',
-      message: data.message || GENERAL_ERROR_MESSAGE,
-      details: data.errors || null,
+      code: data.code ?? 'unknown_error',
+      message: data.detail ?? data.message ?? GENERAL_ERROR_MESSAGE,
+      details: data.details ?? data.errors ?? null,
     }
   }
   if (notify) showGlobalError(apiError)

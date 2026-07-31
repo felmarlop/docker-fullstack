@@ -12,7 +12,7 @@ The goal of this project is to provide a clean, reusable and scalable foundation
 <p align="center">
   <img
     src="assets/images/home.png"
-    width="500"
+    width="600"
     alt="Docker Fullstack Boilerplate"
     style="border:1px solid #30363d;border-radius:6px;"
   >

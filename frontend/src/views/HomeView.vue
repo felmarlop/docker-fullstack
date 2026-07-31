@@ -3,7 +3,7 @@
     <v-row align="center" class="fill-height" justify="center">
       <v-col cols="12" md="8" lg="6">
         <div class="text-center">
-          <v-icon color="primary" icon="mdi-rocket-launch" size="96" />
+          <v-icon icon="mdi-rocket-launch" class="me-4 text-primary" size="120" />
 
           <h1 class="text-h3 font-weight-bold mt-4">Docker Fullstack Boilerplate</h1>
 
@@ -43,11 +43,8 @@
         </div>
 
         <div class="text-center">
-          <v-btn color="primary" min-width="220" prepend-icon="mdi-login" size="large" to="/login"> Login </v-btn>
-          <div class="mt-3 text-body-2 text-medium-emphasis">
-            Don't have an account?
-            <v-btn variant="text" color="primary" to="/signup" class="mb-1 px-2"> Create one </v-btn>
-          </div>
+          <v-btn color="primary" min-width="240" prepend-icon="mdi-login" to="/login"> LOG IN </v-btn>
+          <AuthLink text="Don't have an account?" action="Create one" to="/signup" />
         </div>
 
         <div class="d-flex align-center my-6">
@@ -85,6 +82,8 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+
+import AuthLink from '@/components/auth/AuthLink.vue'
 
 import api from '@/core/api'
 
