@@ -34,7 +34,7 @@
           <pre>{{ error ? formattedError : formattedResponse }}</pre>
         </v-card>
 
-        <div class="d-flex align-center my-6">
+        <div v-if="!auth.isAuthenticated" class="d-flex align-center my-6">
           <v-divider />
 
           <span class="mx-4 text-caption text-medium-emphasis text-no-wrap"> JWT Authentication </span>
@@ -42,7 +42,7 @@
           <v-divider />
         </div>
 
-        <div class="text-center">
+        <div v-if="!auth.isAuthenticated" class="text-center">
           <v-btn color="primary" min-width="240" prepend-icon="mdi-login" to="/login"> LOG IN </v-btn>
           <AuthLink text="Don't have an account?" action="Create one" to="/signup" />
         </div>
@@ -83,10 +83,12 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 
+import { useAuthStore } from '@/stores/auth'
 import AuthLink from '@/components/auth/AuthLink.vue'
 
 import api from '@/core/api'
 
+const auth = useAuthStore()
 const response = ref(null)
 const error = ref(null)
 
