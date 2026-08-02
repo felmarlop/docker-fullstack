@@ -5,7 +5,8 @@ export default function setupRequestInterceptor(api) {
     (config) => {
       const auth = useAuthStore()
 
-      if (auth.accessToken && !config.headers.Authorization) {
+      if (auth.accessToken) {
+        config.headers = config.headers ?? {}
         config.headers.Authorization = `Bearer ${auth.accessToken}`
       }
 

@@ -23,11 +23,15 @@ export const useAuthStore = defineStore('auth', {
       this.user = user
     },
 
-    setTokens(accessToken, refreshToken) {
+    setAccessToken(accessToken) {
       this.accessToken = accessToken
-      this.refreshToken = refreshToken
 
       setCookie(ACCESS_TOKEN_COOKIE, accessToken)
+    },
+
+    setRefreshTokens(refreshToken) {
+      this.refreshToken = refreshToken
+
       setCookie(REFRESH_TOKEN_COOKIE, refreshToken)
     },
 
@@ -43,7 +47,8 @@ export const useAuthStore = defineStore('auth', {
       const { accessToken, refreshToken } = getAuthCookies()
       if (!accessToken || !refreshToken) return
 
-      this.setTokens(accessToken, refreshToken)
+      this.setAccessToken(accessToken)
+      this.setRefreshTokens(refreshToken)
 
       try {
         const { data } = await usersApi.me()
@@ -57,7 +62,8 @@ export const useAuthStore = defineStore('auth', {
     async login(credentials) {
       const { data } = await authApi.login(credentials)
 
-      this.setTokens(data.access, data.refresh)
+      this.setAccessToken(data.access)
+      this.setRefreshTokens(data.refresh)
       this.setUser(data.user)
 
       return data
