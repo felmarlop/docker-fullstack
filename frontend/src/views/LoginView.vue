@@ -32,13 +32,15 @@
                 <v-text-field
                   v-model="form.password"
                   label="Password"
-                  type="password"
+                  :type="showPassword ? 'text' : 'password'"
                   prepend-inner-icon="mdi-lock-outline"
                   autocomplete="current-password"
                   variant="outlined"
                   :rules="[rules.required]"
                   :disabled="loading"
                   class="mb-6"
+                  :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                  @click:append-inner="showPassword = !showPassword"
                 />
 
                 <v-btn
@@ -74,6 +76,7 @@ const router = useRouter()
 
 const loading = ref(false)
 const error = ref('')
+const showPassword = ref(false)
 
 const formRef = ref(null)
 const form = reactive({
