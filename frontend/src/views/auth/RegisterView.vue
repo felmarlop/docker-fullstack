@@ -1,0 +1,146 @@
+<template>
+  <v-main>
+    <v-container class="fill-height">
+      <v-row class="fill-height" justify="center" align="center">
+        <v-col cols="12" sm="8" md="6" lg="4">
+          <register-success v-if="completed && form.email" :email="form.email" />
+          <v-card v-else rounded="lg" elevation="2">
+            <v-card-text class="pa-8">
+              <div class="d-flex mb-6">
+                <v-btn prepend-icon="mdi-chevron-left" variant="text" to="/"> Back </v-btn>
+              </div>
+
+              <div class="text-center mb-8">
+                <h1 class="text-h5 font-weight-bold">Sign up</h1>
+
+                <AuthLink text="Already have an account?" action="Sign in" to="/login" />
+              </div>
+
+              <v-alert v-if="error" class="mb-6" type="error" variant="tonal" density="comfortable">
+                {{ error }}
+              </v-alert>
+
+              <v-form ref="formRef" @submit.prevent="submit">
+                <v-text-field
+                  v-model="form.username"
+                  label="Username"
+                  prepend-inner-icon="mdi-account-outline"
+                  autocomplete="username"
+                  variant="outlined"
+                  :rules="[rules.required]"
+                  :disabled="loading"
+                  class="mb-4"
+                />
+
+                <v-text-field
+                  v-model="form.email"
+                  label="Email"
+                  prepend-inner-icon="mdi-email-outline"
+                  autocomplete="email"
+                  variant="outlined"
+                  :rules="[rules.required, rules.email]"
+                  :disabled="loading"
+                  class="mb-4"
+                />
+
+                <v-text-field
+                  v-model="form.phone"
+                  label="Phone (optional)"
+                  prepend-inner-icon="mdi-phone-outline"
+                  autocomplete="tel"
+                  placeholder="+34 600 111 222"
+                  variant="outlined"
+                  :disabled="loading"
+                  class="mb-4"
+                />
+
+                <v-text-field
+                  v-model="form.password"
+                  label="Password"
+                  :type="showPassword ? 'text' : 'password'"
+                  prepend-inner-icon="mdi-lock-outline"
+                  :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                  autocomplete="new-password"
+                  variant="outlined"
+                  :rules="[rules.required]"
+                  :disabled="loading"
+                  class="mb-6"
+                  @click:append-inner="showPassword = !showPassword"
+                />
+
+                <v-btn
+                  type="submit"
+                  color="primary"
+                  block
+                  prepend-icon="mdi-account-plus-outline"
+                  :loading="loading"
+                  :disabled="loading || !canSubmit"
+                >
+                  SIGN UP
+                </v-btn>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
+</template>
+
+<script setup>
+import { computed, reactive, ref, watch } from 'vue'
+
+import AuthLink from '@/components/auth/AuthLink.vue'
+import RegisterSuccess from '@/components/auth/RegisterSuccess.vue'
+import * as rules from '@/helpers/validation'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
+
+const loading = ref(false)
+const completed = ref(false)
+const error = ref('')
+const showPassword = ref(false)
+
+const formRef = ref(null)
+const form = reactive({
+  username: '',
+  email: '',
+  phone: '',
+  password: '',
+})
+
+const canSubmit = computed(() => {
+  return form.username.trim().length > 0 && form.email.trim().length > 0 && form.password.trim().length > 0
+})
+
+async function submit() {
+  const { valid } = await formRef.value.validate()
+  if (!valid) return
+
+  completed.value = false
+  loading.value = true
+  error.value = ''
+
+  try {
+    await auth.register(form)
+    completed.value = true
+  } catch (err) {
+    const defaultMessage = err.message ?? ''
+    const firstError = Object.values(err.details ?? {})[0]?.[0]
+    error.value = firstError ?? defaultMessage
+  } finally {
+    loading.value = false
+  }
+}
+
+watch(
+  form,
+  () => {
+    error.value = ''
+  },
+  {
+    deep: true,
+  },
+)
+</script>

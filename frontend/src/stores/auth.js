@@ -69,6 +69,11 @@ export const useAuthStore = defineStore('auth', {
       return data
     },
 
+    async register(payload) {
+      const { data } = await authApi.register(payload)
+      return data
+    },
+
     async logout() {
       try {
         await authApi.logout(this.refreshToken)
