@@ -1,19 +1,16 @@
 from typing import Any
 
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 
-from app.authentication.tasks import send_reset_password_email
+from app.authentication.models import User
+from app.authentication.services import send_reset_password_email
 
 token_generator = PasswordResetTokenGenerator()
-
-User = get_user_model()
 
 
 class ForgotPasswordSerializer(serializers.Serializer):
@@ -36,14 +33,8 @@ class ForgotPasswordSerializer(serializers.Serializer):
             ) from exc
         return value
 
-    def save(self, **kwargs: Any) -> None:  # noqa: ARG002
-        email = self.validated_data["email"]  # type: ignore
-
-        uid = urlsafe_base64_encode(force_bytes(self.user.pk))
-        token = token_generator.make_token(self.user)
-
-        url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}"
-        send_reset_password_email.delay(email, url)  # pyright: ignore[reportFunctionMemberAccess]
+    def send_email(self) -> None:
+        send_reset_password_email(self.user)
 
 
 class ResetPasswordSerializer(serializers.Serializer):
@@ -90,6 +81,7 @@ class ResetPasswordSerializer(serializers.Serializer):
 
         return attrs
 
-    def save(self, **kwargs: Any) -> None:  # noqa: ARG002
+    def save(self, **kwargs: Any) -> User:  # noqa: ARG002
         self.user.set_password(self.validated_data["new_password"])  # type: ignore
         self.user.save(update_fields=["password"])
+        return self.user

@@ -93,13 +93,13 @@ class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]  # noqa
 
     def post(self, request: Request) -> Response:
-        serializer = ChangePasswordSerializer(
+        serializer = self.serializer_class(
             data=request.data,
             context={"request": request},
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        logger.info(f"Password changed successfully for user {request.user.username}.")
+        user = serializer.save()
+        logger.info(f"Password changed successfully for user {user.username}.")  # type: ignore
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -123,7 +123,7 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]  # noqa
 
     def post(self, request: Request) -> Response:
-        serializer = LogoutSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         logger.info(f"User {request.user.username} logged out.")

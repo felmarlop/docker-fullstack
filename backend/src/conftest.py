@@ -10,6 +10,7 @@ def user() -> User:
     return User.objects.create_user(
         username="fmartin",
         email="fmartin@test.com",
+        phone="+34600111222",
         password="password123",
     )
 

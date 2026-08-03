@@ -34,9 +34,9 @@ class ForgotPasswordView(APIView):
     serializer_class = ForgotPasswordSerializer
 
     def post(self, request: Request) -> Response:
-        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.send_email()  # type: ignore
         email = serializer.validated_data["email"]  # type: ignore
         logger.info(f"Password reset requested for {email}.")
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -64,8 +64,8 @@ class ResetPasswordView(APIView):
     serializer_class = ResetPasswordSerializer
 
     def post(self, request: Request) -> Response:
-        serializer = ResetPasswordSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        logger.info(f"Password reset completed for user {serializer.user.username}.")  # type: ignore
+        user = serializer.save()
+        logger.info(f"Password reset completed for user {user.username}.")  # type: ignore
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -9,6 +9,7 @@ from rest_framework_simplejwt.serializers import (
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from app.authentication.models import User
 from app.authentication.serializers.user import UserSerializer
 
 
@@ -60,11 +61,12 @@ class ChangePasswordSerializer(serializers.Serializer):
 
         return attrs
 
-    def save(self, **kwargs: Any) -> None:  # noqa: ARG002
+    def save(self, **kwargs: Any) -> User:  # noqa: ARG002
         user = self.context["request"].user
         pwd = self.validated_data["new_password"]  # type: ignore
         user.set_password(pwd)
         user.save(update_fields=["password"])
+        return user
 
 
 class LogoutSerializer(serializers.Serializer):
