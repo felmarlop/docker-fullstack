@@ -29,30 +29,13 @@ class RegisterSerializer(serializers.Serializer):
         value = value.strip().lower()
 
         if value in RESERVED_USERNAMES:
-            raise serializers.ValidationError(
-                {
-                    "username": [
-                        "This username is reserved.",
-                    ]
-                }
-            )
-
+            raise serializers.ValidationError("This username is reserved.")
         if any(value.startswith(prefix) for prefix in RESERVED_PREFIXES):
-            raise serializers.ValidationError(
-                {
-                    "username": [
-                        "This username is reserved.",
-                    ]
-                }
-            )
+            raise serializers.ValidationError("This username is reserved.")
 
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError(
-                {
-                    "username": [
-                        "A user with this username already exists.",
-                    ]
-                }
+                "A user with this username already exists."
             )
 
         return value
@@ -61,24 +44,14 @@ class RegisterSerializer(serializers.Serializer):
         value = value.strip()
 
         if User.objects.filter(email__iexact=value).exists():
-            raise serializers.ValidationError(
-                {
-                    "email": [
-                        "A user with this email already exists.",
-                    ]
-                }
-            )
+            raise serializers.ValidationError("A user with this email already exists.")
 
         return value
 
     def validate_phone(self, value: PhoneNumber | None) -> PhoneNumber | None:
         if value and User.objects.filter(phone=value).exists():
             raise serializers.ValidationError(
-                {
-                    "phone": [
-                        "A user with this phone number already exists.",
-                    ]
-                }
+                "A user with this phone number already exists."
             )
 
         return value
@@ -163,20 +136,12 @@ class ResendActivationEmailSerializer(serializers.Serializer):
             self.user = User.objects.get(email=value)
         except User.DoesNotExist as exc:
             raise serializers.ValidationError(
-                {
-                    "email": [
-                        "No account is associated with this email address.",
-                    ]
-                }
+                "No account is associated with this email address."
             ) from exc
 
         if self.user.is_active:
             raise serializers.ValidationError(
-                {
-                    "email": [
-                        "This account has already been activated.",
-                    ]
-                }
+                "This account has already been activated."
             )
 
         return value

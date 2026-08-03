@@ -1,10 +1,12 @@
 import logging
 
+from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app.authentication.serializers.account import LoginSerializer
 from app.authentication.serializers.register import (
     ActivateAccountSerializer,
     RegisterSerializer,
@@ -15,6 +17,25 @@ from app.authentication.services import send_activation_email
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(
+    summary="Register user",
+    description="Register a new inactive user and send an activation email",
+    request=RegisterSerializer,
+    tags=["Authentication"],
+    responses={200: LoginSerializer},
+    examples=[
+        OpenApiExample(
+            "Register request",
+            value={
+                "username": "fmartin",
+                "email": "fmartin@example.com",
+                "phone": "+34600111222",
+                "password": "myStrongPassword123",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class RegisterView(APIView):
     """
     Register a new inactive user
@@ -39,6 +60,12 @@ class RegisterView(APIView):
         )
 
 
+@extend_schema(
+    summary="Activate account",
+    description="Activate a user account using a user ID and activation token.",
+    request=ActivateAccountSerializer,
+    tags=["Authentication"],
+)
 class ActivateAccountView(APIView):
     """
     Activate a user's account.
@@ -65,6 +92,21 @@ class ActivateAccountView(APIView):
         )
 
 
+@extend_schema(
+    summary="Resend activation email",
+    description="Resend the activation email if the account exists and it's inactive.",
+    request=ResendActivationEmailSerializer,
+    tags=["Authentication"],
+    examples=[
+        OpenApiExample(
+            "Resend activation email request",
+            value={
+                "email": "fmartin@example.com",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class ResendActivationEmailView(APIView):
     """
     Resend activation email

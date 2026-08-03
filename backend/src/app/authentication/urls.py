@@ -6,9 +6,9 @@ urlpatterns = [
     path("ping/", base.PingView.as_view(), name="ping"),
     path("users/me/", user.MeView.as_view(), name="users-me"),
     path("auth/login/", account.LoginView.as_view(), name="login"),
+    path("auth/register/", register.RegisterView.as_view(), name="register"),
     path("auth/logout/", account.LogoutView.as_view(), name="logout"),
     path("auth/refresh/", account.RefreshTokenView.as_view(), name="token-refresh"),
-    path("register/", register.RegisterView.as_view(), name="register"),
     path(
         "activate/<uidb64>/<token>/",
         register.ActivateAccountView.as_view(),
