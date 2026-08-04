@@ -10,12 +10,12 @@ urlpatterns = [
     path("auth/logout/", account.LogoutView.as_view(), name="logout"),
     path("auth/refresh/", account.RefreshTokenView.as_view(), name="token-refresh"),
     path(
-        "activate/<uidb64>/<token>/",
+        "auth/activate/<uidb64>/<token>/",
         register.ActivateAccountView.as_view(),
         name="activate-account",
     ),
     path(
-        "activate/resend/",
+        "auth/activate/resend/",
         register.ResendActivationEmailView.as_view(),
         name="resend-activation-email",
     ),
