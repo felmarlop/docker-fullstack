@@ -9,6 +9,7 @@ from rest_framework_simplejwt.serializers import (
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from app.authentication.exceptions import AccountNotActivated
 from app.authentication.models import User
 from app.authentication.serializers.user import UserSerializer
 
@@ -19,6 +20,12 @@ class LoginSerializer(BaseTokenObtainPairSerializer):
     """
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        username = attrs["username"]
+
+        user = User.objects.filter(username=username).first()
+        if user and not user.is_active:
+            raise AccountNotActivated("Please activate your account before signing in.")
+
         data = super().validate(attrs)
         return {**data, "user": UserSerializer(self.user).data}
 

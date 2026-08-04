@@ -33,30 +33,26 @@ class RegisterSerializer(serializers.Serializer):
         if any(value.startswith(prefix) for prefix in RESERVED_PREFIXES):
             raise serializers.ValidationError("This username is reserved.")
 
-        user = User.objects.filter(username=value).first()
-        if user and user.is_active:
-                raise serializers.ValidationError(
-                    "A user with this username already exists."
-                )
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError(
+                "A user with this username already exists."
+            )
 
         return value
 
     def validate_email(self, value: str) -> str:
         value = value.strip()
 
-        user = User.objects.filter(email__iexact=value).first()
-        if user and user.is_active:
+        if User.objects.filter(email__iexact=value).exists():
             raise serializers.ValidationError("A user with this email already exists.")
 
         return value
 
     def validate_phone(self, value: PhoneNumber | None) -> PhoneNumber | None:
-        if value:
-            user = User.objects.filter(phone=value).first()
-            if user and user.is_active:
-                raise serializers.ValidationError(
-                    "A user with this phone number already exists."
-                )
+        if value and User.objects.filter(phone=value).exists():
+            raise serializers.ValidationError(
+                "A user with this phone number already exists."
+            )
 
         return value
 
@@ -66,9 +62,6 @@ class RegisterSerializer(serializers.Serializer):
         return value
 
     def create(self, validated_data: dict[str, Any]) -> User:
-        user = User.objects.filter(username=validated_data["username"]).first()
-        if user:
-            return user
         return User.objects.create_user(
             username=validated_data["username"],
             email=validated_data["email"],
