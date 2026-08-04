@@ -3,7 +3,7 @@
     <v-container class="fill-height">
       <v-row class="fill-height" justify="center" align="center">
         <v-col cols="12" sm="8" md="6" lg="4">
-          <register-success v-if="completed && form.email" :email="form.email" />
+          <register-success-msg v-if="completed && form.email" :email="form.email" />
           <v-card v-else rounded="lg" elevation="2">
             <v-card-text class="pa-8">
               <div class="d-flex mb-6">
@@ -13,7 +13,7 @@
               <div class="text-center mb-8">
                 <h1 class="text-h5 font-weight-bold">Sign up</h1>
 
-                <AuthLink text="Already have an account?" action="Sign in" to="/login" />
+                <AuthLink text="Already have an account?" action="Log in" to="/login" />
               </div>
 
               <v-alert v-if="error" class="mb-6" type="error" variant="tonal" density="comfortable">
@@ -91,7 +91,7 @@
 import { computed, reactive, ref, watch } from 'vue'
 
 import AuthLink from '@/components/auth/AuthLink.vue'
-import RegisterSuccess from '@/components/auth/RegisterSuccess.vue'
+import RegisterSuccessMsg from '@/components/auth/RegisterSuccessMsg.vue'
 import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'
 

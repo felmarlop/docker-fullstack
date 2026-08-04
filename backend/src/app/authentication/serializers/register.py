@@ -93,7 +93,6 @@ class ActivateAccountSerializer(serializers.Serializer):
                     ]
                 }
             ) from exc
-
         return user
 
     def activate(self) -> User:

@@ -21,8 +21,8 @@ def send_activation_email(user: User) -> None:
 
 
 def send_reset_password_email(user: User) -> None:
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
     token = reset_token_generator.make_token(user)
 
-    url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}"
+    url = f"{settings.FRONTEND_URL}/reset-password/{uidb64}/{token}"
     tasks.send_reset_password_email.delay(user.email, url)  # pyright: ignore[reportFunctionMemberAccess]

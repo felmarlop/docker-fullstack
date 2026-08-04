@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
     summary="Register user",
     description="Register a new inactive user and send an activation email",
     request=RegisterSerializer,
-    tags=["Authentication"],
+    tags=["Registration"],
     responses={200: LoginSerializer},
     examples=[
         OpenApiExample(
@@ -64,7 +64,7 @@ class RegisterView(APIView):
     summary="Activate account",
     description="Activate a user account using a user ID and activation token.",
     request=ActivateAccountSerializer,
-    tags=["Authentication"],
+    tags=["Registration"],
 )
 class ActivateAccountView(APIView):
     """
@@ -96,7 +96,7 @@ class ActivateAccountView(APIView):
     summary="Resend activation email",
     description="Resend the activation email if the account exists and it's inactive.",
     request=ResendActivationEmailSerializer,
-    tags=["Authentication"],
+    tags=["Registration"],
     examples=[
         OpenApiExample(
             "Resend activation email request",

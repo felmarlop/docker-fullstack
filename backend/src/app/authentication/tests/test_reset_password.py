@@ -42,7 +42,7 @@ def test_reset_password_success(public_api_client: APIClient, user: User) -> Non
 
     response = public_api_client.post(
         reverse("reset-password"),
-        {"uid": uid, "token": token, "new_password": VALID_PASSWORD},
+        {"uidb64": uid, "token": token, "new_password": VALID_PASSWORD},
         format="json",
     )
 
@@ -59,7 +59,7 @@ def test_reset_password_too_common(public_api_client: APIClient, user: User) -> 
 
     response = public_api_client.post(
         reverse("reset-password"),
-        {"uid": uid, "token": token, "new_password": COMMON_PASSWORD},
+        {"uidb64": uid, "token": token, "new_password": COMMON_PASSWORD},
         format="json",
     )
 
@@ -76,12 +76,12 @@ def test_reset_password_invalid_uid(public_api_client: APIClient, user: User) ->
 
     response = public_api_client.post(
         reverse("reset-password"),
-        {"uid": uid, "token": token, "new_password": VALID_PASSWORD},
+        {"uidb64": uid, "token": token, "new_password": VALID_PASSWORD},
         format="json",
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert "uid" in response.data
+    assert "uidb64" in response.data
 
 
 @pytest.mark.django_db
@@ -92,7 +92,7 @@ def test_reset_password_invalid_token(public_api_client: APIClient, user: User) 
 
     response = public_api_client.post(
         reverse("reset-password"),
-        {"uid": uid, "token": token, "new_password": VALID_PASSWORD},
+        {"uidb64": uid, "token": token, "new_password": VALID_PASSWORD},
         format="json",
     )
 
@@ -109,7 +109,7 @@ def test_reset_password_token_cannot_be_reused(
 
     response = public_api_client.post(
         reverse("reset-password"),
-        {"uid": uid, "token": token, "new_password": VALID_PASSWORD},
+        {"uidb64": uid, "token": token, "new_password": VALID_PASSWORD},
         format="json",
     )
 
@@ -120,7 +120,7 @@ def test_reset_password_token_cannot_be_reused(
 
     response = public_api_client.post(
         reverse("reset-password"),
-        {"uid": uid, "token": token, "new_password": SECOND_VALID_PASSWORD},
+        {"uidb64": uid, "token": token, "new_password": SECOND_VALID_PASSWORD},
         format="json",
     )
 

@@ -14,6 +14,6 @@ def custom_exception_handler(
         return None
 
     if hasattr(exc, "get_codes"):
-        response.data["code"] = exc.get_codes()
+        response.data["code"] = exc.get_codes()  # type: ignore
 
     return response

@@ -74,6 +74,11 @@ export const useAuthStore = defineStore('auth', {
       return data
     },
 
+    async forgotPassword(payload) {
+      const { data } = await authApi.forgotPassword(payload)
+      return data
+    },
+
     async logout() {
       try {
         await authApi.logout(this.refreshToken)

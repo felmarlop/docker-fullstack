@@ -7,54 +7,41 @@
           <v-card v-else rounded="lg" elevation="2">
             <v-card-text class="pa-8">
               <div class="d-flex mb-6">
-                <v-btn prepend-icon="mdi-chevron-left" variant="text" to="/"> Back </v-btn>
+                <v-btn prepend-icon="mdi-chevron-left" variant="text" to="/login"> Back </v-btn>
               </div>
 
               <div class="text-center mb-8">
-                <h1 class="text-h5 font-weight-bold">Log in</h1>
+                <h1 class="text-h5 font-weight-bold">Reset password</h1>
 
-                <AuthLink text="Don't have an account?" action="Create one" to="/register" />
+                <AuthLink text="Remember your password?" action="Log in" to="/login" />
               </div>
+
               <v-alert v-if="error" class="mb-6" type="error" variant="tonal" density="comfortable">
                 {{ error }}
               </v-alert>
+
               <v-form ref="formRef" @submit.prevent="submit">
                 <v-text-field
-                  v-model="form.username"
-                  label="Username"
-                  prepend-inner-icon="mdi-account-outline"
-                  autocomplete="username"
+                  v-model="form.email"
+                  label="Email"
+                  prepend-inner-icon="mdi-email-outline"
+                  autocomplete="email"
                   variant="outlined"
-                  :rules="[rules.required]"
-                  :disabled="loading"
-                  class="mb-4"
-                />
-
-                <v-text-field
-                  v-model="form.password"
-                  label="Password"
-                  :type="showPassword ? 'text' : 'password'"
-                  prepend-inner-icon="mdi-lock-outline"
-                  autocomplete="current-password"
-                  variant="outlined"
-                  :rules="[rules.required]"
+                  :rules="[rules.required, rules.email]"
                   :disabled="loading"
                   class="mb-6"
-                  :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-                  @click:append-inner="showPassword = !showPassword"
                 />
 
                 <v-btn
                   type="submit"
                   color="primary"
                   block
-                  prepend-icon="mdi-login"
+                  prepend-icon="mdi-lock-reset"
                   :loading="loading"
                   :disabled="loading || !canSubmit"
                 >
-                  LOG IN
+                  SEND RESET LINK
                 </v-btn>
-                <AuthLink action="I forgot my password" to="/reset-password" />
               </v-form>
             </v-card-text>
           </v-card>
@@ -66,7 +53,6 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 
 import ActivateAccountMsg from '@/components/auth/ActivateAccountMsg.vue'
 import AuthLink from '@/components/auth/AuthLink.vue'
@@ -74,34 +60,31 @@ import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
-const router = useRouter()
 
 const loading = ref(false)
 const error = ref('')
 const inactive = ref(false)
-const showPassword = ref(false)
 
 const formRef = ref(null)
+
 const form = reactive({
-  username: '',
-  password: '',
+  email: '',
 })
 
-const canSubmit = computed(() => {
-  return form.username.trim().length > 0 && form.password.trim().length > 0
-})
+const canSubmit = computed(() => form.email.trim().length > 0)
 
 async function submit() {
   const { valid } = await formRef.value.validate()
-  if (!valid) return
+
+  if (!valid) {
+    return
+  }
 
   loading.value = true
   error.value = ''
 
   try {
-    await auth.login(form)
-
-    router.push('/')
+    await auth.forgotPassword(form)
   } catch (err) {
     const defaultMessage = err.message ?? ''
     const firstError = Object.values(err.details ?? {})[0]?.[0]

@@ -26,11 +26,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
             self.user = User.objects.get(email=value)
         except User.DoesNotExist as exc:
             raise serializers.ValidationError(
-                {
-                    "email": [
-                        "No account is associated with this email address.",
-                    ]
-                }
+                "No account is associated with this email address."
             ) from exc
 
         if not self.user.is_active:
@@ -49,18 +45,18 @@ class ResetPasswordSerializer(serializers.Serializer):
     Reset a user's password using a valid reset token.
     """
 
-    uid = serializers.CharField()
+    uidb64 = serializers.CharField()
     token = serializers.CharField()
     new_password = serializers.CharField(write_only=True)
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         try:
-            uid = force_str(urlsafe_base64_decode(attrs["uid"]))
+            uid = force_str(urlsafe_base64_decode(attrs["uidb64"]))
             self.user = User.objects.get(pk=uid)
         except Exception as exc:
             raise serializers.ValidationError(
                 {
-                    "uid": [
+                    "uidb64": [
                         "Invalid password reset link.",
                     ],
                 }
