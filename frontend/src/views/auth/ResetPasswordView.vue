@@ -63,7 +63,6 @@ const loading = ref(false)
 const completed = ref(false)
 const inactive = ref(false)
 const error = ref('')
-const detailErrors = ref({})
 
 const formRef = ref(null)
 
@@ -99,7 +98,7 @@ async function submit() {
     let details = err.details ?? null
     delete details.code
     if (details && typeof details === 'object' && Object.keys(details).length > 0) {
-			error.value = Object.values(details)[0]?.[0] ?? ''
+      error.value = Object.values(details)[0]?.[0] ?? ''
     } else {
       error.value = err.message ?? ''
     }

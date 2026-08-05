@@ -19,15 +19,29 @@ class LoginSerializer(BaseTokenObtainPairSerializer):
     Authenticate a user and return JWT tokens.
     """
 
-    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
-        username = attrs["username"]
+    username = serializers.CharField(write_only=True, required=False)
 
-        user = User.objects.filter(username=username).first()
-        if user and not user.is_active:
-            raise AccountNotActivated("Please activate your account before signing in.")
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        username = attrs["username"].strip()
+
+        user = (
+            User.objects.filter(username__iexact=username).first()
+            or User.objects.filter(email__iexact=username).first()
+        )
+
+        if user:
+            if not user.is_active:
+                raise AccountNotActivated(
+                    "Please activate your account before signing in."
+                )
+            attrs["username"] = user.username
 
         data = super().validate(attrs)
-        return {**data, "user": UserSerializer(self.user).data}
+
+        return {
+            **data,
+            "user": UserSerializer(self.user).data,
+        }
 
 
 class ChangePasswordSerializer(serializers.Serializer):

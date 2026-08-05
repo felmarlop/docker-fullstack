@@ -47,7 +47,7 @@ class LoginView(BaseTokenObtainPairView):
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         username = request.data.get("username")  # type: ignore
         response = super().post(request, *args, **kwargs)
-        logger.info(f"User {username} authenticated successfully.")
+        logger.info(f"{username} authenticated successfully.")
         return response
 
 

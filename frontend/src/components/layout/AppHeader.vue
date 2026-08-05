@@ -1,14 +1,8 @@
 <template>
   <v-app-bar color="primary" elevation="1" class="px-2">
     <v-app-bar-title class="d-flex align-center ga-2">
-      <RouterLink
-        to="/"
-        class="header-link d-flex align-center ga-2 text-inherit"
-      >
-        <v-icon
-          icon="mdi-rocket-launch"
-          class="me-4"
-        />
+      <RouterLink to="/" class="header-link d-flex align-center ga-2 text-inherit">
+        <v-icon icon="mdi-rocket-launch" class="me-4" />
         <span>Docker Fullstack Boilerplate</span>
       </RouterLink>
     </v-app-bar-title>

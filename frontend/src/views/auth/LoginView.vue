@@ -16,7 +16,7 @@
               </v-alert>
               <v-form ref="formRef" @submit.prevent="submit">
                 <v-text-field
-                  v-model="form.indentifier"
+                  v-model="form.username"
                   label="Email or username"
                   prepend-inner-icon="mdi-account-outline"
                   autocomplete="username"
@@ -79,16 +79,16 @@ const showPassword = ref(false)
 
 const formRef = ref(null)
 const form = reactive({
-  identifier: '',
+  username: '',
   password: '',
 })
 
 const canSubmit = computed(() => {
-  return form.identifier.trim().length > 0 && form.password.trim().length > 0
+  return form.username.trim().length > 0 && form.password.trim().length > 0
 })
 
 function resetForm() {
-  form.identifier = ''
+  form.username = ''
   form.password = ''
   error.value = ''
   inactive.value = false
