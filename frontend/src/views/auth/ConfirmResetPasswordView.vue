@@ -101,12 +101,15 @@ async function submit() {
   error.value = ''
 
   try {
-    await authApi.resetPassword(route.params.uidb64, route.params.token, form.password)
+    await authApi.resetPassword({
+      uidb64: route.params.uidb64,
+      token: route.params.token,
+      new_password: form.password,
+    })
 
     success.value = true
   } catch (err) {
     let details = err.details ?? null
-    delete details.code
     if (details && typeof details === 'object' && Object.keys(details).length > 0) {
       error.value = Object.values(details)[0]?.[0] ?? ''
     } else {

@@ -134,8 +134,8 @@ class ResendActivationEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def send_email(self) -> None:
-        email = self.validated_data["email"]
+        email = self.validated_data["email"]  # type: ignore
         user = User.objects.filter(email__iexact=email).first()
 
         if user and not user.is_active:
-            send_activation_email(self.user)
+            send_activation_email(user)

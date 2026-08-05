@@ -14,18 +14,10 @@ SECOND_VALID_PASSWORD = "fmartinStrongAgain123"
 
 
 @pytest.mark.django_db
-def test_forgot_password_valid_and_invalid_email(
+def test_forgot_password(
     public_api_client: APIClient,
     user: User,  # noqa: ARG001
 ) -> None:
-    response = public_api_client.post(
-        reverse("forgot-password"),
-        {"email": "f_martin@test.com"},
-        format="json",
-    )
-
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
     response = public_api_client.post(
         reverse("forgot-password"),
         {"email": "fmartin@test.com"},

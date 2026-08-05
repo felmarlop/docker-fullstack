@@ -3,8 +3,7 @@
     <v-container class="fill-height">
       <v-row class="fill-height" justify="center" align="center">
         <v-col cols="12" sm="8" md="6" lg="4">
-          <activate-account-msg v-if="inactive" @close="resetForm" />
-          <v-card v-else rounded="lg" elevation="2">
+          <v-card rounded="lg" elevation="2">
             <v-card-text class="pa-8">
               <div class="text-center mb-8">
                 <h1 class="text-h5 font-weight-bold">Log in</h1>
@@ -64,7 +63,6 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
-import ActivateAccountMsg from '@/components/auth/ActivateAccountMsg.vue'
 import AuthLink from '@/components/auth/AuthLink.vue'
 import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'
@@ -74,7 +72,6 @@ const router = useRouter()
 
 const loading = ref(false)
 const error = ref('')
-const inactive = ref(false)
 const showPassword = ref(false)
 
 const formRef = ref(null)
@@ -87,20 +84,11 @@ const canSubmit = computed(() => {
   return form.username.trim().length > 0 && form.password.trim().length > 0
 })
 
-function resetForm() {
-  form.username = ''
-  form.password = ''
-  error.value = ''
-  inactive.value = false
-}
-
 async function submit() {
   const { valid } = await formRef.value.validate()
   if (!valid) return
 
   loading.value = true
-  inactive.value = false
-
   error.value = ''
 
   try {
@@ -109,7 +97,11 @@ async function submit() {
     router.push('/')
   } catch (err) {
     error.value = err.message ?? ''
-    inactive.value = err.code === 'account_not_activated'
+
+    if (err.code === 'account_not_activated') {
+      const query = form.username.includes('@') ? { email: form.username } : {}
+      router.push({ name: 'resend-activation', query: query })
+    }
   } finally {
     loading.value = false
   }

@@ -3,6 +3,7 @@ import ConfirmResetPasswordView from '@/views/auth/ConfirmResetPasswordView.vue'
 import LoginView from '@/views/auth/LoginView.vue'
 import ProfileView from '@/views/auth/ProfileView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
+import ResendActivationView from '@/views/auth/ResendActivationView.vue'
 import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
 
 export default [
@@ -26,6 +27,14 @@ export default [
     path: '/activate/:uidb64/:token',
     name: 'activate-account',
     component: ActivateAccountView,
+    meta: {
+      guestOnly: true,
+    },
+  },
+  {
+    path: '/resend',
+    name: 'resend-activation',
+    component: ResendActivationView,
     meta: {
       guestOnly: true,
     },

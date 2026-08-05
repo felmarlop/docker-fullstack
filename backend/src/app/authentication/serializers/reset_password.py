@@ -7,7 +7,6 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 
-from app.authentication.exceptions import AccountNotActivated
 from app.authentication.models import User
 from app.authentication.services import send_reset_password_email
 
@@ -22,7 +21,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def send_email(self) -> None:
-        email = self.validated_data["email"]
+        email = self.validated_data["email"]  # type: ignore
         user = User.objects.filter(email__iexact=email).first()
 
         if user and user.is_active:

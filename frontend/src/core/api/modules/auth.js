@@ -1,27 +1,27 @@
 import api from '../index'
 
-export function login(data) {
-  return api.post('auth/login/', data)
+export function login(payload) {
+  return api.post('auth/login/', payload)
 }
 
-export function register(data) {
-  return api.post('auth/register/', data)
+export function register(payload) {
+  return api.post('auth/register/', payload)
 }
 
 export function activate(uidb64, token) {
   return api.get(`auth/activate/${uidb64}/${token}/`)
 }
 
+export function resendActivationEmail(payload) {
+  return api.post(`auth/activate/resend/`, payload)
+}
+
 export function forgotPassword(payload) {
   return api.post('auth/forgot-password/', payload)
 }
 
-export function resetPassword(uidb64, token, newPassword) {
-  return api.post(`auth/reset-password/`, {
-    uidb64,
-    token,
-    new_password: newPassword,
-  })
+export function resetPassword(payload) {
+  return api.post(`auth/reset-password/`, payload)
 }
 
 export function logout(refreshToken) {

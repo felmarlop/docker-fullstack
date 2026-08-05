@@ -130,7 +130,6 @@ async function submit() {
     completed.value = true
   } catch (err) {
     let details = err.details ?? null
-    delete details.code
     if (details && typeof details === 'object' && Object.keys(details).length > 0) {
       detailErrors.value = details
     } else {
