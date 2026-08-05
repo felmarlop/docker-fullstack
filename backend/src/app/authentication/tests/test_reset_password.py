@@ -64,8 +64,8 @@ def test_reset_password_too_common(public_api_client: APIClient, user: User) -> 
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert "new_password" in response.data
-    assert "too common" in response.data["new_password"][0].lower()
+    assert "password" in response.data
+    assert "too common" in response.data["password"][0].lower()
 
 
 @pytest.mark.django_db

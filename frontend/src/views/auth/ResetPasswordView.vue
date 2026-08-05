@@ -7,10 +7,6 @@
           <email-sent-msg v-else-if="completed && form.email" action="reset your password" :email="form.email" />
           <v-card v-else rounded="lg" elevation="2">
             <v-card-text class="pa-8">
-              <div class="d-flex mb-6">
-                <v-btn prepend-icon="mdi-chevron-left" variant="text" to="/login"> Back </v-btn>
-              </div>
-
               <div class="text-center mb-8">
                 <h1 class="text-h5 font-weight-bold">Reset password</h1>
 

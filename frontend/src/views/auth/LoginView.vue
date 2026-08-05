@@ -6,10 +6,6 @@
           <activate-account-msg v-if="inactive" @close="resetForm" />
           <v-card v-else rounded="lg" elevation="2">
             <v-card-text class="pa-8">
-              <div class="d-flex mb-6">
-                <v-btn prepend-icon="mdi-chevron-left" variant="text" to="/"> Back </v-btn>
-              </div>
-
               <div class="text-center mb-8">
                 <h1 class="text-h5 font-weight-bold">Log in</h1>
 
@@ -20,8 +16,8 @@
               </v-alert>
               <v-form ref="formRef" @submit.prevent="submit">
                 <v-text-field
-                  v-model="form.username"
-                  label="Username"
+                  v-model="form.indentifier"
+                  label="Email or username"
                   prepend-inner-icon="mdi-account-outline"
                   autocomplete="username"
                   variant="outlined"
@@ -83,16 +79,16 @@ const showPassword = ref(false)
 
 const formRef = ref(null)
 const form = reactive({
-  username: '',
+  identifier: '',
   password: '',
 })
 
 const canSubmit = computed(() => {
-  return form.username.trim().length > 0 && form.password.trim().length > 0
+  return form.identifier.trim().length > 0 && form.password.trim().length > 0
 })
 
 function resetForm() {
-  form.username = ''
+  form.identifier = ''
   form.password = ''
   error.value = ''
   inactive.value = false

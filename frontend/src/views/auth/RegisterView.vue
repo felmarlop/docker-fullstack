@@ -6,10 +6,6 @@
           <email-sent-msg v-if="completed && form.email" action="activate your account" :email="form.email" />
           <v-card v-else rounded="lg" elevation="2">
             <v-card-text class="pa-8">
-              <div class="d-flex mb-6">
-                <v-btn prepend-icon="mdi-chevron-left" variant="text" to="/"> Back </v-btn>
-              </div>
-
               <div class="text-center mb-8">
                 <h1 class="text-h5 font-weight-bold">Sign up</h1>
 
