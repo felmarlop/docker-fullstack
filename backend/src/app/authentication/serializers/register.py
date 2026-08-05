@@ -133,20 +133,9 @@ class ResendActivationEmailSerializer(serializers.Serializer):
 
     email = serializers.EmailField()
 
-    def validate_email(self, value: str) -> str:
-        try:
-            self.user = User.objects.get(email=value)
-        except User.DoesNotExist as exc:
-            raise serializers.ValidationError(
-                "No account is associated with this email address."
-            ) from exc
-
-        if self.user.is_active:
-            raise serializers.ValidationError(
-                "This account has already been activated."
-            )
-
-        return value
-
     def send_email(self) -> None:
-        send_activation_email(self.user)
+        email = self.validated_data["email"]
+        user = User.objects.filter(email__iexact=email).first()
+
+        if user and not user.is_active:
+            send_activation_email(self.user)

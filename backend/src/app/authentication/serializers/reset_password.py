@@ -21,23 +21,12 @@ class ForgotPasswordSerializer(serializers.Serializer):
 
     email = serializers.EmailField()
 
-    def validate_email(self, value: str) -> str:
-        try:
-            self.user = User.objects.get(email=value)
-        except User.DoesNotExist as exc:
-            raise serializers.ValidationError(
-                "No account is associated with this email address."
-            ) from exc
-
-        if not self.user.is_active:
-            raise AccountNotActivated(
-                "Please activate your account before resetting your password."
-            )
-
-        return value
-
     def send_email(self) -> None:
-        send_reset_password_email(self.user)
+        email = self.validated_data["email"]
+        user = User.objects.filter(email__iexact=email).first()
+
+        if user and user.is_active:
+            send_reset_password_email(user)
 
 
 class ResetPasswordSerializer(serializers.Serializer):

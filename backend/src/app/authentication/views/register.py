@@ -120,7 +120,4 @@ class ResendActivationEmailView(APIView):
 
         serializer.send_email()  # type: ignore
 
-        email = serializer.validated_data["email"]  # type: ignore
-        logger.info(f"Activation email requested for {email}.")
-
         return Response(status=status.HTTP_204_NO_CONTENT)

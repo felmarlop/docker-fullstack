@@ -36,9 +36,9 @@ class ForgotPasswordView(APIView):
     def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         serializer.send_email()  # type: ignore
-        email = serializer.validated_data["email"]  # type: ignore
-        logger.info(f"Password reset requested for {email}.")
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
