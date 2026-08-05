@@ -34,13 +34,13 @@ BACKEND_CI = $(COMPOSE) run --rm backend
 	create-superuser \
 	generate-django-secret-key \
 	logs \
-	logs-backend \
-	logs-frontend \
-	logs-nginx \
-	logs-worker \
-	logs-beat \
-	logs-postgres \
-	logs-redis \
+	backend-logs \
+	frontend-logs \
+	nginx-logs \
+	celery-worker-logs \
+	celery-beat-logs \
+	postgres-logs \
+	redis-logs \
 	backend-lint \
 	backend-lint-fix \
 	backend-type-check \
@@ -79,13 +79,13 @@ help:
 	@echo "  \033[1m - make generate-django-secret-key \033[0m	Generate a new Django secret key"
 	@echo ""
 	@echo "  \033[1m - make logs \033[0m           		Show general logs"
-	@echo "  \033[1m - make logs-backend \033[0m   		Show backend logs"
-	@echo "  \033[1m - make logs-frontend \033[0m   		Show frontend logs"
-	@echo "  \033[1m - make logs-nginx \033[0m   		Show Nginx logs"
-	@echo "  \033[1m - make logs-worker \033[0m    		Show Celery Worker logs"
-	@echo "  \033[1m - make logs-beat \033[0m      		Show Celery Beat logs"
-	@echo "  \033[1m - make logs-postgres \033[0m  		Show PostgreSQL logs"
-	@echo "  \033[1m - make logs-redis \033[0m     		Show Redis logs"
+	@echo "  \033[1m - make backend-logs \033[0m   		Show backend logs"
+	@echo "  \033[1m - make frontend-logs \033[0m   		Show frontend logs"
+	@echo "  \033[1m - make logs-nginx-logs \033[0m   		Show Nginx logs"
+	@echo "  \033[1m - make celery-worker-logs \033[0m    		Show Celery Worker logs"
+	@echo "  \033[1m - make celery-beat-logs \033[0m      		Show Celery Beat logs"
+	@echo "  \033[1m - make postgres-logs \033[0m  		Show PostgreSQL logs"
+	@echo "  \033[1m - make redis-logs \033[0m     		Show Redis logs"
 	@echo ""
 	@echo "  \033[1m - make backend-lint \033[0m			Check code formatting and linting"
 	@echo "  \033[1m - make backend-lint-fix \033[0m		Apply lint and formatting fixes"
@@ -154,25 +154,25 @@ generate-django-secret-key:
 logs:
 	$(COMPOSE) logs -f
 
-logs-backend:
+backend-logs:
 	$(COMPOSE) logs -f backend
 
-logs-frontend:
+frontend-logs:
 	$(COMPOSE) logs -f frontend
 
-logs-nginx:
+nginx-logs:
 	$(COMPOSE) logs -f nginx
 
-logs-worker:
+celery-worker-logs:
 	$(COMPOSE) logs -f celery-worker
 
-logs-beat:
+celery-beat-logs:
 	$(COMPOSE) logs -f celery-beat
 
-logs-postgres:
+postgres-logs:
 	$(COMPOSE) logs -f postgres
 
-logs-redis:
+redis-logs:
 	$(COMPOSE) logs -f redis
 
 backend-lint:

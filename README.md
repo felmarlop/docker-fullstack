@@ -164,13 +164,13 @@ The project provides a set of Makefile shortcuts to manage the development envir
 | `make create-superuser`           | Create Django superuser                     |
 | `make generate-django-secret-key` | Generate a new Django secret key            |
 | `make logs`                       | Show general logs                           |
-| `make logs-backend`               | Show backend logs                           |
-| `make logs-frontend`              | Show frontend logs                          |
-| `make logs-nginx`                 | Show Nginx logs                             |
-| `make logs-celery-worker`         | Show Celery Worker logs                     |
-| `make logs-celery-beat`           | Show Celery Beat logs                       |
-| `make logs-postgres`              | Show PostgreSQL logs                        |
-| `make logs-redis`                 | Show Redis logs                             |
+| `make backend-logs`               | Show backend logs                           |
+| `make frontend-logs`              | Show frontend logs                          |
+| `make nginx-logs`                 | Show Nginx logs                             |
+| `make celery-worker-logs`         | Show Celery Worker logs                     |
+| `make celery-beat-logs`           | Show Celery Beat logs                       |
+| `make postgres-logs`              | Show PostgreSQL logs                        |
+| `make redis-logs`                 | Show Redis logs                             |
 | `make backend-lint`               | Check code formatting and linting with Ruff |
 | `make backend-lint-fix`           | Apply Ruff formatting and lint fixes        |
 | `make backend-test`               | Run the test suite                          |
