@@ -3,11 +3,11 @@
     <v-row align="center" class="fill-height" justify="center">
       <v-col cols="12" md="8" lg="6">
         <div class="text-center">
-          <v-icon icon="mdi-rocket-launch" class="me-4 text-primary" size="120" />
+          <v-icon icon="mdi-rocket-launch" class="rocket-icon me-4 text-primary" size="120" />
 
-          <h1 class="text-h3 font-weight-bold mt-4">Docker Fullstack Boilerplate</h1>
+          <h1 class="text-h3 font-weight-bold">Docker Fullstack Boilerplate</h1>
 
-          <p class="text-h6 text-medium-emphasis mt-3">
+          <p class="text-h6 text-medium-emphasis">
             Ready-to-use development environment for modern Django and Vue applications.
           </p>
         </div>
@@ -121,6 +121,26 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.rocket-icon {
+  animation: rocketTakeoff 3s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+@keyframes rocketTakeoff {
+  0% {
+    transform: translateY(20px) translateX(-20px) rotate(0deg);
+    filter: drop-shadow(0 0 0px rgba(var(--v-theme-secondary), 0));
+  }
+  50% {
+    /* Upward thrust with engine glow */
+    transform: translateY(-15px) translateX(15px) rotate(-3deg);
+    filter: drop-shadow(-4px 8px 14px rgba(var(--v-theme-secondary), 0.6));
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+    filter: drop-shadow(0 0 0px rgba(var(--v-theme-secondary), 0));
+  }
+}
+
 .api-response {
   text-align: left;
 }
