@@ -44,7 +44,7 @@
 
         <div v-if="!auth.isAuthenticated" class="text-center">
           <v-btn color="primary" min-width="240" prepend-icon="mdi-login" to="/login"> LOG IN </v-btn>
-          <AuthLink text="Don't have an account?" action="Create one" to="/signup" />
+          <AuthLink text="Don't have an account?" action="Create one" to="/register" />
         </div>
 
         <div class="d-flex align-center my-6">

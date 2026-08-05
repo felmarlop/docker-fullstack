@@ -13,7 +13,7 @@
         <p class="text-medium-emphasis mb-8">
           If an account exists for
           <strong>{{ email }}</strong
-          >, you'll receive an activation email shortly.
+          >, you'll receive email shortly to {{ action }}.
         </p>
       </div>
     </v-card-text>
@@ -23,6 +23,10 @@
 <script setup>
 defineProps({
   email: {
+    type: String,
+    required: true,
+  },
+  action: {
     type: String,
     required: true,
   },

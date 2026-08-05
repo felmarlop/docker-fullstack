@@ -3,7 +3,8 @@
     <v-container class="fill-height">
       <v-row class="fill-height" justify="center" align="center">
         <v-col cols="12" sm="8" md="6" lg="4">
-          <activate-account-msg v-if="inactive" />
+          <activate-account-msg v-if="inactive" @close="resetForm" />
+          <email-sent-msg v-else-if="completed && form.email" action="reset your password" :email="form.email" />
           <v-card v-else rounded="lg" elevation="2">
             <v-card-text class="pa-8">
               <div class="d-flex mb-6">
@@ -56,14 +57,17 @@ import { computed, reactive, ref, watch } from 'vue'
 
 import ActivateAccountMsg from '@/components/auth/ActivateAccountMsg.vue'
 import AuthLink from '@/components/auth/AuthLink.vue'
+import EmailSentMsg from '@/components/auth/EmailSentMsg.vue'
 import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
 
 const loading = ref(false)
-const error = ref('')
+const completed = ref(false)
 const inactive = ref(false)
+const error = ref('')
+const detailErrors = ref({})
 
 const formRef = ref(null)
 
@@ -73,6 +77,12 @@ const form = reactive({
 
 const canSubmit = computed(() => form.email.trim().length > 0)
 
+function resetForm() {
+  form.email = ''
+  error.value = ''
+  inactive.value = false
+}
+
 async function submit() {
   const { valid } = await formRef.value.validate()
 
@@ -81,15 +91,23 @@ async function submit() {
   }
 
   loading.value = true
+  completed.value = false
+
   error.value = ''
 
   try {
     await auth.forgotPassword(form)
+
+    completed.value = true
   } catch (err) {
-    const defaultMessage = err.message ?? ''
-    const firstError = Object.values(err.details ?? {})[0]?.[0]
+    let details = err.details ?? null
+    delete details.code
+    if (details && typeof details === 'object' && Object.keys(details).length > 0) {
+			error.value = Object.values(details)[0]?.[0] ?? ''
+    } else {
+      error.value = err.message ?? ''
+    }
     inactive.value = err.code === 'account_not_activated'
-    error.value = firstError ?? defaultMessage
   } finally {
     loading.value = false
   }

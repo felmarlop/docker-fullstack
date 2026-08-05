@@ -22,7 +22,7 @@ class RegisterSerializer(serializers.Serializer):
 
     username = serializers.CharField(max_length=150)
     email = serializers.EmailField()
-    phone = PhoneNumberField(required=False, allow_null=True)
+    phone = PhoneNumberField(required=False, allow_null=True, allow_blank=True)
     password = serializers.CharField(write_only=True, trim_whitespace=False)
 
     def validate_username(self, value: str) -> str:
@@ -49,7 +49,10 @@ class RegisterSerializer(serializers.Serializer):
         return value
 
     def validate_phone(self, value: PhoneNumber | None) -> PhoneNumber | None:
-        if value and User.objects.filter(phone=value).exists():
+        if not value:
+            return None
+
+        if User.objects.filter(phone=value).exists():
             raise serializers.ValidationError(
                 "A user with this phone number already exists."
             )

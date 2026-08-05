@@ -78,7 +78,7 @@ class ResetPasswordSerializer(serializers.Serializer):
         except DjangoValidationError as exc:
             raise serializers.ValidationError(
                 {
-                    "new_password": exc.messages,
+                    "password": exc.messages,
                 }
             ) from exc
 

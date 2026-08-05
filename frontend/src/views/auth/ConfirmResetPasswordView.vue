@@ -96,6 +96,8 @@ async function submit() {
   if (!valid) return
 
   loading.value = true
+  success.value = false
+
   error.value = ''
 
   try {
@@ -103,9 +105,13 @@ async function submit() {
 
     success.value = true
   } catch (err) {
-    const defaultMessage = err.message ?? ''
-    const firstError = Object.values(err.details ?? {})[0]?.[0]
-    error.value = firstError ?? defaultMessage
+    let details = err.details ?? null
+    delete details.code
+    if (details && typeof details === 'object' && Object.keys(details).length > 0) {
+			error.value = Object.values(details)[0]?.[0] ?? ''
+    } else {
+      error.value = err.message ?? ''
+    }
   } finally {
     loading.value = false
   }

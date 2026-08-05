@@ -3,7 +3,7 @@
     <v-container class="fill-height">
       <v-row class="fill-height" justify="center" align="center">
         <v-col cols="12" sm="8" md="6" lg="4">
-          <activate-account-msg v-if="inactive" />
+          <activate-account-msg v-if="inactive" @close="resetForm" />
           <v-card v-else rounded="lg" elevation="2">
             <v-card-text class="pa-8">
               <div class="d-flex mb-6">
@@ -91,11 +91,20 @@ const canSubmit = computed(() => {
   return form.username.trim().length > 0 && form.password.trim().length > 0
 })
 
+function resetForm() {
+  form.username = ''
+  form.password = ''
+  error.value = ''
+  inactive.value = false
+}
+
 async function submit() {
   const { valid } = await formRef.value.validate()
   if (!valid) return
 
   loading.value = true
+  inactive.value = false
+
   error.value = ''
 
   try {
@@ -103,10 +112,8 @@ async function submit() {
 
     router.push('/')
   } catch (err) {
-    const defaultMessage = err.message ?? ''
-    const firstError = Object.values(err.details ?? {})[0]?.[0]
+    error.value = err.message ?? ''
     inactive.value = err.code === 'account_not_activated'
-    error.value = firstError ?? defaultMessage
   } finally {
     loading.value = false
   }
