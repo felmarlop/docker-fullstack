@@ -40,7 +40,7 @@
                 class="mb-4"
               />
 
-              <v-text-field
+              <!-- <v-text-field
                 v-model="form.phone"
                 label="Phone (optional)"
                 prepend-inner-icon="mdi-phone-outline"
@@ -50,7 +50,7 @@
                 :error-messages="detailErrors.phone"
                 :disabled="loading"
                 class="mb-4"
-              />
+              /> -->
 
               <v-text-field
                 v-model="form.password"

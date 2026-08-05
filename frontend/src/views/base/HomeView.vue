@@ -128,16 +128,16 @@ onMounted(async () => {
 @keyframes rocketTakeoff {
   0% {
     transform: translateY(20px) translateX(-20px) rotate(0deg);
-    filter: drop-shadow(0 0 0px rgba(var(--v-theme-secondary), 0));
+    filter: drop-shadow(0 0 0px rgba(var(--v-theme-primary), 0));
   }
   50% {
     /* Upward thrust with engine glow */
-    transform: translateY(-15px) translateX(15px) rotate(-3deg);
-    filter: drop-shadow(-4px 8px 14px rgba(var(--v-theme-secondary), 0.6));
+    transform: translateY(-15px) translateX(15px) rotate(-4deg);
+    filter: drop-shadow(-4px 8px 14px rgba(var(--v-theme-primary), 0.6));
   }
   100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
-    filter: drop-shadow(0 0 0px rgba(var(--v-theme-secondary), 0));
+    filter: drop-shadow(0 0 0px rgba(var(--v-theme-primary), 0));
   }
 }
 
