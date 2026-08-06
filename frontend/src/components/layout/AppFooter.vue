@@ -1,34 +1,55 @@
 <template>
-  <v-footer border style="max-height: 100px">
-    <v-container fluid>
-      <div class="d-flex align-center justify-space-between flex-wrap ga-2">
-        <span class="text-caption text-medium-emphasis"> Docker Fullstack Boilerplate © {{ currentYear }} </span>
+  <v-footer class="app-footer">
+    <div class="footer-content">
+      <span class="text-medium-emphasis"> © {{ currentYear }} Docker Fullstack Boilerplate </span>
 
-        <div class="d-flex align-center ga-1">
-          <v-btn
-            href="https://github.com/felmarlop/docker-fullstack"
-            icon="mdi-github"
-            rel="noopener noreferrer"
-            target="_blank"
-            variant="text"
-          />
+      <div class="d-flex align-center ga-1">
+        <v-btn
+          icon="mdi-github"
+          href="https://github.com/felmarlop/docker-fullstack"
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="text"
+          density="comfortable"
+        />
 
-          <v-btn
-            href="https://github.com/felmarlop/docker-fullstack#-docker-fullstack-boilerplate"
-            prepend-icon="mdi-book-open-page-variant"
-            rel="noopener noreferrer"
-            target="_blank"
-            size="small"
-            variant="text"
-          >
-            Documentation
-          </v-btn>
-        </div>
+        <v-btn
+          prepend-icon="mdi-book-open-page-variant"
+          href="https://github.com/felmarlop/docker-fullstack#-docker-fullstack-boilerplate"
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="text"
+          density="comfortable"
+        >
+          Documentation
+        </v-btn>
       </div>
-    </v-container>
+    </div>
   </v-footer>
 </template>
 
 <script setup>
 const currentYear = new Date().getFullYear()
 </script>
+
+<style scoped>
+.app-footer {
+  flex: 0 0 50px;
+
+  position: relative;
+  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.footer-content {
+  font-size: 1rem;
+  height: 50px;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 20px;
+}
+</style>

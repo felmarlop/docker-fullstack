@@ -2,7 +2,7 @@
   <div class="text-body-2 text-medium-emphasis text-center mt-4 auth-link">
     {{ text }}
 
-    <RouterLink :to="to" class="text-decoration-none text-primary font-weight-medium ms-1">
+    <RouterLink :to="to" class="text-primary font-weight-medium ms-1">
       {{ action }}
     </RouterLink>
   </div>
@@ -31,5 +31,9 @@ defineProps({
 .auth-link {
   font-size: 0.9rem;
   font-weight: 400;
+
+  a {
+    text-decoration: none;
+  }
 }
 </style>

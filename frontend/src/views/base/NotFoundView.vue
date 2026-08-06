@@ -16,12 +16,13 @@
 
 <style scoped>
 .magnify-icon {
-  animation: searchPulse 2.4s ease-in-out infinite;
+  animation: searchPulse 2.4s ease-in-out;
   z-index: 2;
 }
 
 @keyframes searchPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
   50% {

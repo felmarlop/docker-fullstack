@@ -10,18 +10,9 @@
               <AuthLink text="Don't have an account?" action="Create one" to="/register" />
             </div>
 
-            <v-btn
-              block
-              prepend-icon="mdi-google"
-              class="mb-6 font-weight-bold"
-              height="48"
-            >
+            <v-btn block prepend-icon="mdi-google" class="mb-6 font-weight-bold" height="48">
               <template #prepend>
-                <v-img
-                  :src="googleIcon"
-                  width="18"
-                  height="18"
-                />
+                <v-img :src="googleIcon" width="18" height="18" />
               </template>
 
               Continue with Google
@@ -29,9 +20,7 @@
 
             <div class="d-flex align-center mb-6">
               <v-divider />
-              <span class="text-medium-emphasis text-caption mx-4">
-                OR
-              </span>
+              <span class="text-medium-emphasis text-caption mx-4"> OR </span>
               <v-divider />
             </div>
 

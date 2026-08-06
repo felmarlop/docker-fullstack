@@ -1,7 +1,6 @@
 import ActivateAccountView from '@/views/auth/ActivateAccountView.vue'
 import ConfirmResetPasswordView from '@/views/auth/ConfirmResetPasswordView.vue'
 import LoginView from '@/views/auth/LoginView.vue'
-import ProfileView from '@/views/auth/ProfileView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import ResendActivationView from '@/views/auth/ResendActivationView.vue'
 import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
@@ -53,14 +52,6 @@ export default [
     component: ConfirmResetPasswordView,
     meta: {
       guestOnly: true,
-    },
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    component: ProfileView,
-    meta: {
-      requiresAuth: true,
     },
   },
 ]

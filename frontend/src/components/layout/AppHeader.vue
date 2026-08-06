@@ -1,28 +1,44 @@
 <template>
-  <v-app-bar color="primary" elevation="1" class="px-2">
-    <v-app-bar-title class="d-flex align-center ga-2">
-      <RouterLink to="/" class="header-link d-flex align-center ga-2 text-inherit">
-        <v-icon icon="mdi-rocket-launch" class="me-4" />
+  <v-app-bar
+    color="primary"
+    elevation="1"
+    class="px-2"
+  >
+    <v-app-bar-title>
+      <RouterLink
+        to="/"
+        class="header-link text-decoration-none"
+      >
+        <v-icon
+          icon="mdi-rocket-launch"
+          class="me-4"
+        />
+
         <span>Docker Fullstack Boilerplate</span>
       </RouterLink>
     </v-app-bar-title>
+
     <v-spacer />
 
-    <RouterLink
+    <v-btn
       v-if="auth.isAuthenticated"
-      :to="{ name: 'profile' }"
-      class="header-link text-white text-decoration-none font-weight-medium me-4"
-    >
-      <v-icon icon="mdi-account-circle" size="20" class="me-2" />
-      <span class="text-uppercase">{{ auth.user?.username }}</span>
-    </RouterLink>
+      :to="{ name: 'account-profile' }"
+      icon="mdi-account-circle"
+      variant="text"
+    />
 
-    <v-btn v-if="auth.isAuthenticated" icon="mdi-logout" variant="text" @click="logout" />
+    <v-btn
+      v-if="auth.isAuthenticated"
+      icon="mdi-logout"
+      variant="text"
+      @click="logout"
+    />
   </v-app-bar>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
@@ -41,7 +57,5 @@ async function logout() {
 
   color: inherit;
   text-decoration: none;
-
-  transition: opacity 0.2s ease;
 }
 </style>
