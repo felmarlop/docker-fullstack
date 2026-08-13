@@ -1,6 +1,6 @@
 export default [
   {
-    title: 'My profile',
+    title: 'Personal information',
     icon: 'mdi-account-outline',
     to: { name: 'account-profile' },
   },
