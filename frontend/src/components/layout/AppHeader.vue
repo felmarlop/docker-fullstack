@@ -1,18 +1,8 @@
 <template>
-  <v-app-bar
-    color="primary"
-    elevation="1"
-    class="px-2"
-  >
+  <v-app-bar color="primary" elevation="1" class="px-2">
     <v-app-bar-title>
-      <RouterLink
-        to="/"
-        class="header-link text-decoration-none"
-      >
-        <v-icon
-          icon="mdi-rocket-launch"
-          class="me-4"
-        />
+      <RouterLink to="/" class="header-link text-decoration-none">
+        <v-icon icon="mdi-rocket-launch" class="me-4" />
 
         <span>Docker Fullstack Boilerplate</span>
       </RouterLink>
@@ -20,19 +10,9 @@
 
     <v-spacer />
 
-    <v-btn
-      v-if="auth.isAuthenticated"
-      :to="{ name: 'account-profile' }"
-      icon="mdi-account-circle"
-      variant="text"
-    />
+    <v-btn v-if="auth.isAuthenticated" :to="{ name: 'account-profile' }" icon="mdi-account-circle" variant="text" />
 
-    <v-btn
-      v-if="auth.isAuthenticated"
-      icon="mdi-logout"
-      variant="text"
-      @click="logout"
-    />
+    <v-btn v-if="auth.isAuthenticated" icon="mdi-logout" variant="text" @click="logout" />
   </v-app-bar>
 </template>
 

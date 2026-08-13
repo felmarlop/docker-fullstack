@@ -20,13 +20,28 @@ class RegisterSerializer(serializers.Serializer):
     Register a new inactive user.
     """
 
-    username = serializers.CharField(max_length=150)
+    username = serializers.CharField(max_length=150, required=False, allow_blank=True)
     email = serializers.EmailField()
     phone = PhoneNumberField(required=False, allow_null=True, allow_blank=True)
     password = serializers.CharField(write_only=True, trim_whitespace=False)
 
+    def _generate_username(self, email: str) -> str:
+        base = email.split("@")[0].strip().lower() or "user"
+
+        username = base
+        counter = 2
+
+        while User.objects.filter(username=username).exists():
+            username = f"{base}{counter}"
+            counter += 1
+
+        return username
+
     def validate_username(self, value: str) -> str:
         value = value.strip().lower()
+
+        if not value:
+            return value
 
         if value in RESERVED_USERNAMES:
             raise serializers.ValidationError("This username is reserved.")
@@ -65,9 +80,12 @@ class RegisterSerializer(serializers.Serializer):
         return value
 
     def create(self, validated_data: dict[str, Any]) -> User:
+        email = validated_data["email"]
+        username = validated_data.get("username") or self._generate_username(email)
+
         return User.objects.create_user(
-            username=validated_data["username"],
-            email=validated_data["email"],
+            username=username,
+            email=email,
             phone=validated_data.get("phone"),
             password=validated_data["password"],
             is_active=False,

@@ -18,14 +18,15 @@
             <v-form ref="formRef" @submit.prevent="submit">
               <v-text-field
                 v-model="form.username"
-                label="Username"
+                label="Username (optional)"
+                hint="Leave empty to generate a username automatically."
+                persistent-hint
                 prepend-inner-icon="mdi-account-outline"
                 autocomplete="username"
                 variant="outlined"
                 :error-messages="detailErrors.username"
-                :rules="[rules.required]"
                 :disabled="loading"
-                class="mb-4"
+                class="mb-6"
               />
 
               <v-text-field
@@ -110,7 +111,7 @@ const form = reactive({
 })
 
 const canSubmit = computed(() => {
-  return form.username.trim().length > 0 && form.email.trim().length > 0 && form.password.trim().length > 0
+  return form.email.trim().length > 0 && form.password.trim().length > 0
 })
 
 async function submit() {

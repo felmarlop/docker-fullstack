@@ -1,13 +1,6 @@
 <template>
-  <v-navigation-drawer
-    v-model:rail="uiStore.drawerRail"
-    :rail-width="APP_DRAWER_RAIL_WIDTH"
-    permanent
-  >
-    <div
-      class="drawer-header"
-      :class="{ rail: uiStore.drawerRail }"
-    >
+  <v-navigation-drawer v-model:rail="uiStore.drawerRail" :rail-width="APP_DRAWER_RAIL_WIDTH" permanent>
+    <div class="drawer-header" :class="{ rail: uiStore.drawerRail }">
       <v-btn
         :icon="uiStore.drawerRail ? 'mdi-chevron-right' : 'mdi-chevron-left'"
         variant="text"
@@ -16,10 +9,7 @@
       />
     </div>
 
-    <v-list
-      density="comfortable"
-      class="py-2"
-    >
+    <v-list density="comfortable" class="py-2">
       <v-tooltip
         v-for="item in items"
         :key="item.to.name"

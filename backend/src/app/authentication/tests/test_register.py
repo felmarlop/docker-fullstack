@@ -54,6 +54,26 @@ def test_register_username_normalized(public_api_client: APIClient) -> None:
 
 
 @pytest.mark.django_db
+def test_register_no_username(public_api_client: APIClient) -> None:
+    response = public_api_client.post(
+        reverse("register"),
+        {
+            "username": "",
+            "email": "fmartin.73@test.com",
+            "password": VALID_PASSWORD,
+        },
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
+
+    user = User.objects.get(username="fmartin.73")
+
+    assert user.email == "fmartin.73@test.com"
+    assert not user.is_active
+
+
+@pytest.mark.django_db
 def test_register_with_phone(public_api_client: APIClient) -> None:
     response = public_api_client.post(
         reverse("register"),
