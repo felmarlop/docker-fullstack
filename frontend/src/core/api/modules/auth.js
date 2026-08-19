@@ -16,6 +16,10 @@ export function resendActivationEmail(data) {
   return api.post(`auth/activate/resend/`, data)
 }
 
+export function changePassword(data) {
+  return api.post('auth/change-password/', data)
+}
+
 export function forgotPassword(data) {
   return api.post('auth/forgot-password/', data)
 }

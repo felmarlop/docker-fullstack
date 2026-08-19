@@ -10,8 +10,8 @@ export default [
     to: { name: 'account-email' },
   },
   {
-    title: 'Password',
-    icon: 'mdi-lock-outline',
+    title: 'Email and password',
+    icon: 'mdi-shield-account-outline',
     to: { name: 'account-password' },
   },
   {

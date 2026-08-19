@@ -55,14 +55,6 @@
 
             <v-divider />
 
-            <v-list-item
-              prepend-icon="mdi-email-outline"
-              title="Email"
-              :subtitle="auth.user?.email"
-            />
-
-            <v-divider />
-
             <v-list-item>
               <div class="d-flex justify-space-around align-center py-2">
                 <div class="text-center">
@@ -257,6 +249,9 @@ watch(
   .v-card-title {
     font-size: 1.1rem !important;
     font-weight: 400 !important;
+    .v-btn {
+      font-size: 0.8rem !important;
+    }
   }
 }
 </style>

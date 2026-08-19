@@ -59,12 +59,6 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async updateMe(payload) {
-      const { data: user } = await usersApi.updateMe(payload)
-
-      this.setUser(user)
-    },
-
     async login(credentials) {
       const { data } = await authApi.login(credentials)
 
@@ -83,6 +77,12 @@ export const useAuthStore = defineStore('auth', {
     async forgotPassword(payload) {
       const { data } = await authApi.forgotPassword(payload)
       return data
+    },
+
+    async updateMe(payload) {
+      const { data: user } = await usersApi.updateMe(payload)
+
+      this.setUser(user)
     },
 
     async logout() {
