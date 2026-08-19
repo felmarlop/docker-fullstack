@@ -5,23 +5,30 @@
         <v-card-title class="d-flex align-center py-4 text-medium-emphasis">
           <span>My email address</span>
           <v-spacer />
-          <v-btn v-if="!editing" variant="outlined" min-width="100" size="small" prepend-icon="mdi-pencil-outline">
+          <v-btn
+            variant="outlined"
+            class="my-0 py-0"
+            min-width="100"
+            size="small"
+            prepend-icon="mdi-pencil-outline"
+            :class="{ invisible: editingEmail }"
+          >
             EDIT
           </v-btn>
         </v-card-title>
 
         <v-divider />
 
-        <template v-if="!editing">
-          <v-list lines="two">
-            <v-list-item prepend-icon="mdi-email-outline" title="Email" :subtitle="auth.user?.email || '-'" />
-          </v-list>
-        </template>
-
-        <template v-else>
+        <template v-if="editingEmail">
           <v-card-text>
             <v-form ref="formRef"> </v-form>
           </v-card-text>
+        </template>
+
+        <template v-else>
+          <v-list lines="two">
+            <v-list-item prepend-icon="mdi-email-outline" title="Email" :subtitle="auth.user?.email || '-'" />
+          </v-list>
         </template>
       </v-card>
 
@@ -32,12 +39,12 @@
           <v-spacer />
 
           <v-btn
-            v-if="!editing"
             variant="outlined"
             size="small"
             min-width="100"
             prepend-icon="mdi-pencil-outline"
-            @click="startEditing"
+            :class="{ invisible: editingPassword }"
+            @click="startEditingPassword"
           >
             EDIT
           </v-btn>
@@ -45,13 +52,7 @@
 
         <v-divider />
 
-        <template v-if="!editing">
-          <v-list lines="two">
-            <v-list-item title="Password" prepend-icon="mdi-key-variant" subtitle="***************" />
-          </v-list>
-        </template>
-
-        <template v-else>
+        <template v-if="editingPassword">
           <v-card-text>
             <v-alert v-if="error" class="mb-6" type="error" variant="tonal" density="comfortable">
               {{ error }}
@@ -93,7 +94,7 @@
                   min-width="120"
                   prepend-icon="mdi-close"
                   :disabled="loading"
-                  @click="cancelEditing"
+                  @click="cancelEditingPassword"
                 >
                   CANCEL
                 </v-btn>
@@ -112,6 +113,12 @@
             </v-form>
           </v-card-text>
         </template>
+
+        <template v-else>
+          <v-list lines="two">
+            <v-list-item title="Password" prepend-icon="mdi-lock-outline" subtitle="***************" />
+          </v-list>
+        </template>
       </v-card>
     </div>
   </v-container>
@@ -128,7 +135,8 @@ import * as rules from '@/helpers/validation'
 const auth = useAuthStore()
 
 const loading = ref(false)
-const editing = ref(false)
+const editingEmail = ref(false)
+const editingPassword = ref(false)
 const formRef = ref(null)
 const error = ref('')
 const detailErrors = ref({})
@@ -140,7 +148,7 @@ const form = reactive({
   new_password: '',
 })
 
-function startEditing() {
+function startEditingPassword() {
   Object.assign(form, {
     current_password: '',
     new_password: '',
@@ -152,10 +160,10 @@ function startEditing() {
   error.value = ''
   detailErrors.value = {}
 
-  editing.value = true
+  editingPassword.value = true
 }
 
-function cancelEditing() {
+function cancelEditingPassword() {
   Object.assign(form, {
     current_password: '',
     new_password: '',
@@ -167,7 +175,7 @@ function cancelEditing() {
   error.value = ''
   detailErrors.value = {}
 
-  editing.value = false
+  editingPassword.value = false
 }
 
 async function submit() {
@@ -181,7 +189,7 @@ async function submit() {
 
   try {
     await authApi.changePassword(form)
-    cancelEditing()
+    cancelEditingPassword()
   } catch (err) {
     const details = err.details ?? null
 
@@ -215,6 +223,9 @@ watch(
     font-weight: 400 !important;
     .v-btn {
       font-size: 0.8rem !important;
+      &.invisible {
+        visibility: hidden;
+      }
     }
   }
 }

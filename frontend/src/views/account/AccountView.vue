@@ -32,11 +32,11 @@
           <span>Personal information</span>
           <v-spacer />
           <v-btn
-            v-if="!editing"
             variant="outlined"
             min-width="100"
             size="small"
             prepend-icon="mdi-pencil-outline"
+            :class="{ invisible: editing }"
             @click="startEditing"
           >
             EDIT
@@ -233,6 +233,9 @@ watch(
     font-weight: 400 !important;
     .v-btn {
       font-size: 0.8rem !important;
+      &.invisible {
+        visibility: hidden;
+      }
     }
   }
 }

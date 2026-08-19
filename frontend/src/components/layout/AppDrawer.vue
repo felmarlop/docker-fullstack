@@ -27,7 +27,7 @@
             rounded="lg"
           >
             <template #prepend>
-              <v-icon :icon="item.icon" />
+              <v-icon :icon="item.icon" :size="APP_DRAWER_ICON_SIZE" />
             </template>
           </v-list-item>
         </template>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { APP_DRAWER_RAIL_WIDTH } from '@/config/layout'
+import { APP_DRAWER_ICON_SIZE, APP_DRAWER_RAIL_WIDTH } from '@/config/layout'
 import { useUiStore } from '@/stores/ui'
 
 defineProps({
