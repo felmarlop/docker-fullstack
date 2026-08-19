@@ -1,17 +1,11 @@
 <template>
   <v-container class="py-8" fluid>
     <div class="mx-auto account-content">
-			<v-card rounded="lg" elevation="2" class="mb-10">
+      <v-card rounded="lg" elevation="2" class="mb-10">
         <v-card-title class="d-flex align-center py-4 text-medium-emphasis">
           <span>My email address</span>
           <v-spacer />
-          <v-btn
-            v-if="!editing"
-            variant="outlined"
-            min-width="100"
-            size="small"
-            prepend-icon="mdi-pencil-outline"
-          >
+          <v-btn v-if="!editing" variant="outlined" min-width="100" size="small" prepend-icon="mdi-pencil-outline">
             EDIT
           </v-btn>
         </v-card-title>
@@ -20,18 +14,13 @@
 
         <template v-if="!editing">
           <v-list lines="two">
-            <v-list-item
-              prepend-icon="mdi-email-outline"
-              title="Email"
-              :subtitle="auth.user?.email || '-'"
-            />
+            <v-list-item prepend-icon="mdi-email-outline" title="Email" :subtitle="auth.user?.email || '-'" />
           </v-list>
         </template>
 
         <template v-else>
           <v-card-text>
-            <v-form ref="formRef">
-            </v-form>
+            <v-form ref="formRef"> </v-form>
           </v-card-text>
         </template>
       </v-card>
@@ -58,23 +47,13 @@
 
         <template v-if="!editing">
           <v-list lines="two">
-						<v-list-item
-							title="Password"
-							prepend-icon="mdi-key-variant"
-							subtitle="***************"
-						/>
-					</v-list>
+            <v-list-item title="Password" prepend-icon="mdi-key-variant" subtitle="***************" />
+          </v-list>
         </template>
 
         <template v-else>
           <v-card-text>
-            <v-alert
-              v-if="error"
-              class="mb-6"
-              type="error"
-              variant="tonal"
-              density="comfortable"
-            >
+            <v-alert v-if="error" class="mb-6" type="error" variant="tonal" density="comfortable">
               {{ error }}
             </v-alert>
 
@@ -84,20 +63,14 @@
                 label="Current password"
                 :type="showCurrentPassword ? 'text' : 'password'"
                 prepend-inner-icon="mdi-lock-outline"
-                :append-inner-icon="
-                  showCurrentPassword
-                    ? 'mdi-eye-off-outline'
-                    : 'mdi-eye-outline'
-                "
+                :append-inner-icon="showCurrentPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
                 autocomplete="current-password"
                 variant="outlined"
-								:rules="[rules.required]"
+                :rules="[rules.required]"
                 :error-messages="detailErrors.current_password"
                 :disabled="loading"
                 class="mb-4"
-                @click:append-inner="
-                  showCurrentPassword = !showCurrentPassword
-                "
+                @click:append-inner="showCurrentPassword = !showCurrentPassword"
               />
 
               <v-text-field
@@ -105,19 +78,13 @@
                 label="New password"
                 :type="showNewPassword ? 'text' : 'password'"
                 prepend-inner-icon="mdi-lock-outline"
-                :append-inner-icon="
-                  showNewPassword
-                    ? 'mdi-eye-off-outline'
-                    : 'mdi-eye-outline'
-                "
+                :append-inner-icon="showNewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
                 autocomplete="new-password"
                 variant="outlined"
-								:rules="[rules.required]"
+                :rules="[rules.required]"
                 :error-messages="detailErrors.new_password"
                 :disabled="loading"
-                @click:append-inner="
-                  showNewPassword = !showNewPassword
-                "
+                @click:append-inner="showNewPassword = !showNewPassword"
               />
 
               <div class="d-flex justify-end ga-3 mt-6">

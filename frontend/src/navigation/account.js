@@ -5,14 +5,9 @@ export default [
     to: { name: 'account-profile' },
   },
   {
-    title: 'Email',
-    icon: 'mdi-email-outline',
-    to: { name: 'account-email' },
-  },
-  {
     title: 'Email and password',
     icon: 'mdi-shield-account-outline',
-    to: { name: 'account-password' },
+    to: { name: 'account-security' },
   },
   {
     title: 'Subscription',

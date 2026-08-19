@@ -57,7 +57,11 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
     def validate_username(self, value: str) -> str:
         value = validators.validate_username(value)
 
-        if User.objects.filter(username=value).exclude(pk=self.instance.pk).exists():
+        queryset = User.objects.filter(username=value)
+        if self.instance:
+            queryset = queryset.exclude(username=self.instance.username)
+
+        if queryset.exists():
             raise serializers.ValidationError(
                 "A user with this username already exists."
             )

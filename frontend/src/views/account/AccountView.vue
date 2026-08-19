@@ -47,21 +47,14 @@
 
         <template v-if="!editing">
           <v-list lines="two">
-            <v-list-item
-              prepend-icon="mdi-account-outline"
-              title="Name"
-              :subtitle="fullName || '-'"
-            />
+            <v-list-item prepend-icon="mdi-account-outline" title="Name" :subtitle="fullName || '-'" />
 
             <v-divider />
 
             <v-list-item>
               <div class="d-flex justify-space-around align-center py-2">
                 <div class="text-center">
-                  <v-icon
-                    :color="auth.user?.is_staff ? 'primary' : 'medium-emphasis'"
-                    size="28"
-                  >
+                  <v-icon :color="auth.user?.is_staff ? 'primary' : 'medium-emphasis'" size="28">
                     mdi-shield-account-outline
                   </v-icon>
 
@@ -73,10 +66,7 @@
                 </div>
 
                 <div class="text-center">
-                  <v-icon
-                    :color="auth.user?.is_superuser ? 'secondary' : 'medium-emphasis'"
-                    size="28"
-                  >
+                  <v-icon :color="auth.user?.is_superuser ? 'secondary' : 'medium-emphasis'" size="28">
                     mdi-crown-outline
                   </v-icon>
 
@@ -93,13 +83,7 @@
 
         <template v-else>
           <v-card-text>
-            <v-alert
-              v-if="error"
-              class="mb-6"
-              type="error"
-              variant="tonal"
-              density="comfortable"
-            >
+            <v-alert v-if="error" class="mb-6" type="error" variant="tonal" density="comfortable">
               {{ error }}
             </v-alert>
 
@@ -172,9 +156,7 @@ const form = reactive({
 })
 
 const fullName = computed(() => {
-  return [auth.user?.first_name, auth.user?.last_name]
-    .filter(Boolean)
-    .join(' ') || ''
+  return [auth.user?.first_name, auth.user?.last_name].filter(Boolean).join(' ') || ''
 })
 
 const nameErrors = computed(() => {

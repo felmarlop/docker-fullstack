@@ -5,6 +5,7 @@ from app.authentication.constants import (
     RESERVED_USERNAMES,
 )
 
+
 def validate_username(username: str) -> str:
     username = username.strip().lower()
 

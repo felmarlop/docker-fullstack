@@ -1,8 +1,7 @@
 import navigation from '@/navigation/account'
 
 import AccountView from '@/views/account/AccountView.vue'
-import EmailView from '@/views/account/EmailView.vue'
-import PasswordView from '@/views/account/PasswordView.vue'
+import EmailPasswordView from '@/views/account/EmailPasswordView.vue'
 
 export default [
   {
@@ -19,19 +18,14 @@ export default [
         component: AccountView,
       },
       {
-        path: 'email',
-        name: 'account-email',
-        component: EmailView,
-      },
-      {
-        path: 'password',
-        name: 'account-password',
-        component: PasswordView,
+        path: 'security',
+        name: 'account-security',
+        component: EmailPasswordView,
       },
       {
         path: 'subscription',
         name: 'account-subscription',
-        //component: () => import('@/views/account/PasswordView.vue'),
+        //component: EmailPasswordView,
       },
       {
         path: 'delete',

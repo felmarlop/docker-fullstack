@@ -38,4 +38,3 @@ class MeView(APIView):
 
         user = serializer.save()
         return Response(UserSerializer(user).data)
-
