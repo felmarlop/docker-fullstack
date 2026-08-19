@@ -7,10 +7,7 @@ from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
-from app.authentication.constants import (
-    RESERVED_PREFIXES,
-    RESERVED_USERNAMES,
-)
+from app.authentication import validators
 from app.authentication.models import User
 from app.authentication.services import send_activation_email
 
@@ -38,15 +35,7 @@ class RegisterSerializer(serializers.Serializer):
         return username
 
     def validate_username(self, value: str) -> str:
-        value = value.strip().lower()
-
-        if not value:
-            return value
-
-        if value in RESERVED_USERNAMES:
-            raise serializers.ValidationError("This username is reserved.")
-        if any(value.startswith(prefix) for prefix in RESERVED_PREFIXES):
-            raise serializers.ValidationError("This username is reserved.")
+        value = validators.validate_username(value)
 
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError(

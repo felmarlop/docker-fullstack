@@ -9,6 +9,7 @@ from rest_framework_simplejwt.serializers import (
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from app.authentication import validators
 from app.authentication.exceptions import AccountNotActivated
 from app.authentication.models import User
 from app.authentication.serializers.user import UserSerializer
@@ -42,6 +43,26 @@ class LoginSerializer(BaseTokenObtainPairSerializer):
             **data,
             "user": UserSerializer(self.user).data,
         }
+
+
+class UpdateProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+        )
+
+    def validate_username(self, value: str) -> str:
+        value = validators.validate_username(value)
+
+        if User.objects.filter(username=value).exclude(pk=self.instance.pk).exists():
+            raise serializers.ValidationError(
+                "A user with this username already exists."
+            )
+
+        return value
 
 
 class ChangePasswordSerializer(serializers.Serializer):

@@ -27,6 +27,11 @@ export default [
         //component: () => import('@/views/account/PasswordView.vue'),
       },
       {
+        path: 'subscription',
+        name: 'account-subscription',
+        //component: () => import('@/views/account/PasswordView.vue'),
+      },
+      {
         path: 'delete',
         name: 'account-delete',
         //component: () => import('@/views/account/DeleteAccountView.vue'),

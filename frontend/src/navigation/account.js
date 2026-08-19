@@ -15,6 +15,11 @@ export default [
     to: { name: 'account-password' },
   },
   {
+    title: 'Subscription',
+    icon: 'mdi-credit-card-outline',
+    to: { name: 'account-subscription' },
+  },
+  {
     title: 'Delete account',
     icon: 'mdi-delete-outline',
     to: { name: 'account-delete' },
