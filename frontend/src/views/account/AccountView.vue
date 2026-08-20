@@ -107,7 +107,7 @@
                 :disabled="loading"
               />
 
-              <div class="d-flex justify-end ga-3 mt-6">
+              <div class="d-flex justify-end ga-3 mt-2">
                 <v-btn
                   variant="outlined"
                   min-width="120"

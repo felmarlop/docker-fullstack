@@ -20,6 +20,21 @@ urlpatterns = [
         name="resend-activation-email",
     ),
     path(
+        "auth/change-email/",
+        account.ChangeEmailView.as_view(),
+        name="change-email",
+    ),
+    path(
+        "auth/verify-email/<uidb64>/<token>/",
+        account.VerifyEmailView.as_view(),
+        name="verify-email",
+    ),
+    path(
+        "auth/verify-email/resend/",
+        account.ResendEmailVerificationView.as_view(),
+        name="resend-email-verification",
+    ),
+    path(
         "auth/change-password/",
         account.ChangePasswordView.as_view(),
         name="change-password",

@@ -1,15 +1,17 @@
+import logging
 from typing import Any
 
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_decode
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
-from app.authentication import validators
+from app.authentication import utils, validators
 from app.authentication.models import User
-from app.authentication.services import send_activation_email
+from app.authentication.services import send_account_activation
+
+logger = logging.getLogger(__name__)
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -89,24 +91,8 @@ class ActivateAccountSerializer(serializers.Serializer):
     Activate a user's account.
     """
 
-    def _get_user_from_uidb64(self) -> User:
-        uidb64 = self.context["uidb64"]
-
-        try:
-            user_id = urlsafe_base64_decode(uidb64).decode()
-            user = User.objects.get(pk=user_id)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist) as exc:
-            raise serializers.ValidationError(
-                {
-                    "uidb64": [
-                        "Invalid activation link.",
-                    ]
-                }
-            ) from exc
-        return user
-
     def activate(self) -> User:
-        user = self._get_user_from_uidb64()
+        user = utils.get_user_from_uidb64(self.context["uidb64"])
         token = self.context["token"]
 
         if user.is_active:
@@ -145,4 +131,10 @@ class ResendActivationEmailSerializer(serializers.Serializer):
         user = User.objects.filter(email__iexact=email).first()
 
         if user and not user.is_active:
-            send_activation_email(user)
+            send_account_activation(user)
+        elif user and user.is_active:
+            logger.warning(
+                f"Activation email: Account already activated for user {user.username}."
+            )
+        else:
+            logger.warning(f"Activation email: No user found with email {email}.")

@@ -16,6 +16,7 @@ class UserSerializer(BaseModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "pending_email",
             "is_staff",
             "is_superuser",
         )

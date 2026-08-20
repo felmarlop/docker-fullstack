@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 
 from app.authentication.models import User
-from app.authentication.services import send_reset_password_email
+from app.authentication.services import send_password_reset
 
 token_generator = PasswordResetTokenGenerator()
 
@@ -25,7 +25,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
         user = User.objects.filter(email__iexact=email).first()
 
         if user and user.is_active:
-            send_reset_password_email(user)
+            send_password_reset(user)
 
 
 class ResetPasswordSerializer(serializers.Serializer):

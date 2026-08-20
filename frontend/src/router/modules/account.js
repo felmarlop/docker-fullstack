@@ -2,6 +2,7 @@ import navigation from '@/navigation/account'
 
 import AccountView from '@/views/account/AccountView.vue'
 import EmailPasswordView from '@/views/account/EmailPasswordView.vue'
+import VerifyEmailView from '@/views/account/VerifyEmailView.vue'
 
 export default [
   {
@@ -33,5 +34,10 @@ export default [
         //component: () => import('@/views/account/DeleteAccountView.vue'),
       },
     ],
+  },
+  {
+    path: '/verify/email/:uidb64/:token',
+    name: 'verify-email',
+    component: VerifyEmailView,
   },
 ]

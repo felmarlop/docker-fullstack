@@ -16,6 +16,18 @@ export function resendActivationEmail(data) {
   return api.post(`auth/activate/resend/`, data)
 }
 
+export function changeEmail(data) {
+  return api.post('auth/change-email/', data)
+}
+
+export function verifyEmail(uidb64, token) {
+  return api.get(`auth/verify-email/${uidb64}/${token}/`)
+}
+
+export function resendVerificationEmail(data) {
+  return api.post(`auth/verify-email/resend/`, data)
+}
+
 export function changePassword(data) {
   return api.post('auth/change-password/', data)
 }

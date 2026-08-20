@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 
 from django.contrib.auth.password_validation import validate_password
@@ -9,10 +10,14 @@ from rest_framework_simplejwt.serializers import (
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from app.authentication import validators
+from app.authentication import utils, validators
 from app.authentication.exceptions import AccountNotActivated
 from app.authentication.models import User
 from app.authentication.serializers.user import UserSerializer
+from app.authentication.services import send_email_verification
+from app.authentication.tokens import email_verification_token_generator
+
+logger = logging.getLogger(__name__)
 
 
 class LoginSerializer(BaseTokenObtainPairSerializer):
@@ -67,6 +72,98 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
             )
 
         return value
+
+
+class ChangeEmailSerializer(serializers.Serializer):
+    """
+    Change the authenticated user's email.
+    """
+
+    email = serializers.EmailField()
+
+    def validate_email(self, value: str) -> str:
+        user = self.context["request"].user
+        value = value.strip()
+
+        if value.lower() == user.email.lower():
+            raise serializers.ValidationError(
+                "The new email must be different from the current email."
+            )
+
+        queryset = User.objects.exclude(pk=user.pk)
+
+        if queryset.filter(email__iexact=value).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
+
+        if queryset.filter(pending_email__iexact=value).exists():
+            raise serializers.ValidationError(
+                "A user with this pending email already exists."
+            )
+
+        return value
+
+    def save(self, **kwargs: Any) -> User:  # noqa: ARG002
+        user = self.context["request"].user
+
+        user.pending_email = self.validated_data["email"]  # type: ignore
+        user.save(update_fields=["pending_email"])
+
+        send_email_verification(user)
+
+        return user
+
+
+class VerifyEmailSerializer(serializers.Serializer):
+    """
+    Verify a pending email address.
+    """
+
+    def verify(self) -> User:
+        user = utils.get_user_from_uidb64(self.context["uidb64"])
+        token = self.context["token"]
+
+        if not user.pending_email:
+            raise serializers.ValidationError(
+                {
+                    "email": [
+                        "There is no pending email to verify.",
+                    ]
+                }
+            )
+
+        if not email_verification_token_generator.check_token(user, token):
+            raise serializers.ValidationError(
+                {
+                    "token": [
+                        "Invalid or expired verification link.",
+                    ]
+                }
+            )
+
+        user.email = user.pending_email
+        user.pending_email = None
+        user.save(update_fields=["email", "pending_email"])
+
+        return user
+
+
+class ResendEmailVerificationSerializer(serializers.Serializer):
+    """
+    Resend email verification.
+    """
+
+    email = serializers.EmailField()
+
+    def send_email(self) -> None:
+        email = self.validated_data["email"]  # type: ignore
+        user = User.objects.filter(pending_email__iexact=email).first()
+
+        if user:
+            send_email_verification(user)
+        else:
+            logger.warning(
+                f"Email verification: No user found with pending email {email}."
+            )
 
 
 class ChangePasswordSerializer(serializers.Serializer):

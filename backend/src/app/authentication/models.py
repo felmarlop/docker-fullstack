@@ -8,6 +8,12 @@ class User(AbstractUser):
     Custom user model.
     """
 
+    pending_email = models.EmailField(
+        blank=True,
+        null=True,
+        unique=True,
+    )
+
     phone = PhoneNumberField(
         unique=True,
         null=True,

@@ -12,7 +12,7 @@ from app.authentication.serializers.register import (
     RegisterSerializer,
     ResendActivationEmailSerializer,
 )
-from app.authentication.services import send_activation_email
+from app.authentication.services import send_account_activation
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ class RegisterView(APIView):
 
         user = serializer.save()
 
-        send_activation_email(user)  # type: ignore
+        send_account_activation(user)  # type: ignore
         logger.info(f"Inactive account created for {user.username}.")  # type: ignore
 
         return Response(

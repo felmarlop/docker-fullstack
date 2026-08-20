@@ -85,6 +85,18 @@ export const useAuthStore = defineStore('auth', {
       this.setUser(user)
     },
 
+    async changeEmail(payload) {
+      const { data: user } = await authApi.changeEmail(payload)
+
+      this.setUser(user)
+    },
+
+    async verifyEmail(uidb64, token) {
+      const { data: user } = await authApi.verifyEmail(uidb64, token)
+
+      this.setUser(user)
+    },
+
     async logout() {
       try {
         await authApi.logout(this.refreshToken)

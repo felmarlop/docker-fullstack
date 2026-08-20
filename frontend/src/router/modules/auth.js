@@ -31,7 +31,7 @@ export default [
     },
   },
   {
-    path: '/resend',
+    path: '/activate/resend',
     name: 'resend-activation',
     component: ResendActivationView,
     meta: {

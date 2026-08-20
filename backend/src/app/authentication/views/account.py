@@ -16,10 +16,14 @@ from rest_framework_simplejwt.views import (
 )
 
 from app.authentication.serializers.account import (
+    ChangeEmailSerializer,
     ChangePasswordSerializer,
     LoginSerializer,
     LogoutSerializer,
+    ResendEmailVerificationSerializer,
+    VerifyEmailSerializer,
 )
+from app.authentication.serializers.user import UserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -100,6 +104,90 @@ class ChangePasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         logger.info(f"Password changed successfully for user {user.username}.")  # type: ignore
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@extend_schema(
+    summary="Change Email",
+    description="Change the authenticated user's email",
+    request=ChangeEmailSerializer,
+    tags=["Email"],
+    examples=[
+        OpenApiExample(
+            "Change email",
+            value={
+                "email": "fmartin@example.com",
+            },
+            request_only=True,
+        ),
+    ],
+)
+class ChangeEmailView(APIView):
+    serializer_class = ChangeEmailSerializer
+    permission_classes = [IsAuthenticated]  # noqa
+
+    def post(self, request: Request) -> Response:
+        serializer = self.serializer_class(
+            data=request.data,
+            context={"request": request},
+        )
+
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        logger.info(f"Email change requested for user {user.username}.")  # type: ignore
+        return Response(UserSerializer(user).data)
+
+
+@extend_schema(
+    summary="Verify email",
+    description="Verify a user's email using a user ID and activation token.",
+    request=VerifyEmailSerializer,
+    tags=["Email"],
+)
+class VerifyEmailView(APIView):
+    serializer_class = VerifyEmailSerializer
+
+    def get(self, request: Request, uidb64: str, token: str) -> Response:  # noqa: ARG002
+        serializer = self.serializer_class(
+            context={
+                "uidb64": uidb64,
+                "token": token,
+            }
+        )
+
+        user = serializer.verify()  # type: ignore
+        logger.info(f"Email verified successfully for user {user.username}.")
+        return Response(UserSerializer(user).data)
+
+
+@extend_schema(
+    summary="Resend email verification",
+    description="Resend the email verification if user's pending email exists.",
+    request=ResendEmailVerificationSerializer,
+    tags=["Email"],
+    examples=[
+        OpenApiExample(
+            "Resend email verification",
+            value={
+                "email": "fmartin@example.com",
+            },
+            request_only=True,
+        ),
+    ],
+)
+class ResendEmailVerificationView(APIView):
+    """
+    Resend email verification
+    """
+
+    serializer_class = ResendEmailVerificationSerializer
+
+    def post(self, request: Request) -> Response:
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.send_email()  # type: ignore
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

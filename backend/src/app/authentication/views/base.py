@@ -6,7 +6,6 @@ from rest_framework.views import APIView
 
 
 @extend_schema(
-    auth=[],
     summary="Health check",
     description="Verify that the API is running",
     tags=["System"],
