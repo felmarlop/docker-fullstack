@@ -24,7 +24,12 @@
           <v-card-title class="d-flex align-center justify-space-between">
             <span>GET /api/ping</span>
 
-            <v-chip :color="error ? 'error' : 'success'" prepend-icon="mdi-check-circle" size="small" variant="flat">
+            <v-chip
+              :color="error ? 'error' : 'success'"
+              :prepend-icon="error ? 'mdi-close-circle' : 'mdi-check-circle'"
+              size="small"
+              variant="flat"
+            >
               {{ error ? `${error.status} ${error.code}` : '200 OK' }}
             </v-chip>
           </v-card-title>
@@ -101,7 +106,7 @@ const formattedError = computed(() => {
 
   return JSON.stringify(
     {
-      status: error.value.status || '',
+      status: error.value.status || 0,
       code: error.value.code || '',
       message: error.value.message || '',
     },
