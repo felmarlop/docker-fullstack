@@ -13,6 +13,7 @@ function loadDrawerRail() {
 export const useUiStore = defineStore('ui', {
   state: () => ({
     drawerRail: loadDrawerRail(),
+    pingData: null,
     snackbar: {
       show: false,
       text: '',
@@ -28,6 +29,10 @@ export const useUiStore = defineStore('ui', {
     setDrawerRail(value) {
       this.drawerRail = value
       localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
+    },
+
+    setPingData(value) {
+      this.pingData = value
     },
 
     showSnackbar(text, color = 'error') {

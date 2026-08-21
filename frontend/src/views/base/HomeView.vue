@@ -20,23 +20,38 @@
           <v-divider />
         </div>
 
-        <v-card v-if="formattedResponse || error" class="api-response mx-auto" max-width="580" variant="tonal">
-          <v-card-title class="d-flex align-center justify-space-between">
-            <span>GET /api/ping</span>
-
-            <v-chip
-              :color="error ? 'error' : 'success'"
-              :prepend-icon="error ? 'mdi-close-circle' : 'mdi-check-circle'"
-              size="small"
-              variant="flat"
+        <v-card class="api-response mx-auto" max-width="580" min-height="200" variant="tonal">
+          <template v-if="loading && ui.pingData" #loader>
+            <v-progress-linear indeterminate color="primary" />
+          </template>
+          <v-fade-transition mode="out-in">
+            <div
+              v-if="loading && !ui.pingData"
+              class="d-flex flex-column align-center justify-center fill-height py-10"
             >
-              {{ error ? `${error.status} ${error.code}` : '200 OK' }}
-            </v-chip>
-          </v-card-title>
+              <v-progress-circular indeterminate color="primary" size="36" />
+              <div class="text-medium-emphasis mt-6">Connecting...</div>
+            </div>
 
-          <v-divider />
+            <div v-else key="content">
+              <v-card-title class="d-flex align-center justify-space-between">
+                <span>GET /api/ping</span>
 
-          <pre>{{ error ? formattedError : formattedResponse }}</pre>
+                <v-chip
+                  :color="error ? 'error' : 'success'"
+                  :prepend-icon="error ? 'mdi-close-circle' : 'mdi-check-circle'"
+                  size="small"
+                  variant="flat"
+                >
+                  {{ error ? `${error.status} ${error.code}` : '200 OK' }}
+                </v-chip>
+              </v-card-title>
+
+              <v-divider />
+
+              <pre>{{ error ? formattedError : formattedResponse }}</pre>
+            </div>
+          </v-fade-transition>
         </v-card>
 
         <div v-if="!auth.isAuthenticated" class="d-flex align-center my-6">
@@ -89,15 +104,17 @@
 import { computed, onMounted, ref } from 'vue'
 
 import { useAuthStore } from '@/stores/auth'
+import { useUiStore } from '@/stores/ui'
 import AuthLink from '@/components/auth/AuthLink.vue'
 
 import api from '@/core/api'
 
 const auth = useAuthStore()
-const response = ref(null)
+const ui = useUiStore()
+const loading = ref(true)
 const error = ref(null)
 
-const formattedResponse = computed(() => (response.value ? JSON.stringify(response.value, null, 2) : ''))
+const formattedResponse = computed(() => (ui.pingData ? JSON.stringify(ui.pingData, null, 2) : ''))
 
 const formattedError = computed(() => {
   if (!error.value) {
@@ -118,9 +135,11 @@ const formattedError = computed(() => {
 onMounted(async () => {
   try {
     const { data } = await api.get('ping', { notify: true })
-    response.value = data
+    ui.setPingData(data)
   } catch (err) {
     error.value = err
+  } finally {
+    loading.value = false
   }
 })
 </script>
