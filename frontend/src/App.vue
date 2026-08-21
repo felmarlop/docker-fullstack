@@ -17,22 +17,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { RouterView, useRoute } from 'vue-router'
+import { RouterView } from 'vue-router'
 
 import AppSnackbar from '@/components/common/AppSnackbar.vue'
 import AppDrawer from '@/components/layout/AppDrawer.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
+import navigation from '@/navigation/account'
 
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
-const route = useRoute()
-
-const navigation = computed(() => {
-  return route.matched.find((record) => record.meta.navigation)?.meta.navigation ?? null
-})
 </script>
 
 <style scoped>

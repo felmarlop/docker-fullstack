@@ -1,28 +1,9 @@
 <template>
   <v-container class="py-8" fluid>
     <div class="mx-auto account-content">
-      <div class="text-center mb-8">
-        <v-avatar color="primary" size="180">
-          <v-img
-            v-if="auth.user?.username"
-            :src="`https://i.pravatar.cc/180?u=${auth.user.username}`"
-            :alt="auth.user.username"
-          >
-            <template #placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <h1 class="font-weight-light text-white">
-                  {{ auth.user.username[0].toUpperCase() }}
-                </h1>
-              </v-row>
-            </template>
-          </v-img>
-
-          <v-row v-else class="fill-height ma-0" align="center" justify="center">
-            <h1 class="text-h3 font-weight-light">?</h1>
-          </v-row>
-        </v-avatar>
-
-        <h1 class="text-h4 font-weight-bold mt-4">
+      <div class="text-center">
+        <user-avatar :size="180" show-username />
+        <h1 class="text-h1 font-weight-bold mt-4 text-center">
           {{ auth.user?.username }}
         </h1>
       </div>
@@ -140,6 +121,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 
+import UserAvatar from '@/components/account/UserAvatar.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
