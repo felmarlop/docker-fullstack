@@ -10,7 +10,7 @@ export default [
     to: { name: 'account-security' },
   },
   {
-    title: 'Subscription',
+    title: 'Subscription & Billing',
     icon: 'mdi-credit-card-outline',
     to: { name: 'account-subscription' },
   },

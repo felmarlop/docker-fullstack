@@ -55,4 +55,16 @@
   .tracking-tight {
     letter-spacing: -0.02em !important;
   }
+
+  .basic-bg {
+    background: rgba(var(--v-theme-on-surface), 0.03) !important;
+  }
+
+  .pro-gradient-bg {
+    background: linear-gradient(
+      135deg,
+      rgba(var(--v-theme-primary), 0.12) 0%,
+      rgba(var(--v-theme-primary), 0.02) 100%
+    ) !important;
+  }
 }

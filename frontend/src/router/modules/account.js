@@ -3,6 +3,7 @@ import navigation from '@/navigation/account'
 import EmailPasswordView from '@/views/account/EmailPasswordView.vue'
 import DeleteAccountView from '@/views/account/DeleteAccountView.vue'
 import PersonalInfoView from '@/views/account/PersonalInfoView.vue'
+import SubscriptionView from '@/views/account/SubscriptionView.vue'
 import VerifyEmailView from '@/views/account/VerifyEmailView.vue'
 
 export default [
@@ -27,7 +28,7 @@ export default [
       {
         path: 'subscription',
         name: 'account-subscription',
-        //component: EmailPasswordView,
+        component: SubscriptionView,
       },
       {
         path: 'delete',

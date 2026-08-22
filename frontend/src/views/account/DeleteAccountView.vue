@@ -36,7 +36,6 @@
             <div class="mb-4">
               <v-text-field
                 v-model="form.password"
-                autofocus
                 placeholder="Password"
                 :type="showPassword ? 'text' : 'password'"
                 prepend-inner-icon="mdi-lock-outline"
