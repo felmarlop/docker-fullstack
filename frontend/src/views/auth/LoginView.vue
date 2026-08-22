@@ -1,69 +1,96 @@
 <template>
-  <v-container class="fill-height">
-    <v-row class="fill-height" justify="center" align="center">
+  <v-container class="fill-height py-10 auth-content" fluid>
+    <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-card rounded="lg" elevation="2">
+        <v-card variant="outlined" class="auth-card">
           <v-card-text class="pa-8">
             <div class="text-center mb-8">
-              <h1 class="text-h5 font-weight-bold">Log in</h1>
-
-              <AuthLink text="Don't have an account?" action="Create one" to="/register" />
+              <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis">Sign in</h1>
+              <div class="mt-1">
+                <AuthLink text="Don't have an account?" action="Create one" to="/register" />
+              </div>
             </div>
-
-            <v-btn block prepend-icon="mdi-google" class="mb-6 font-weight-bold" height="48">
+            <v-btn
+              variant="outlined"
+              block
+              height="44"
+              class="mb-6 font-weight-bold text-high-emphasis border-color-soft"
+              :disabled="loading"
+            >
               <template #prepend>
-                <v-img :src="googleIcon" width="18" height="18" />
+                <v-img :src="googleIcon" width="18" height="18" class="mr-2" />
               </template>
-
               Continue with Google
             </v-btn>
 
             <div class="d-flex align-center mb-6">
               <v-divider />
-              <span class="text-medium-emphasis text-caption mx-4"> OR </span>
+              <span class="text-caption font-weight-bold text-uppercase text-medium-emphasis mx-4"> OR </span>
               <v-divider />
             </div>
 
-            <v-alert v-if="error" class="mb-6" type="error" variant="tonal" density="comfortable">
+            <v-alert
+              v-if="error"
+              type="error"
+              variant="tonal"
+              density="comfortable"
+              icon="mdi-alert-circle-outline"
+              class="mb-6 rounded-lg"
+            >
               {{ error }}
             </v-alert>
+
             <v-form ref="formRef" @submit.prevent="submit">
-              <v-text-field
-                v-model="form.username"
-                label="Email or username"
-                prepend-inner-icon="mdi-account-outline"
-                autocomplete="username"
-                variant="outlined"
-                :rules="[rules.required]"
-                :disabled="loading"
-                class="mb-4"
-              />
+              <div class="mb-4">
+                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                  Email or Username
+                </label>
+                <v-text-field
+                  v-model="form.username"
+                  placeholder="Enter your email or username"
+                  prepend-inner-icon="mdi-account-outline"
+                  autocomplete="username"
+                  variant="outlined"
+                  density="comfortable"
+                  hide-details="auto"
+                  :rules="[rules.required]"
+                  :disabled="loading"
+                />
+              </div>
 
-              <v-text-field
-                v-model="form.password"
-                label="Password"
-                :type="showPassword ? 'text' : 'password'"
-                prepend-inner-icon="mdi-lock-outline"
-                autocomplete="current-password"
-                variant="outlined"
-                :rules="[rules.required]"
-                :disabled="loading"
-                class="mb-6"
-                :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-                @click:append-inner="showPassword = !showPassword"
-              />
+              <div class="mb-6">
+                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis"> Password </label>
+                <v-text-field
+                  v-model="form.password"
+                  placeholder="Enter your password"
+                  :type="showPassword ? 'text' : 'password'"
+                  prepend-inner-icon="mdi-lock-outline"
+                  :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                  autocomplete="current-password"
+                  variant="outlined"
+                  density="comfortable"
+                  hide-details="auto"
+                  :rules="[rules.required]"
+                  :disabled="loading"
+                  @click:append-inner="showPassword = !showPassword"
+                />
+              </div>
 
+              <!-- Submit Button -->
               <v-btn
                 type="submit"
                 color="primary"
                 block
+                elevation="0"
+                size="large"
                 prepend-icon="mdi-login"
                 :loading="loading"
                 :disabled="loading || !canSubmit"
+                class="font-weight-bold"
               >
-                LOG IN
+                Log In
               </v-btn>
-              <AuthLink action="I forgot my password" to="/reset-password" />
+              <AuthLink action="Forgot password?" to="/reset-password" />
             </v-form>
           </v-card-text>
         </v-card>
@@ -107,10 +134,9 @@ async function submit() {
 
   try {
     await auth.login(form)
-
     router.push('/')
   } catch (err) {
-    error.value = err.message ?? ''
+    error.value = err.message ?? 'An error occurred while logging in.'
 
     if (err.code === 'account_not_activated') {
       const query = form.username.includes('@') ? { email: form.username } : {}
@@ -126,8 +152,6 @@ watch(
   () => {
     error.value = ''
   },
-  {
-    deep: true,
-  },
+  { deep: true },
 )
 </script>

@@ -1,41 +1,63 @@
 <template>
-  <v-container class="fill-height">
-    <v-row class="fill-height" justify="center" align="center">
+  <v-container class="fill-height py-10 auth-content" fluid>
+    <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-card rounded="lg" elevation="2">
+        <v-card variant="outlined" class="auth-card">
           <v-card-text class="pa-8">
-            <div v-if="!success" class="d-flex mb-6">
-              <v-btn prepend-icon="mdi-chevron-left" variant="text" to="/login"> Back </v-btn>
+            <div v-if="!success && !loading" class="mb-6">
+              <v-btn
+                prepend-icon="mdi-arrow-left"
+                variant="text"
+                size="small"
+                to="/login"
+                class="px-0 font-weight-bold"
+              >
+                Back
+              </v-btn>
             </div>
 
             <template v-if="loading">
-              <div class="text-center py-8">
+              <div class="text-center py-6">
                 <v-progress-circular indeterminate color="primary" size="48" class="mb-6" />
 
-                <h1 class="text-h5 font-weight-bold mb-3">Activating account</h1>
+                <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">Activating account</h1>
 
-                <p class="text-medium-emphasis">Please wait while we activate your account.</p>
+                <p class="text-body-1 text-medium-emphasis mb-0">
+                  Please wait while we verify and activate your account...
+                </p>
               </div>
             </template>
 
             <template v-else>
               <div class="text-center">
-                <v-icon
-                  :icon="success ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline'"
-                  :color="success ? 'success' : 'error'"
-                  size="80"
-                  class="mb-6"
-                />
+                <v-avatar :color="success ? 'success-lighten-5' : 'error-lighten-5'" size="64" class="mb-6">
+                  <v-icon
+                    :icon="success ? 'mdi-check-circle-outline' : 'mdi-alert-circle-outline'"
+                    :color="success ? 'success' : 'error'"
+                    size="32"
+                  />
+                </v-avatar>
 
-                <h1 class="text-h5 font-weight-bold mb-3">
+                <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">
                   {{ success ? 'Account activated' : 'Activation failed' }}
                 </h1>
 
-                <p class="text-medium-emphasis mb-8">
+                <p class="text-body-1 text-medium-emphasis mb-8">
                   {{ message }}
                 </p>
 
-                <v-btn v-if="success" color="primary" block prepend-icon="mdi-login" to="/login"> LOG IN </v-btn>
+                <v-btn
+                  v-if="success"
+                  color="primary"
+                  block
+                  elevation="0"
+                  size="large"
+                  prepend-icon="mdi-login"
+                  to="/login"
+                  class="font-weight-bold"
+                >
+                  Log In
+                </v-btn>
               </div>
             </template>
           </v-card-text>
@@ -62,7 +84,7 @@ onMounted(async () => {
     await authApi.activate(route.params.uidb64, route.params.token)
 
     success.value = true
-    message.value = 'Your account has been successfully activated.'
+    message.value = 'Your account has been successfully activated. You can now log in.'
   } catch (err) {
     const defaultMessage = err.message ?? 'This activation link is invalid or has expired.'
     const firstError = Object.values(err.details ?? {})[0]?.[0]

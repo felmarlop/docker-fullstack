@@ -36,4 +36,10 @@ defineProps({
     text-decoration: none;
   }
 }
+
+.auth-link-sm {
+  font-size: 0.8rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 </style>

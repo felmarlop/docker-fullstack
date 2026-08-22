@@ -1,96 +1,134 @@
 <template>
-  <v-container fluid class="fill-height">
-    <v-row align="center" class="fill-height" justify="center">
-      <v-col cols="12" md="8" lg="6">
-        <div class="text-center">
-          <v-icon icon="mdi-rocket-launch" class="rocket-icon me-4 text-primary" size="120" />
+  <v-container fluid class="fill-height py-10">
+    <v-row align="center" justify="center" class="fill-height">
+      <v-col cols="12" md="8" lg="6" class="mx-auto">
+        <!-- Hero Header -->
+        <div class="text-center mb-8">
+          <v-avatar color="primary-lighten-5" size="112" class="mb-4">
+            <v-icon icon="mdi-rocket-launch" class="rocket-icon" color="primary" size="56" />
+          </v-avatar>
 
-          <h1 class="text-h3 font-weight-bold">Docker Fullstack Boilerplate</h1>
+          <h1 class="text-h3 font-weight-bold tracking-tight text-high-emphasis mb-2">Docker Fullstack Boilerplate</h1>
 
-          <p class="text-h6 text-medium-emphasis">
-            Ready-to-use development environment for modern Django and Vue applications.
+          <p class="text-body-1 text-medium-emphasis mx-auto" style="max-width: 520px">
+            Ready-to-use development environment for modern Django REST Framework and Vue 3 applications.
           </p>
         </div>
 
         <div class="d-flex align-center my-6">
           <v-divider />
-
-          <span class="mx-4 text-caption text-medium-emphasis text-no-wrap"> Backend Status </span>
-
+          <span class="mx-4 text-caption font-weight-bold text-uppercase text-medium-emphasis text-no-wrap">
+            Backend API Health
+          </span>
           <v-divider />
         </div>
 
-        <v-card class="api-response mx-auto" max-width="580" min-height="200" variant="tonal">
+        <v-card variant="outlined" class="api-response-card mx-auto mb-6" max-width="580">
           <template v-if="loading && ui.pingData" #loader>
             <v-progress-linear indeterminate color="primary" />
           </template>
+
           <v-fade-transition mode="out-in">
             <div
               v-if="loading && !ui.pingData"
-              class="d-flex flex-column align-center justify-center fill-height py-10"
+              class="d-flex flex-column align-center justify-center"
+              style="min-height: 177px"
             >
-              <v-progress-circular indeterminate color="primary" size="36" />
-              <div class="text-medium-emphasis mt-6">Connecting...</div>
+              <v-progress-circular indeterminate color="primary" size="32" class="mb-3" />
+              <div class="text-caption text-medium-emphasis">Connecting to API...</div>
             </div>
 
             <div v-else key="content">
-              <v-card-title class="d-flex align-center justify-space-between">
-                <span>GET /api/ping</span>
+              <v-card-item class="py-2 border-b bg-grey-lighten-4">
+                <div class="d-flex align-center justify-space-between w-100">
+                  <div class="d-flex align-center">
+                    <span class="text-primary text-caption font-weight-black mr-2">GET</span>
+                    <span class="text-body-2 font-weight-bold text-medium-emphasis">/api/ping</span>
+                  </div>
 
-                <v-chip
-                  :color="error ? 'error' : 'success'"
-                  :prepend-icon="error ? 'mdi-close-circle' : 'mdi-check-circle'"
-                  size="small"
-                  variant="flat"
-                >
-                  {{ error ? `${error.status} ${error.code}` : '200 OK' }}
-                </v-chip>
-              </v-card-title>
+                  <v-chip :color="error ? 'error' : 'success'" variant="tonal" size="small" class="font-weight-bold">
+                    <template #prepend>
+                      <v-icon
+                        :icon="error ? 'mdi-close-circle-outline' : 'mdi-check-circle-outline'"
+                        size="16"
+                        class="mr-1"
+                      />
+                    </template>
+                    {{ error ? `${error.status} ${error.code}` : '200 OK' }}
+                  </v-chip>
+                </div>
+              </v-card-item>
 
-              <v-divider />
-
-              <pre>{{ error ? formattedError : formattedResponse }}</pre>
+              <div class="terminal-body pa-4">
+                <pre>{{ error ? formattedError : formattedResponse }}</pre>
+              </div>
             </div>
           </v-fade-transition>
         </v-card>
 
-        <div v-if="!auth.isAuthenticated" class="d-flex align-center my-6">
-          <v-divider />
+        <template v-if="!auth.isAuthenticated">
+          <div class="d-flex align-center my-6">
+            <v-divider />
+            <span class="mx-4 text-caption font-weight-bold text-uppercase text-medium-emphasis text-no-wrap">
+              Authentication
+            </span>
+            <v-divider />
+          </div>
 
-          <span class="mx-4 text-caption text-medium-emphasis text-no-wrap"> JWT Authentication </span>
-
-          <v-divider />
-        </div>
-
-        <div v-if="!auth.isAuthenticated" class="text-center">
-          <v-btn color="primary" min-width="240" prepend-icon="mdi-login" to="/login"> LOG IN </v-btn>
-          <AuthLink text="Don't have an account?" action="Create one" to="/register" />
-        </div>
+          <div class="text-center mb-6">
+            <v-btn
+              color="primary"
+              elevation="0"
+              size="large"
+              prepend-icon="mdi-login"
+              to="/login"
+              class="px-8 font-weight-bold mb-3"
+            >
+              Log In
+            </v-btn>
+            <div>
+              <AuthLink text="Don't have an account?" action="Create one" to="/register" />
+            </div>
+          </div>
+        </template>
 
         <div class="d-flex align-center my-6">
           <v-divider />
-
-          <span class="mx-4 text-caption text-medium-emphasis text-no-wrap"> Developer Resources </span>
-
+          <span class="mx-4 text-caption font-weight-bold text-uppercase text-medium-emphasis text-no-wrap">
+            Developer Resources
+          </span>
           <v-divider />
         </div>
 
-        <div class="d-flex justify-center flex-wrap ga-4 mb-6">
-          <v-btn color="secondary" href="/admin/" min-width="180" prepend-icon="mdi-shield-account" variant="outlined">
+        <div class="d-flex justify-center flex-wrap ga-3">
+          <v-btn
+            color="default"
+            variant="outlined"
+            href="/admin/"
+            prepend-icon="mdi-shield-account-outline"
+            class="font-weight-bold border-color-soft"
+          >
             Django Admin
           </v-btn>
 
-          <v-btn color="secondary" href="/api/docs/" min-width="180" prepend-icon="mdi-api" variant="outlined">
+          <v-btn
+            color="default"
+            variant="outlined"
+            href="/api/docs/"
+            prepend-icon="mdi-api"
+            class="font-weight-bold border-color-soft"
+          >
             API Docs
           </v-btn>
 
           <v-btn
+            color="default"
+            variant="outlined"
             href="https://github.com/felmarlop/docker-fullstack#-docker-fullstack-boilerplate"
-            min-width="180"
-            prepend-icon="mdi-book-open-page-variant"
+            prepend-icon="mdi-book-open-page-variant-outline"
             rel="noopener noreferrer"
             target="_blank"
-            variant="outlined"
+            class="font-weight-bold border-color-soft"
           >
             Documentation
           </v-btn>
@@ -103,11 +141,10 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 
+import AuthLink from '@/components/auth/AuthLink.vue'
+import api from '@/core/api'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
-import AuthLink from '@/components/auth/AuthLink.vue'
-
-import api from '@/core/api'
 
 const auth = useAuthStore()
 const ui = useUiStore()
@@ -117,9 +154,7 @@ const error = ref(null)
 const formattedResponse = computed(() => (ui.pingData ? JSON.stringify(ui.pingData, null, 2) : ''))
 
 const formattedError = computed(() => {
-  if (!error.value) {
-    return ''
-  }
+  if (!error.value) return ''
 
   return JSON.stringify(
     {
@@ -151,7 +186,7 @@ onMounted(async () => {
 
 @keyframes rocketTakeoff {
   0% {
-    transform: translateY(20px) translateX(-20px) rotate(0deg);
+    transform: translateY(20px) translateX(-10px) rotate(0deg);
     filter: drop-shadow(0 0 0px rgba(var(--v-theme-primary), 0));
   }
   50% {
@@ -165,19 +200,9 @@ onMounted(async () => {
   }
 }
 
-.api-response {
-  text-align: left;
-}
-
-.api-response pre {
-  margin: 0;
-  padding: 20px;
-
-  overflow-x: auto;
-
-  font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', monospace;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  white-space: pre-wrap;
+.api-response-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border-color: rgba(var(--v-border-color), var(--v-border-opacity)) !important;
 }
 </style>

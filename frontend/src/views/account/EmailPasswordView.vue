@@ -37,7 +37,7 @@
                 </v-avatar>
               </template>
 
-              <v-list-item-title class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1">
+              <v-list-item-title class="font-weight-bold text-uppercase text-medium-emphasis mb-1">
                 Email Address
               </v-list-item-title>
 
@@ -125,7 +125,7 @@
 
             <v-form ref="emailFormRef" @submit.prevent="submitEmail">
               <div class="mb-6">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
                   New Email Address
                 </label>
                 <v-text-field
@@ -200,7 +200,7 @@
                 </v-avatar>
               </template>
 
-              <v-list-item-title class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1">
+              <v-list-item-title class="font-weight-bold text-uppercase text-medium-emphasis mb-1">
                 Current Password
               </v-list-item-title>
 
@@ -226,7 +226,7 @@
 
             <v-form ref="passwordFormRef" @submit.prevent="submitPassword">
               <div class="mb-4">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
                   Current Password
                 </label>
                 <v-text-field
@@ -248,9 +248,7 @@
               </div>
 
               <div class="mb-6">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
-                  New Password
-                </label>
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block"> New Password </label>
                 <v-text-field
                   v-model="passwordForm.new_password"
                   placeholder="Enter new password"

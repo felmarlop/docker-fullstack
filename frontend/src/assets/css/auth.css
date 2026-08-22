@@ -1,0 +1,14 @@
+.auth-content {
+  .auth-card {
+    max-width: 440px;
+    margin: 0 auto;
+    border-color: rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: rgba(var(--v-theme-primary), 0.4) !important;
+    }
+  }
+}

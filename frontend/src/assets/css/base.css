@@ -28,4 +28,28 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  .v-btn .v-btn__content {
+    font-weight: 500 !important; /* Regular/Medium instead of Bold */
+    letter-spacing: 0.01em !important;
+    text-transform: uppercase;
+  }
+
+  .terminal-body {
+    background-color: #1e1e1e;
+    text-align: left;
+  }
+
+  .terminal-body pre {
+    margin: 0;
+    font-family: 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    color: rgba(var(--v-theme-terminal)) !important;
+  }
+
+  .tracking-tight {
+    letter-spacing: -0.02em !important;
+  }
 }

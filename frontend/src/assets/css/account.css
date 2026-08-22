@@ -12,10 +12,7 @@
   }
 
   /* Card Header Titles & Actions */
-  .v-card-title {
-    font-size: 1.1rem !important;
-    font-weight: 600 !important;
-
+  .v-card-item {
     .v-btn {
       font-size: 0.8rem !important;
       &.invisible {
@@ -50,10 +47,6 @@
     &:hover {
       border-color: rgba(var(--v-theme-error), 0.6) !important;
     }
-  }
-
-  .tracking-tight {
-    letter-spacing: -0.02em !important;
   }
 
   .basic-bg {

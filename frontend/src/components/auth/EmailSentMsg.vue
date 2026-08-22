@@ -1,19 +1,20 @@
 <template>
-  <v-card rounded="lg" elevation="2">
+  <v-card variant="outlined" class="auth-card">
     <v-card-text class="pa-8">
-      <div class="d-flex mb-6">
-        <v-btn prepend-icon="mdi-chevron-left" variant="text" to="/login"> Back </v-btn>
+      <div class="mb-6">
+        <v-btn prepend-icon="mdi-arrow-left" variant="text" to="/login" class="px-0 font-weight-bold"> Back </v-btn>
       </div>
 
       <div class="text-center">
-        <v-icon icon="mdi-email-check-outline" color="primary" size="80" class="mb-6" />
+        <v-avatar color="primary-lighten-5" size="64" class="mb-6">
+          <v-icon icon="mdi-email-check-outline" color="primary" size="32" />
+        </v-avatar>
 
-        <h1 class="text-h5 font-weight-bold mb-3">Check your email</h1>
+        <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">Check your email</h1>
 
-        <p class="text-medium-emphasis mb-8">
-          If an account exists for
-          <strong>{{ email }}</strong
-          >, you'll receive email shortly to {{ action }}.
+        <p class="text-body-1 text-medium-emphasis mb-0">
+          If an account exists for <strong class="text-high-emphasis">{{ email }}</strong
+          >, you will receive an email shortly to {{ action }}.
         </p>
       </div>
     </v-card-text>

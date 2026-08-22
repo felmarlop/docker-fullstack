@@ -11,4 +11,5 @@ export default {
   surface: '#FFFFFF',
 
   accent: '#22D3EE',
+  terminal: '#4EC9B0',
 }
