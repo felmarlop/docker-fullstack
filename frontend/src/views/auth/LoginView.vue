@@ -25,7 +25,7 @@
 
             <div class="d-flex align-center mb-6">
               <v-divider />
-              <span class="text-caption font-weight-bold text-uppercase text-medium-emphasis mx-4"> OR </span>
+              <span class="font-weight-bold text-uppercase text-medium-emphasis mx-4"> OR </span>
               <v-divider />
             </div>
 
@@ -42,7 +42,7 @@
 
             <v-form ref="formRef" @submit.prevent="submit">
               <div class="mb-4">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
                   Email or Username
                 </label>
                 <v-text-field
@@ -59,7 +59,7 @@
               </div>
 
               <div class="mb-6">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis"> Password </label>
+                <label class="font-weight-bold text-uppercase text-medium-emphasis"> Password </label>
                 <v-text-field
                   v-model="form.password"
                   placeholder="Enter your password"

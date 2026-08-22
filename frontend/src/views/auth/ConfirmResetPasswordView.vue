@@ -55,7 +55,7 @@
 
               <v-form ref="formRef" @submit.prevent="submit">
                 <div class="mb-6">
-                  <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                  <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
                     New Password
                   </label>
                   <v-text-field

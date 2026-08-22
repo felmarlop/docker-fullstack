@@ -41,7 +41,7 @@
               </template>
 
               <!-- Label on top: Muted, small, structured -->
-              <v-list-item-title class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1">
+              <v-list-item-title class="font-weight-bold text-uppercase text-medium-emphasis mb-1">
                 Full Name
               </v-list-item-title>
 

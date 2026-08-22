@@ -27,7 +27,7 @@
           </div>
 
           <div>
-            <div class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1">Current Plan</div>
+            <div class="font-weight-bold text-uppercase text-medium-emphasis mb-1">Current Plan</div>
             <h2 class="text-h5 font-weight-bold text-high-emphasis tracking-tight">
               {{ isPro ? 'Lifetime Pro Access' : 'Basic Account' }}
             </h2>
@@ -61,13 +61,13 @@
 
             <div class="text-right">
               <span class="text-h5 font-weight-bold text-high-emphasis">$29</span>
-              <span class="text-caption text-medium-emphasis"> / once</span>
+              <span class="text-medium-emphasis"> / once</span>
             </div>
           </div>
         </v-card-item>
 
         <v-card-text v-if="proFeatures.length" class="pa-6 border-b bg-grey-lighten-5">
-          <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-3 d-block">
+          <label class="font-weight-bold text-uppercase text-medium-emphasis mb-3 d-block">
             Included in Pro Tier
           </label>
 
@@ -96,7 +96,7 @@
           </v-alert>
 
           <div class="d-flex align-center justify-space-between">
-            <div class="d-flex align-center text-caption text-medium-emphasis">
+            <div class="d-flex align-center text-medium-emphasis">
               <v-icon icon="mdi-shield-check-outline" size="16" class="mr-1" />
               Secure 256-bit encrypted checkout
             </div>

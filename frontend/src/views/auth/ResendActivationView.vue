@@ -41,9 +41,7 @@
             <!-- Form -->
             <v-form ref="formRef" @submit.prevent="submit">
               <div class="mb-6">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
-                  Email
-                </label>
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block"> Email </label>
                 <v-text-field
                   v-model="email"
                   autofocus

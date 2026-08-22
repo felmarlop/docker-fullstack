@@ -17,7 +17,7 @@
 
         <div class="d-flex align-center my-6">
           <v-divider />
-          <span class="mx-4 text-caption font-weight-bold text-uppercase text-medium-emphasis text-no-wrap">
+          <span class="mx-4 font-weight-bold text-uppercase text-medium-emphasis text-no-wrap">
             Backend API Health
           </span>
           <v-divider />
@@ -35,14 +35,14 @@
               style="min-height: 177px"
             >
               <v-progress-circular indeterminate color="primary" size="32" class="mb-3" />
-              <div class="text-caption text-medium-emphasis">Connecting to API...</div>
+              <div class="text-medium-emphasis">Connecting to API...</div>
             </div>
 
             <div v-else key="content">
               <v-card-item class="py-2 border-b bg-grey-lighten-4">
                 <div class="d-flex align-center justify-space-between w-100">
                   <div class="d-flex align-center">
-                    <span class="text-primary text-caption font-weight-black mr-2">GET</span>
+                    <span class="text-primary font-weight-black mr-2">GET</span>
                     <span class="text-body-2 font-weight-bold text-medium-emphasis">/api/ping</span>
                   </div>
 
@@ -69,9 +69,7 @@
         <template v-if="!auth.isAuthenticated">
           <div class="d-flex align-center my-6">
             <v-divider />
-            <span class="mx-4 text-caption font-weight-bold text-uppercase text-medium-emphasis text-no-wrap">
-              Authentication
-            </span>
+            <span class="mx-4 font-weight-bold text-uppercase text-medium-emphasis text-no-wrap"> Authentication </span>
             <v-divider />
           </div>
 
@@ -82,7 +80,7 @@
               size="large"
               prepend-icon="mdi-login"
               to="/login"
-              class="px-8 font-weight-bold mb-3"
+              class="px-8 font-weight-bold"
             >
               Log In
             </v-btn>
@@ -94,7 +92,7 @@
 
         <div class="d-flex align-center my-6">
           <v-divider />
-          <span class="mx-4 text-caption font-weight-bold text-uppercase text-medium-emphasis text-no-wrap">
+          <span class="mx-4 font-weight-bold text-uppercase text-medium-emphasis text-no-wrap">
             Developer Resources
           </span>
           <v-divider />

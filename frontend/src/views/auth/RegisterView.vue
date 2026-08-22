@@ -26,7 +26,7 @@
 
             <v-form ref="formRef" @submit.prevent="submit">
               <div class="mb-4">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
                   Username <span class="font-weight-regular text-lowercase">(optional)</span>
                 </label>
                 <v-text-field
@@ -44,9 +44,7 @@
               </div>
 
               <div class="mb-4">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
-                  Email
-                </label>
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block"> Email </label>
                 <v-text-field
                   v-model="form.email"
                   placeholder="name@example.com"
@@ -62,9 +60,7 @@
               </div>
 
               <div class="mb-6">
-                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
-                  Password
-                </label>
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block"> Password </label>
                 <v-text-field
                   v-model="form.password"
                   placeholder="Create a strong password"
