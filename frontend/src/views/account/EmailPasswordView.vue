@@ -380,22 +380,7 @@ watch(
 </script>
 
 <style scoped>
-.account-content {
-  max-width: 760px;
-
-  .v-card-title {
-    font-size: 1.1rem !important;
-    font-weight: 400 !important;
-    .v-btn {
-      font-size: 0.8rem !important;
-      &.invisible {
-        visibility: hidden;
-      }
-    }
-  }
-
-  .pending-email {
-    font-size: 0.9rem !important;
-  }
+.account-content .pending-email {
+  font-size: 0.9rem !important;
 }
 </style>

@@ -12,6 +12,12 @@ export function activate(uidb64, token) {
   return api.get(`auth/activate/${uidb64}/${token}/`)
 }
 
+export function refresh(refreshToken) {
+  return api.post('auth/refresh/', {
+    refresh: refreshToken,
+  })
+}
+
 export function resendActivationEmail(data) {
   return api.post(`auth/activate/resend/`, data)
 }
@@ -46,8 +52,6 @@ export function logout(refreshToken) {
   })
 }
 
-export function refresh(refreshToken) {
-  return api.post('auth/refresh/', {
-    refresh: refreshToken,
-  })
+export function deleteAccount(data) {
+  return api.post('auth/delete-account/', data)
 }

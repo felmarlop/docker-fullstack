@@ -230,3 +230,40 @@ class LogoutSerializer(serializers.Serializer):
                     "refresh": ["Invalid or expired refresh token."],
                 }
             ) from exc
+
+
+class DeleteAccountSerializer(serializers.Serializer):
+    """
+    Delete the authenticated user's account
+    """
+
+    confirmation = serializers.CharField()
+    refresh = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, trim_whitespace=False)
+
+    def validate_confirmation(self, value: str) -> str:
+        if value != "DELETE":
+            raise serializers.ValidationError('Please type "DELETE" to confirm.')
+        return value
+
+    def validate_password(self, value: str) -> str:
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("The password is incorrect.")
+
+        return value
+
+    def delete(self) -> None:
+        user = self.context["request"].user
+        refresh = self.validated_data["refresh"]  # type: ignore
+
+        try:
+            RefreshToken(refresh).blacklist()
+        except TokenError as exc:
+            raise serializers.ValidationError(
+                {
+                    "refresh": ["Invalid or expired refresh token."],
+                }
+            ) from exc
+
+        user.delete()

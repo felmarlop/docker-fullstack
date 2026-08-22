@@ -18,6 +18,7 @@ from rest_framework_simplejwt.views import (
 from app.authentication.serializers.account import (
     ChangeEmailSerializer,
     ChangePasswordSerializer,
+    DeleteAccountSerializer,
     LoginSerializer,
     LogoutSerializer,
     ResendEmailVerificationSerializer,
@@ -215,4 +216,38 @@ class LogoutView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         logger.info(f"User {request.user.username} logged out.")
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@extend_schema(
+    summary="Delete account",
+    description="Permanently delete the authenticated user's account.",
+    request=DeleteAccountSerializer,
+    tags=["Authentication"],
+    examples=[
+        OpenApiExample(
+            "Delete request",
+            value={
+                "confirmation": "DELETE",
+                "refresh": "eyJhbGciOiJIUzI1NiIs...",
+                "password": "myNewPassword123",
+            },
+            request_only=True,
+        ),
+    ],
+)
+class DeleteAccountView(APIView):
+    serializer_class = DeleteAccountSerializer
+    permission_classes = [IsAuthenticated]  # noqa
+
+    def post(self, request: Request) -> Response:
+        serializer = self.serializer_class(
+            data=request.data,
+            context={"request": request},
+        )
+        serializer.is_valid(raise_exception=True)
+
+        serializer.delete()  # type: ignore
+
+        logger.info(f"Account deleted: {request.user.username}.")
         return Response(status=status.HTTP_204_NO_CONTENT)

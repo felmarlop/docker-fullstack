@@ -49,4 +49,9 @@ urlpatterns = [
         reset_password.ResetPasswordView.as_view(),
         name="reset-password",
     ),
+    path(
+        "auth/delete-account/",
+        account.DeleteAccountView.as_view(),
+        name="delete-account",
+    ),
 ]

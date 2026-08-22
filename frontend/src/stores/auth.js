@@ -106,5 +106,11 @@ export const useAuthStore = defineStore('auth', {
         this.clearSession()
       }
     },
+
+    async deleteAccount(payload) {
+      const data = { refresh: this.refreshToken, ...payload }
+      await authApi.deleteAccount(data)
+      this.clearSession()
+    },
   },
 })

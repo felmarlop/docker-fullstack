@@ -28,7 +28,12 @@
 
         <template v-if="!editing">
           <v-list lines="two">
-            <v-list-item prepend-icon="mdi-account-outline" title="Name" :subtitle="fullName || '-'" />
+            <v-list-item
+              prepend-icon="mdi-account-outline"
+              title="Name"
+              :style="{ 'font-style': fullName ? '' : 'italic' }"
+              :subtitle="fullName || 'Not provided'"
+            />
 
             <v-divider />
 
@@ -205,20 +210,3 @@ watch(
   },
 )
 </script>
-
-<style scoped>
-.account-content {
-  max-width: 760px;
-
-  .v-card-title {
-    font-size: 1.1rem !important;
-    font-weight: 400 !important;
-    .v-btn {
-      font-size: 0.8rem !important;
-      &.invisible {
-        visibility: hidden;
-      }
-    }
-  }
-}
-</style>

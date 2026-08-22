@@ -1,7 +1,8 @@
 import navigation from '@/navigation/account'
 
-import AccountView from '@/views/account/AccountView.vue'
 import EmailPasswordView from '@/views/account/EmailPasswordView.vue'
+import DeleteAccountView from '@/views/account/DeleteAccountView.vue'
+import PersonalInfoView from '@/views/account/PersonalInfoView.vue'
 import VerifyEmailView from '@/views/account/VerifyEmailView.vue'
 
 export default [
@@ -16,7 +17,7 @@ export default [
       {
         path: 'profile',
         name: 'account-profile',
-        component: AccountView,
+        component: PersonalInfoView,
       },
       {
         path: 'security',
@@ -31,7 +32,7 @@ export default [
       {
         path: 'delete',
         name: 'account-delete',
-        //component: () => import('@/views/account/DeleteAccountView.vue'),
+        component: DeleteAccountView,
       },
     ],
   },
