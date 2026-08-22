@@ -85,7 +85,7 @@ class ChangeEmailSerializer(serializers.Serializer):
         user = self.context["request"].user
         value = value.strip()
 
-        if value.lower() == user.email.lower():
+        if value.lower() == user.email.lower() and not user.pending_email:
             raise serializers.ValidationError(
                 "The new email must be different from the current email."
             )
@@ -104,8 +104,14 @@ class ChangeEmailSerializer(serializers.Serializer):
 
     def save(self, **kwargs: Any) -> User:  # noqa: ARG002
         user = self.context["request"].user
+        email = self.validated_data["email"]  # type: ignore
 
-        user.pending_email = self.validated_data["email"]  # type: ignore
+        if user.pending_email and user.email.lower() == email.lower():
+            user.pending_email = None
+            user.save(update_fields=["pending_email"])
+            return user
+
+        user.pending_email = email
         user.save(update_fields=["pending_email"])
 
         send_email_verification(user)

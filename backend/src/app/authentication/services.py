@@ -18,7 +18,7 @@ def send_account_activation(user: User) -> None:
 def send_email_verification(user: User) -> None:
     uidb64, token = tokens.generate_email_verification_token(user)
     url = f"{settings.FRONTEND_URL}/verify/email/{uidb64}/{token}"
-    tasks.send_email_verification_email.delay(user.email, url)  # pyright: ignore[reportFunctionMemberAccess]
+    tasks.send_email_verification_email.delay(user.pending_email, url)  # pyright: ignore[reportFunctionMemberAccess]
 
 
 def send_password_reset(user: User) -> None:
