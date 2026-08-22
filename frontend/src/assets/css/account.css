@@ -1,14 +1,58 @@
 .account-content {
-  max-width: 760px;
+  max-width: 640px;
 
+  /* Universal Form Label Styling */
+  label,
+  .field-label {
+    display: block;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  /* Card Header Titles & Actions */
   .v-card-title {
     font-size: 1.1rem !important;
-    font-weight: 400 !important;
+    font-weight: 600 !important;
+
     .v-btn {
       font-size: 0.8rem !important;
       &.invisible {
         visibility: hidden;
       }
     }
+  }
+
+  /* Shared Card Shell Setup */
+  .account-card,
+  .danger-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  /* Standard Card Border Accent */
+  .account-card {
+    border-color: rgba(var(--v-theme-primary), 0.3) !important;
+
+    &:hover {
+      border-color: rgba(var(--v-theme-primary), 0.6) !important;
+    }
+  }
+
+  /* Danger Card Border Accent */
+  .danger-card {
+    border-color: rgba(var(--v-theme-error), 0.3) !important;
+
+    &:hover {
+      border-color: rgba(var(--v-theme-error), 0.6) !important;
+    }
+  }
+
+  .tracking-tight {
+    letter-spacing: -0.02em !important;
   }
 }

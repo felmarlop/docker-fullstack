@@ -1,201 +1,295 @@
 <template>
-  <v-container class="py-8" fluid>
+  <v-container class="py-10" fluid>
     <div class="mx-auto account-content">
-      <v-card rounded="lg" elevation="2" class="mb-10">
-        <v-card-title class="d-flex align-center py-4 text-medium-emphasis">
-          <span>My email address</span>
-          <v-spacer />
-          <v-btn
-            variant="outlined"
-            class="my-0 py-0"
-            min-width="100"
-            size="small"
-            prepend-icon="mdi-pencil-outline"
-            :class="{ invisible: emailState.editing }"
-            @click="startEditingEmail"
-          >
-            EDIT
-          </v-btn>
-        </v-card-title>
+      <div class="mb-8">
+        <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis">Security & Credentials</h1>
+      </div>
 
-        <v-divider />
+      <v-card variant="outlined" class="account-card mb-8">
+        <v-card-item class="pa-6 border-b">
+          <div class="d-flex align-center justify-space-between w-100">
+            <div>
+              <v-card-title class="text-h6 font-weight-bold"> Direct Email </v-card-title>
+              <v-card-subtitle class="text-body-2 text-medium-emphasis">
+                Primary email used for account authentication.
+              </v-card-subtitle>
+            </div>
 
-        <template v-if="emailState.editing">
-          <v-card-text>
-            <v-alert v-if="emailState.error" class="mb-6" type="error" variant="tonal" density="comfortable">
+            <v-btn
+              variant="outlined"
+              size="small"
+              prepend-icon="mdi-pencil-outline"
+              :class="{ invisible: emailState.editing }"
+              class="font-weight-bold px-4"
+              @click="startEditingEmail"
+            >
+              Edit
+            </v-btn>
+          </div>
+        </v-card-item>
+
+        <template v-if="!emailState.editing">
+          <v-list class="py-0">
+            <v-list-item class="pa-6">
+              <template #prepend>
+                <v-avatar color="primary-lighten-5" size="40" class="mr-2">
+                  <v-icon icon="mdi-email-outline" color="primary" size="20" />
+                </v-avatar>
+              </template>
+
+              <v-list-item-title class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1">
+                Email Address
+              </v-list-item-title>
+
+              <v-list-item-subtitle class="text-body-1 text-high-emphasis font-weight-medium">
+                {{ userEmail || 'Not provided' }}
+              </v-list-item-subtitle>
+
+              <template #append>
+                <v-chip
+                  v-if="auth.user?.pending_email"
+                  color="warning"
+                  variant="tonal"
+                  size="small"
+                  prepend-icon="mdi-progress-clock"
+                  class="font-weight-bold"
+                >
+                  Verification Pending
+                </v-chip>
+
+                <v-chip
+                  v-else
+                  color="success"
+                  variant="tonal"
+                  size="small"
+                  prepend-icon="mdi-check-circle-outline"
+                  class="font-weight-bold"
+                >
+                  Verified
+                </v-chip>
+              </template>
+            </v-list-item>
+
+            <template v-if="auth.user?.pending_email">
+              <v-divider />
+              <v-card-text class="pa-6 bg-grey-lighten-5">
+                <div class="d-flex flex-column align-center text-center">
+                  <p class="text-body-2 text-medium-emphasis mb-4">
+                    We've sent a verification link to
+                    <strong class="text-high-emphasis">{{ auth.user?.pending_email }}</strong
+                    >. Please check your inbox.
+                  </p>
+
+                  <v-alert
+                    v-if="emailState.error"
+                    type="error"
+                    variant="tonal"
+                    density="comfortable"
+                    icon="mdi-alert-circle-outline"
+                    class="mb-4 rounded-lg w-100 text-left"
+                  >
+                    {{ emailState.error }}
+                  </v-alert>
+
+                  <v-form ref="emailFormRef" @submit.prevent="resendVerification">
+                    <v-btn
+                      type="submit"
+                      variant="outlined"
+                      color="primary"
+                      prepend-icon="mdi-email-fast-outline"
+                      :loading="emailState.loading"
+                      :disabled="emailState.sent"
+                      class="font-weight-bold"
+                    >
+                      {{ emailState.sent ? 'Verification Email Sent' : 'Resend Verification Link' }}
+                    </v-btn>
+                  </v-form>
+                </div>
+              </v-card-text>
+            </template>
+          </v-list>
+        </template>
+
+        <template v-else>
+          <v-card-text class="pa-6">
+            <v-alert
+              v-if="emailState.error"
+              type="error"
+              variant="tonal"
+              density="comfortable"
+              icon="mdi-alert-circle-outline"
+              class="mb-6 rounded-lg"
+            >
               {{ emailState.error }}
             </v-alert>
 
             <v-form ref="emailFormRef" @submit.prevent="submitEmail">
-              <v-text-field
-                v-model="emailForm.email"
-                label="New email"
-                prepend-inner-icon="mdi-email-outline"
-                autocomplete="email"
-                variant="outlined"
-                :rules="[rules.required, rules.email]"
-                :error-messages="emailState.detailErrors.email"
-                :disabled="emailState.loading"
-              />
-
-              <div class="d-flex justify-end ga-3 mt-2">
-                <v-btn
+              <div class="mb-6">
+                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                  New Email Address
+                </label>
+                <v-text-field
+                  v-model="emailForm.email"
+                  autofocus
+                  placeholder="name@example.com"
+                  prepend-inner-icon="mdi-email-outline"
+                  autocomplete="email"
                   variant="outlined"
-                  min-width="120"
-                  prepend-icon="mdi-close"
+                  density="comfortable"
+                  hide-details="auto"
+                  :rules="[rules.required, rules.email]"
+                  :error-messages="emailState.detailErrors.email"
                   :disabled="emailState.loading"
-                  @click="cancelEditingEmail"
-                >
-                  CANCEL
+                />
+              </div>
+
+              <v-divider class="mb-6" />
+
+              <div class="d-flex justify-end ga-3">
+                <v-btn variant="text" color="default" :disabled="emailState.loading" @click="cancelEditingEmail">
+                  Cancel
                 </v-btn>
 
                 <v-btn
                   type="submit"
                   color="primary"
-                  min-width="120"
+                  elevation="0"
+                  size="large"
                   prepend-icon="mdi-content-save-outline"
                   :loading="emailState.loading"
                   :disabled="emailState.loading"
+                  class="px-6 font-weight-bold"
                 >
-                  UPDATE
+                  Save Changes
                 </v-btn>
               </div>
             </v-form>
           </v-card-text>
         </template>
-
-        <template v-else>
-          <v-list lines="two">
-            <v-list-item prepend-icon="mdi-email-outline" title="Email" :subtitle="userEmail || '-'">
-              <template #append>
-                <div v-if="auth.user?.pending_email" class="d-flex align-center text-warning">
-                  <v-icon icon="mdi-progress-clock" size="18" />
-                  <span class="ms-1">Verification pending</span>
-                </div>
-                <div v-else class="d-flex align-center text-success">
-                  <v-icon icon="mdi-check-all" size="18" />
-                  <span class="ms-1">Verified</span>
-                </div>
-              </template>
-            </v-list-item>
-            <template v-if="auth.user?.pending_email">
-              <v-divider />
-              <v-list-item class="pending-email">
-                <div class="w-100">
-                  <div class="text-medium-emphasis mb-3">
-                    We've sent a verification email to your new email address. Please check your inbox.
-                  </div>
-                  <div class="d-flex justify-center">
-                    <v-alert v-if="emailState.error" class="mb-6" type="error" variant="tonal" density="comfortable">
-                      {{ emailState.error }}
-                    </v-alert>
-
-                    <v-form ref="emailFormRef" @submit.prevent="resendVerification">
-                      <v-btn
-                        type="submit"
-                        color="primary"
-                        variant="outlined"
-                        prepend-icon="mdi-email-fast-outline"
-                        :loading="emailState.loading"
-                        :disabled="emailState.sent"
-                      >
-                        {{ emailState.sent ? 'EMAIL SENT' : 'RESEND VERIFICATION LINK' }}
-                      </v-btn>
-                    </v-form>
-                  </div>
-                </div>
-              </v-list-item>
-            </template>
-          </v-list>
-        </template>
       </v-card>
 
-      <v-card rounded="lg" elevation="2">
-        <v-card-title class="d-flex align-center py-4 text-medium-emphasis">
-          <span>My password</span>
+      <v-card variant="outlined" class="account-card">
+        <v-card-item class="pa-6 border-b">
+          <div class="d-flex align-center justify-space-between w-100">
+            <div>
+              <v-card-title class="text-h6 font-weight-bold"> Password </v-card-title>
+              <v-card-subtitle class="text-body-2 text-medium-emphasis">
+                Set a secure password to protect your account.
+              </v-card-subtitle>
+            </div>
 
-          <v-spacer />
+            <v-btn
+              variant="outlined"
+              size="small"
+              prepend-icon="mdi-pencil-outline"
+              :class="{ invisible: passwordState.editing }"
+              class="font-weight-bold px-4"
+              @click="startEditingPassword"
+            >
+              Edit
+            </v-btn>
+          </div>
+        </v-card-item>
 
-          <v-btn
-            variant="outlined"
-            size="small"
-            min-width="100"
-            prepend-icon="mdi-pencil-outline"
-            :class="{ invisible: passwordState.editing }"
-            @click="startEditingPassword"
-          >
-            EDIT
-          </v-btn>
-        </v-card-title>
+        <template v-if="!passwordState.editing">
+          <v-list class="py-0">
+            <v-list-item class="pa-6">
+              <template #prepend>
+                <v-avatar color="primary-lighten-5" size="40" class="mr-2">
+                  <v-icon icon="mdi-lock-outline" color="primary" size="20" />
+                </v-avatar>
+              </template>
 
-        <v-divider />
+              <v-list-item-title class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1">
+                Current Password
+              </v-list-item-title>
 
-        <template v-if="passwordState.editing">
-          <v-card-text>
-            <v-alert v-if="passwordState.error" class="mb-6" type="error" variant="tonal" density="comfortable">
+              <v-list-item-subtitle class="text-body-1 text-high-emphasis font-weight-medium">
+                ••••••••••••••••
+              </v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
+        </template>
+
+        <template v-else>
+          <v-card-text class="pa-6">
+            <v-alert
+              v-if="passwordState.error"
+              type="error"
+              variant="tonal"
+              density="comfortable"
+              icon="mdi-alert-circle-outline"
+              class="mb-6 rounded-lg"
+            >
               {{ passwordState.error }}
             </v-alert>
 
             <v-form ref="passwordFormRef" @submit.prevent="submitPassword">
-              <v-text-field
-                v-model="passwordForm.current_password"
-                label="Current password"
-                :type="showCurrentPassword ? 'text' : 'password'"
-                prepend-inner-icon="mdi-lock-outline"
-                :append-inner-icon="showCurrentPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-                autocomplete="current-password"
-                variant="outlined"
-                :rules="[rules.required]"
-                :error-messages="passwordState.detailErrors.current_password"
-                :disabled="passwordState.loading"
-                class="mb-4"
-                @click:append-inner="showCurrentPassword = !showCurrentPassword"
-              />
-
-              <v-text-field
-                v-model="passwordForm.new_password"
-                label="New password"
-                :type="showNewPassword ? 'text' : 'password'"
-                prepend-inner-icon="mdi-lock-outline"
-                :append-inner-icon="showNewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-                autocomplete="new-password"
-                variant="outlined"
-                :rules="[rules.required]"
-                :error-messages="passwordState.detailErrors.new_password"
-                :disabled="passwordState.loading"
-                @click:append-inner="showNewPassword = !showNewPassword"
-              />
-
-              <div class="d-flex justify-end ga-3 mt-2">
-                <v-btn
+              <div class="mb-4">
+                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                  Current Password
+                </label>
+                <v-text-field
+                  v-model="passwordForm.current_password"
+                  autofocus
+                  placeholder="Enter current password"
+                  :type="showCurrentPassword ? 'text' : 'password'"
+                  prepend-inner-icon="mdi-lock-outline"
+                  :append-inner-icon="showCurrentPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                  autocomplete="current-password"
                   variant="outlined"
-                  min-width="120"
-                  prepend-icon="mdi-close"
+                  density="comfortable"
+                  hide-details="auto"
+                  :rules="[rules.required]"
+                  :error-messages="passwordState.detailErrors.current_password"
                   :disabled="passwordState.loading"
-                  @click="cancelEditingPassword"
-                >
-                  CANCEL
+                  @click:append-inner="showCurrentPassword = !showCurrentPassword"
+                />
+              </div>
+
+              <div class="mb-6">
+                <label class="text-caption font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                  New Password
+                </label>
+                <v-text-field
+                  v-model="passwordForm.new_password"
+                  placeholder="Enter new password"
+                  :type="showNewPassword ? 'text' : 'password'"
+                  prepend-inner-icon="mdi-lock-reset"
+                  :append-inner-icon="showNewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                  autocomplete="new-password"
+                  variant="outlined"
+                  density="comfortable"
+                  hide-details="auto"
+                  :rules="[rules.required]"
+                  :error-messages="passwordState.detailErrors.new_password"
+                  :disabled="passwordState.loading"
+                  @click:append-inner="showNewPassword = !showNewPassword"
+                />
+              </div>
+
+              <v-divider class="mb-6" />
+
+              <div class="d-flex justify-end ga-3">
+                <v-btn variant="text" color="default" :disabled="passwordState.loading" @click="cancelEditingPassword">
+                  Cancel
                 </v-btn>
 
                 <v-btn
                   type="submit"
                   color="primary"
-                  min-width="120"
+                  elevation="0"
+                  size="large"
                   prepend-icon="mdi-content-save-outline"
                   :loading="passwordState.loading"
                   :disabled="passwordState.loading"
+                  class="px-6 font-weight-bold"
                 >
-                  UPDATE
+                  Save Changes
                 </v-btn>
               </div>
             </v-form>
           </v-card-text>
-        </template>
-
-        <template v-else>
-          <v-list lines="two">
-            <v-list-item title="Password" prepend-icon="mdi-lock-outline" subtitle="***************" />
-          </v-list>
         </template>
       </v-card>
     </div>
@@ -221,6 +315,7 @@ const emailState = reactive({
   error: '',
   detailErrors: {},
 })
+
 const passwordState = reactive({
   loading: false,
   editing: false,
@@ -248,7 +343,6 @@ const passwordForm = reactive({
 
 function startEditingEmail() {
   emailForm.email = userEmail.value
-
   emailState.error = ''
   emailState.detailErrors = {}
   emailState.editing = true
@@ -256,7 +350,6 @@ function startEditingEmail() {
 
 function cancelEditingEmail() {
   emailForm.email = ''
-
   emailState.error = ''
   emailState.detailErrors = {}
   emailState.editing = false
@@ -268,10 +361,8 @@ function startEditingPassword() {
     current_password: '',
     new_password: '',
   })
-
   showCurrentPassword.value = false
   showNewPassword.value = false
-
   passwordState.error = ''
   passwordState.detailErrors = {}
   passwordState.editing = true
@@ -282,10 +373,8 @@ function cancelEditingPassword() {
     current_password: '',
     new_password: '',
   })
-
   showCurrentPassword.value = false
   showNewPassword.value = false
-
   passwordState.error = ''
   passwordState.detailErrors = {}
   passwordState.editing = false
@@ -302,7 +391,6 @@ async function submitEmail() {
 
   try {
     await auth.changeEmail(emailForm)
-
     cancelEditingEmail()
   } catch (err) {
     const details = err.details ?? null
@@ -310,7 +398,7 @@ async function submitEmail() {
     if (details && typeof details === 'object' && Object.keys(details).length > 0) {
       emailState.detailErrors = details
     } else {
-      emailState.error = err.message ?? ''
+      emailState.error = err.message ?? 'An error occurred while updating your email.'
     }
   } finally {
     emailState.loading = false
@@ -323,7 +411,6 @@ async function submitPassword() {
   if (!valid) return
 
   passwordState.loading = true
-
   passwordState.error = ''
   passwordState.detailErrors = {}
 
@@ -336,7 +423,7 @@ async function submitPassword() {
     if (details && typeof details === 'object' && Object.keys(details).length > 0) {
       passwordState.detailErrors = details
     } else {
-      passwordState.error = err.message ?? ''
+      passwordState.error = err.message ?? 'An error occurred while changing your password.'
     }
   } finally {
     passwordState.loading = false
@@ -349,7 +436,6 @@ async function resendVerification() {
 
   try {
     await authApi.resendVerificationEmail({ email: auth.user?.pending_email })
-
     emailState.sent = true
   } catch {
     ui.showError('Oops! An error occurred while sending the verification email.')
@@ -363,9 +449,7 @@ watch(
   () => {
     emailState.error = ''
   },
-  {
-    deep: true,
-  },
+  { deep: true },
 )
 
 watch(
@@ -373,14 +457,6 @@ watch(
   () => {
     passwordState.error = ''
   },
-  {
-    deep: true,
-  },
+  { deep: true },
 )
 </script>
-
-<style scoped>
-.account-content .pending-email {
-  font-size: 0.9rem !important;
-}
-</style>

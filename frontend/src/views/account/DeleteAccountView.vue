@@ -1,57 +1,89 @@
 <template>
-  <v-container class="py-8" fluid>
+  <v-container class="py-10" fluid>
     <div class="mx-auto account-content">
-      <v-card rounded="lg" elevation="2" class="mb-10">
-        <v-card-title class="d-flex align-center py-4 text-medium-emphasis">
-          <span>Delete account</span>
-        </v-card-title>
+      <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis">Delete account</h1>
 
-        <v-divider />
+      <v-card variant="outlined" class="danger-card border-error">
+        <v-card-item class="pa-6 border-b">
+          <template #prepend>
+            <v-avatar color="error-lighten-5" size="44" class="mr-2">
+              <v-icon icon="mdi-alert-octagon-outline" color="error" size="24" />
+            </v-avatar>
+          </template>
 
-        <v-card-text>
-          <v-alert v-if="error" class="mb-6" type="error" variant="tonal" density="comfortable">
+          <v-card-title class="text-h6 font-weight-bold text-error"> Account deletion </v-card-title>
+          <v-card-subtitle class="text-body-2 text-medium-emphasis">
+            Permanently remove your account and all your data.
+          </v-card-subtitle>
+        </v-card-item>
+
+        <v-card-text class="pa-6">
+          <v-alert
+            v-if="error"
+            type="error"
+            variant="tonal"
+            density="comfortable"
+            icon="mdi-alert-circle-outline"
+            class="mb-6 rounded-lg"
+          >
             {{ error }}
-          </v-alert>
-          <v-alert v-else type="warning" variant="tonal" class="mb-6">
-            <strong>This action cannot be undone.</strong><br />
-            Your account and all associated data will be permanently deleted.
           </v-alert>
 
           <v-form ref="formRef" @submit.prevent="submit">
-            <v-text-field
-              v-model="form.password"
-              label="Current password"
-              :type="showPassword ? 'text' : 'password'"
-              prepend-inner-icon="mdi-lock-outline"
-              :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-              autocomplete="password"
-              variant="outlined"
-              :rules="[rules.required]"
-              :error-messages="detailErrors.password"
-              :disabled="loading"
-              class="mb-4"
-              @click:append-inner="showPassword = !showPassword"
-            />
+            <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+              Enter your current password
+            </label>
+            <div class="mb-4">
+              <v-text-field
+                v-model="form.password"
+                autofocus
+                placeholder="Password"
+                :type="showPassword ? 'text' : 'password'"
+                prepend-inner-icon="mdi-lock-outline"
+                :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                autocomplete="current-password"
+                variant="outlined"
+                density="comfortable"
+                hide-details="auto"
+                :rules="[rules.required]"
+                :error-messages="detailErrors.password"
+                :disabled="loading"
+                @click:append-inner="showPassword = !showPassword"
+              />
+            </div>
 
-            <v-text-field
-              v-model="form.confirmation"
-              label="Type DELETE to confirm"
-              variant="outlined"
-              :rules="[rules.required]"
-              :error-messages="detailErrors.confirmation"
-              :disabled="loading"
-            />
+            <div class="mb-6">
+              <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                Type <span class="font-weight-black text-high-emphasis">DELETE</span> to confirm
+              </label>
+              <v-text-field
+                v-model="form.confirmation"
+                placeholder="DELETE"
+                variant="outlined"
+                density="comfortable"
+                hide-details="auto"
+                :rules="[rules.required]"
+                :error-messages="detailErrors.confirmation"
+                :disabled="loading"
+              />
+            </div>
 
-            <div class="d-flex ga-3 mt-2 justify-center">
+            <v-divider class="mb-6" />
+
+            <div class="d-flex justify-end ga-3">
+              <v-btn variant="text" color="default" :disabled="loading" @click="router.back()"> Cancel </v-btn>
+
               <v-btn
                 type="submit"
                 color="error"
-                min-width="120"
-                prepend-icon="mdi-delete-outline"
+                elevation="0"
+                size="large"
+                prepend-icon="mdi-delete-forever-outline"
                 :loading="loading"
                 :disabled="disabled"
+                class="px-6 font-weight-bold"
               >
-                DELETE ACCOUNT
+                Delete Account
               </v-btn>
             </div>
           </v-form>
@@ -109,7 +141,7 @@ async function submit() {
     if (details && typeof details === 'object' && Object.keys(details).length > 0) {
       detailErrors.value = details
     } else {
-      error.value = err.message ?? ''
+      error.value = err.message ?? 'An unexpected error occurred. Please try again.'
     }
   } finally {
     loading.value = false
@@ -120,9 +152,16 @@ watch(
   form,
   () => {
     error.value = ''
+    detailErrors.value = {}
   },
   {
     deep: true,
   },
 )
 </script>
+
+<style scoped>
+.account-content {
+  max-width: 640px;
+}
+</style>
