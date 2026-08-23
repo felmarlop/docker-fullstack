@@ -160,7 +160,7 @@
                   :disabled="emailState.loading"
                   class="px-6 font-weight-bold"
                 >
-                  Save Changes
+                  Update
                 </v-btn>
               </div>
             </v-form>
@@ -283,7 +283,7 @@
                   :disabled="passwordState.loading"
                   class="px-6 font-weight-bold"
                 >
-                  Save Changes
+                  Update
                 </v-btn>
               </div>
             </v-form>

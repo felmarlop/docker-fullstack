@@ -23,7 +23,7 @@
               size="small"
               prepend-icon="mdi-pencil-outline"
               :class="{ invisible: editing }"
-              class="font-weight-bold px-4"
+              class="px-4"
               @click="startEditing"
             >
               Edit
@@ -42,7 +42,7 @@
 
               <!-- Label on top: Muted, small, structured -->
               <v-list-item-title class="font-weight-bold text-uppercase text-medium-emphasis mb-1">
-                Full Name
+                Name
               </v-list-item-title>
 
               <!-- Value on bottom: Large, crisp, prominent -->
@@ -129,10 +129,10 @@
               </div>
 
               <div class="mb-6">
-                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block"> Full Name </label>
+                <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block"> Name </label>
                 <v-text-field
                   v-model="form.name"
-                  placeholder="First and last name"
+                  placeholder="Name"
                   prepend-inner-icon="mdi-card-account-details-outline"
                   variant="outlined"
                   density="comfortable"
@@ -157,7 +157,7 @@
                   :disabled="loading"
                   class="px-6 font-weight-bold"
                 >
-                  Save Changes
+                  Update
                 </v-btn>
               </div>
             </v-form>
@@ -193,7 +193,7 @@ const fullName = computed(() => {
 
 const fullNameLabel = computed(() => {
   if (auth.user) {
-    return [auth.user?.first_name, auth.user?.last_name].filter(Boolean).join(' ') || 'Not provided'
+    return fullName.value || 'Not provided'
   }
   return '-'
 })

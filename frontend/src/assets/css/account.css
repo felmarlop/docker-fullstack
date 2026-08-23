@@ -53,11 +53,39 @@
     background: rgba(var(--v-theme-on-surface), 0.03) !important;
   }
 
+  /* Plus Tier */
   .pro-gradient-bg {
+    background: linear-gradient(
+      135deg,
+      rgba(var(--v-theme-accent), 0.12) 0%,
+      rgba(var(--v-theme-accent), 0.02) 100%
+    ) !important;
+  }
+
+  .pro-badge {
+    background: linear-gradient(
+      135deg,
+      rgb(var(--v-theme-accent)) 0%,
+      rgba(var(--v-theme-accent), 0.85) 100%
+    ) !important;
+    color: white !important;
+  }
+
+  /* Pro Tier */
+  .plus-gradient-bg {
     background: linear-gradient(
       135deg,
       rgba(var(--v-theme-primary), 0.12) 0%,
       rgba(var(--v-theme-primary), 0.02) 100%
     ) !important;
+  }
+
+  .plus-badge {
+    background: linear-gradient(
+      135deg,
+      rgb(var(--v-theme-primary)) 0%,
+      rgba(var(--v-theme-primary), 0.85) 100%
+    ) !important;
+    color: white !important;
   }
 }
