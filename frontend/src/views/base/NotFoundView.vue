@@ -2,7 +2,6 @@
   <v-container class="fill-height py-10" fluid>
     <v-row align="center" justify="center">
       <v-col cols="12" class="text-center">
-        <!-- Icon Bubble -->
         <v-avatar color="primary-lighten-5" size="112" class="mb-2">
           <v-icon color="primary" icon="mdi-magnify" size="56" class="magnify-icon" />
         </v-avatar>

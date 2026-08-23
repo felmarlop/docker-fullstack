@@ -6,14 +6,12 @@
 
         <v-card v-else variant="outlined" class="auth-card">
           <v-card-text class="pa-8">
-            <!-- Back Button -->
             <div class="mb-6">
               <v-btn prepend-icon="mdi-arrow-left" variant="text" to="/login" class="px-0 font-weight-bold">
                 Back
               </v-btn>
             </div>
 
-            <!-- Header Section -->
             <div class="text-center mb-8">
               <v-avatar color="primary-lighten-5" size="64" class="mb-4">
                 <v-icon icon="mdi-email-alert-outline" color="primary" size="32" />
@@ -26,7 +24,6 @@
               </p>
             </div>
 
-            <!-- Error Alert -->
             <v-alert
               v-if="error"
               type="error"
@@ -38,7 +35,6 @@
               {{ error }}
             </v-alert>
 
-            <!-- Form -->
             <v-form ref="formRef" @submit.prevent="submit">
               <div class="mb-6">
                 <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block"> Email </label>
@@ -56,7 +52,6 @@
                 />
               </div>
 
-              <!-- Submit Button -->
               <v-btn
                 type="submit"
                 color="primary"

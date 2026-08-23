@@ -25,17 +25,28 @@
           </div>
         </div>
 
-        <v-list density="comfortable" nav>
-          <template v-for="item in headerMenu" :key="item.title">
-            <v-list-item :to="item.to" :prepend-icon="item.icon" class="mt-0">
-              <v-list-item-title class="text-body-1 font-weight-bold ps-6 mt-1">
-                {{ item.title }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-divider />
-          </template>
-          <v-list-item prepend-icon="mdi-logout" class="mt-0" @click="logout">
-            <v-list-item-title class="text-body-1 ps-6 mt-1"> Log out </v-list-item-title>
+        <v-list density="comfortable" nav class="px-2 pt-0">
+          <v-list-item
+            v-for="item in headerMenu"
+            :key="item.title"
+            :to="item.to"
+            rounded="lg"
+            color="primary"
+            class="my-0"
+          >
+            <template #prepend>
+              <v-icon :icon="item.icon" size="20" class="mr-5" />
+            </template>
+            <v-list-item-title class="text-body-2 font-weight-medium">
+              {{ item.title }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-divider class="my-1" />
+          <v-list-item rounded="lg" @click="logout">
+            <template #prepend>
+              <v-icon icon="mdi-logout" size="20" class="mr-5" />
+            </template>
+            <v-list-item-title class="text-body-2 font-weight-medium"> Log out </v-list-item-title>
           </v-list-item>
         </v-list>
       </v-card>
@@ -72,13 +83,11 @@ async function logout() {
   font-weight: 600;
 }
 
-:deep(.v-list-item) {
-  border-radius: 0;
+:deep(.v-list-item__prepend) {
+  margin-inline-end: 0 !important;
 }
 
 :deep(.v-list-item-title) {
-  font-size: 0.85rem;
-  font-weight: 500;
-  min-height: 20px !important;
+  font-size: 0.875rem !important;
 }
 </style>

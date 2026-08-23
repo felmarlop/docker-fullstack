@@ -5,7 +5,7 @@ export default [
     to: { name: 'account-profile' },
   },
   {
-    title: 'Subscription',
+    title: 'My subscription',
     icon: 'mdi-credit-card-outline',
     to: { name: 'account-subscription' },
   },

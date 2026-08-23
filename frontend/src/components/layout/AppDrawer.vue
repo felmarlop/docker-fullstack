@@ -1,20 +1,25 @@
 <template>
-  <v-navigation-drawer v-model:rail="uiStore.drawerRail" :rail-width="APP_DRAWER_RAIL_WIDTH" permanent>
+  <v-navigation-drawer
+    v-model:rail="uiStore.drawerRail"
+    :rail-width="APP_DRAWER_RAIL_WIDTH"
+    permanent
+    class="app-drawer border-e"
+  >
     <div class="drawer-header" :class="{ rail: uiStore.drawerRail }">
       <v-btn
         :icon="uiStore.drawerRail ? 'mdi-chevron-right' : 'mdi-chevron-left'"
         variant="text"
         density="comfortable"
+        color="primary"
         @click="uiStore.toggleDrawerRail()"
       />
     </div>
 
-    <v-list density="comfortable" class="py-2">
+    <v-list density="comfortable" nav class="px-2 py-0">
       <v-tooltip
         v-for="item in items"
         :key="item.to.name"
         :text="item.title"
-        :nav="!uiStore.drawerRail"
         location="right"
         :disabled="!uiStore.drawerRail"
       >
@@ -23,11 +28,12 @@
             v-bind="props"
             :to="item.to"
             :title="uiStore.drawerRail ? undefined : item.title"
-            class="mx-2 mb-1"
             rounded="lg"
+            color="primary"
+            class="mb-1 drawer-item"
           >
             <template #prepend>
-              <v-icon :icon="item.icon" :size="APP_DRAWER_ICON_SIZE" />
+              <v-icon :icon="item.icon" size="20" class="drawer-icon" />
             </template>
           </v-list-item>
         </template>
@@ -37,7 +43,7 @@
 </template>
 
 <script setup>
-import { APP_DRAWER_ICON_SIZE, APP_DRAWER_RAIL_WIDTH } from '@/config/layout'
+import { APP_DRAWER_RAIL_WIDTH } from '@/config/layout'
 import { useUiStore } from '@/stores/ui'
 
 defineProps({
@@ -53,34 +59,44 @@ const uiStore = useUiStore()
 <style scoped>
 .drawer-header {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  padding: 12px 8px;
-}
+  padding: 12px 12px 8px 12px;
 
-.drawer-header.rail {
-  justify-content: center;
+  &.rail {
+    justify-content: center;
+    padding-inline: 0;
+  }
 }
 
 :deep(.v-list-item-title) {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: rgb(var(--v-theme-on-surface));
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+}
+
+:deep(.v-list-item__prepend) {
+  margin-inline-end: 12px !important;
 }
 
 :deep(.v-list-item) {
-  padding-right: 0;
-  transition: all 0.2s ease;
-}
-
-:deep(.v-list-item__prepend > .v-icon) {
-  font-size: 20px;
-}
-
-:deep(.v-navigation-drawer--rail .v-list-item__prepend > .v-icon) {
-  margin-inline: 0;
+  min-height: 40px !important;
+  padding-inline-start: 12px !important;
+  padding-inline-end: 12px !important;
 }
 
 :deep(.v-navigation-drawer--rail .v-list-item) {
-  padding-inline: 0;
+  padding-inline-start: 0 !important;
+  padding-inline-end: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+:deep(.v-navigation-drawer--rail .v-list-item__prepend) {
+  margin-inline-end: 0 !important;
+}
+
+:deep(.v-list-item--active) {
+  font-weight: 600;
 }
 </style>

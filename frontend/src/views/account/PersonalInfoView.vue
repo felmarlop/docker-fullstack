@@ -40,12 +40,10 @@
                 </v-avatar>
               </template>
 
-              <!-- Label on top: Muted, small, structured -->
               <v-list-item-title class="font-weight-bold text-uppercase text-medium-emphasis mb-1">
                 Name
               </v-list-item-title>
 
-              <!-- Value on bottom: Large, crisp, prominent -->
               <v-list-item-subtitle
                 class="text-body-1 text-high-emphasis font-weight-medium"
                 :class="{ 'text-medium-emphasis': !fullName }"

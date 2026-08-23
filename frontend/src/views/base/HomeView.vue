@@ -2,7 +2,6 @@
   <v-container fluid class="fill-height py-10">
     <v-row align="center" justify="center" class="fill-height">
       <v-col cols="12" md="8" lg="6" class="mx-auto">
-        <!-- Hero Header -->
         <div class="text-center mb-8">
           <v-avatar color="primary-lighten-5" size="112" class="mb-4">
             <v-icon icon="mdi-rocket-launch" class="rocket-icon" color="primary" size="56" />
@@ -74,14 +73,7 @@
           </div>
 
           <div class="text-center mb-6">
-            <v-btn
-              color="primary"
-              elevation="0"
-              size="large"
-              prepend-icon="mdi-login"
-              to="/login"
-              class="px-8 font-weight-bold"
-            >
+            <v-btn color="primary" elevation="0" prepend-icon="mdi-login" to="/login" class="px-8 font-weight-bold">
               Log In
             </v-btn>
             <div>
