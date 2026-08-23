@@ -86,8 +86,4 @@ async function logout() {
 :deep(.v-list-item__prepend) {
   margin-inline-end: 0 !important;
 }
-
-:deep(.v-list-item-title) {
-  font-size: 0.875rem !important;
-}
 </style>

@@ -70,7 +70,6 @@ const uiStore = useUiStore()
 }
 
 :deep(.v-list-item-title) {
-  font-size: 0.875rem !important;
   font-weight: 500 !important;
   letter-spacing: -0.01em !important;
 }

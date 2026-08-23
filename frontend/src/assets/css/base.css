@@ -29,7 +29,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  .v-list-item-title {
+    font-size: 0.875rem !important;
+  }
+
   .v-btn .v-btn__content {
+    font-size: 0.8rem;
     font-weight: 500 !important; /* Regular/Medium instead of Bold */
     letter-spacing: 0.01em !important;
     text-transform: uppercase;
@@ -43,7 +48,7 @@ body {
   .terminal-body pre {
     margin: 0;
     font-family: 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     line-height: 1.5;
     white-space: pre-wrap;
     color: rgba(var(--v-theme-terminal)) !important;
@@ -51,5 +56,26 @@ body {
 
   .tracking-tight {
     letter-spacing: -0.02em !important;
+  }
+
+  /* Footer */
+  .app-footer {
+    flex: 0 0 50px;
+
+    position: relative;
+    border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  }
+
+  .footer-content {
+    font-size: 0.9rem;
+    height: 50px;
+
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 20px;
   }
 }
