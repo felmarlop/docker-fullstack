@@ -30,25 +30,27 @@
           </v-alert>
 
           <v-form ref="formRef" @submit.prevent="submit">
-            <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
-              Enter your current password
-            </label>
-            <div class="mb-4">
-              <v-text-field
-                v-model="form.password"
-                placeholder="Password"
-                :type="showPassword ? 'text' : 'password'"
-                prepend-inner-icon="mdi-lock-outline"
-                :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-                autocomplete="current-password"
-                variant="outlined"
-                density="comfortable"
-                hide-details="auto"
-                :rules="[rules.required]"
-                :error-messages="detailErrors.password"
-                :disabled="loading"
-                @click:append-inner="showPassword = !showPassword"
-              />
+            <div v-if="usablePassword">
+              <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                Enter your current password
+              </label>
+              <div class="mb-4">
+                <v-text-field
+                  v-model="form.password"
+                  placeholder="Password"
+                  :type="showPassword ? 'text' : 'password'"
+                  prepend-inner-icon="mdi-lock-outline"
+                  :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                  autocomplete="current-password"
+                  variant="outlined"
+                  density="comfortable"
+                  hide-details="auto"
+                  :rules="[rules.required]"
+                  :error-messages="detailErrors.password"
+                  :disabled="loading"
+                  @click:append-inner="showPassword = !showPassword"
+                />
+              </div>
             </div>
 
             <div class="mb-6">
@@ -117,8 +119,13 @@ const form = reactive({
   confirmation: '',
 })
 
+const usablePassword = computed(() => {
+  return auth.user?.has_usable_password ?? false
+})
+
 const disabled = computed(() => {
-  return loading.value || !form.password || form.confirmation !== 'DELETE'
+  const check = loading.value || form.confirmation !== 'DELETE'
+  return usablePassword.value ? check || !form.password : check
 })
 
 async function submit() {

@@ -186,7 +186,7 @@
               class="font-weight-bold px-4"
               @click="startEditingPassword"
             >
-              Edit
+              {{ usablePassword ? 'Edit' : 'Set password' }}
             </v-btn>
           </div>
         </v-card-item>
@@ -201,11 +201,14 @@
               </template>
 
               <v-list-item-title class="font-weight-bold text-uppercase text-medium-emphasis mb-1">
-                Current Password
+                {{ usablePassword ? 'Current Password' : 'Password' }}
               </v-list-item-title>
 
-              <v-list-item-subtitle class="text-body-1 text-high-emphasis font-weight-medium">
-                ••••••••••••••••
+              <v-list-item-subtitle
+                class="text-body-1 text-high-emphasis font-weight-medium"
+                :style="{ 'font-style': usablePassword ? '' : 'italic' }"
+              >
+                {{ passwordLabel }}
               </v-list-item-subtitle>
             </v-list-item>
           </v-list>
@@ -225,7 +228,7 @@
             </v-alert>
 
             <v-form ref="passwordFormRef" @submit.prevent="submitPassword">
-              <div class="mb-4">
+              <div v-if="usablePassword" class="mb-4">
                 <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
                   Current Password
                 </label>
@@ -251,6 +254,7 @@
                 <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block"> New Password </label>
                 <v-text-field
                   v-model="passwordForm.new_password"
+                  :autofocus="!usablePassword"
                   placeholder="Enter new password"
                   :type="showNewPassword ? 'text' : 'password'"
                   prepend-inner-icon="mdi-lock-reset"
@@ -323,6 +327,14 @@ const passwordState = reactive({
 
 const userEmail = computed(() => {
   return auth.user?.pending_email ?? auth.user?.email ?? ''
+})
+
+const usablePassword = computed(() => {
+  return auth.user?.has_usable_password ?? false
+})
+
+const passwordLabel = computed(() => {
+  return usablePassword.value ? '••••••••••••••••' : 'No password has been set for this account.'
 })
 
 const emailFormRef = ref(null)
@@ -413,7 +425,7 @@ async function submitPassword() {
   passwordState.detailErrors = {}
 
   try {
-    await authApi.changePassword(passwordForm)
+    await auth.changePassword(passwordForm)
     cancelEditingPassword()
   } catch (err) {
     const details = err.details ?? null

@@ -105,7 +105,7 @@ class ChangePasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         logger.info(f"Password changed successfully for user {user.username}.")  # type: ignore
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(UserSerializer(user).data)
 
 
 @extend_schema(

@@ -19,12 +19,38 @@ def test_change_password_success(
         format="json",
     )
 
-    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert response.status_code == status.HTTP_200_OK
 
     response = public_api_client.post(
         reverse("login"),
         {
             "username": user.username,
+            "password": "new-password123",
+        },
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db
+def test_set_password_success(
+    authenticated_api_client_no_password: APIClient, user_no_password: User
+) -> None:
+    response = authenticated_api_client_no_password.post(
+        reverse("change-password"),
+        {
+            "new_password": "new-password123",
+        },
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+    response = authenticated_api_client_no_password.post(
+        reverse("login"),
+        {
+            "username": user_no_password.username,
             "password": "new-password123",
         },
         format="json",
@@ -81,6 +107,23 @@ def test_change_password_same_new_password(authenticated_api_client: APIClient) 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     assert "new_password" in response.data
+
+
+@pytest.mark.django_db
+def test_change_password_current_password_needed(
+    authenticated_api_client: APIClient,
+) -> None:
+    response = authenticated_api_client.post(
+        reverse("change-password"),
+        {
+            "new_password": "new-password123",
+        },
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    assert "current_password" in response.data
 
 
 @pytest.mark.django_db

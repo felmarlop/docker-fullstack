@@ -27,7 +27,7 @@ class LoginSerializer(BaseTokenObtainPairSerializer):
     Authenticate a user and return JWT tokens.
     """
 
-    username = serializers.CharField(write_only=True, required=False)
+    username = serializers.CharField(write_only=True)
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         username = attrs["username"].strip()
@@ -179,27 +179,37 @@ class ChangePasswordSerializer(serializers.Serializer):
     Change the authenticated user's password.
     """
 
-    current_password = serializers.CharField(write_only=True)
+    current_password = serializers.CharField(
+        write_only=True, required=False, allow_blank=True
+    )
     new_password = serializers.CharField(write_only=True)
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         user = self.context["request"].user
 
-        if user.check_password(attrs["new_password"]):
-            raise serializers.ValidationError(
-                {
-                    "new_password": [
-                        "The new password must be different from the current password.",
-                    ],
-                }
-            )
-
-        if not user.check_password(attrs["current_password"]):
-            raise serializers.ValidationError(
-                {
-                    "current_password": ["Current password is incorrect."],
-                }
-            )
+        if user.has_usable_password():
+            if user.check_password(attrs["new_password"]):
+                raise serializers.ValidationError(
+                    {
+                        "new_password": [
+                            "The new password must be different from the current "
+                            "password.",
+                        ],
+                    }
+                )
+            current_password = attrs.get("current_password")
+            if not current_password:
+                raise serializers.ValidationError(
+                    {
+                        "current_password": ["Current password is required."],
+                    }
+                )
+            if not user.check_password(current_password):
+                raise serializers.ValidationError(
+                    {
+                        "current_password": ["Current password is incorrect."],
+                    }
+                )
 
         try:
             validate_password(attrs["new_password"], user)
@@ -247,7 +257,9 @@ class DeleteAccountSerializer(serializers.Serializer):
 
     confirmation = serializers.CharField()
     refresh = serializers.CharField(write_only=True)
-    password = serializers.CharField(write_only=True, trim_whitespace=False)
+    password = serializers.CharField(
+        write_only=True, trim_whitespace=False, required=False, allow_blank=True
+    )
 
     def validate_confirmation(self, value: str) -> str:
         if value != "DELETE":
@@ -256,7 +268,7 @@ class DeleteAccountSerializer(serializers.Serializer):
 
     def validate_password(self, value: str) -> str:
         user = self.context["request"].user
-        if not user.check_password(value):
+        if user.has_usable_password() and not user.check_password(value):
             raise serializers.ValidationError("The password is incorrect.")
 
         return value

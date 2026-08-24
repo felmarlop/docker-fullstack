@@ -2,7 +2,7 @@
   <v-container class="py-10" fluid>
     <div class="mx-auto account-content">
       <div class="text-center mb-8">
-        <user-avatar :size="120" show-username />
+        <user-avatar :size="180" show-username />
         <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mt-4">
           {{ auth.user?.username || '...' }}
         </h1>
