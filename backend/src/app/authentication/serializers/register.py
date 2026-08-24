@@ -24,18 +24,6 @@ class RegisterSerializer(serializers.Serializer):
     phone = PhoneNumberField(required=False, allow_null=True, allow_blank=True)
     password = serializers.CharField(write_only=True, trim_whitespace=False)
 
-    def _generate_username(self, email: str) -> str:
-        base = email.split("@")[0].strip().lower() or "user"
-
-        username = base
-        counter = 2
-
-        while User.objects.filter(username=username).exists():
-            username = f"{base}{counter}"
-            counter += 1
-
-        return username
-
     def validate_username(self, value: str) -> str:
         value = validators.validate_username(value)
 
@@ -72,7 +60,9 @@ class RegisterSerializer(serializers.Serializer):
 
     def create(self, validated_data: dict[str, Any]) -> User:
         email = validated_data["email"]
-        username = validated_data.get("username") or self._generate_username(email)
+        username = validated_data.get("username") or utils.generate_username_from_email(
+            email
+        )
 
         return User.objects.create_user(
             username=username,
@@ -113,10 +103,7 @@ class ActivateAccountSerializer(serializers.Serializer):
                 }
             )
 
-        user.is_active = True
-        user.save(update_fields=["is_active"])
-
-        return user
+        return utils.activate_user(user)
 
 
 class ResendActivationEmailSerializer(serializers.Serializer):

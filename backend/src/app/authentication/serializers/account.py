@@ -3,11 +3,13 @@ from typing import Any
 
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import transaction
 from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer as BaseTokenObtainPairSerializer,
 )
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from app.authentication import utils, validators
@@ -259,6 +261,7 @@ class DeleteAccountSerializer(serializers.Serializer):
 
         return value
 
+    @transaction.atomic
     def delete(self) -> None:
         user = self.context["request"].user
         refresh = self.validated_data["refresh"]  # type: ignore
@@ -272,4 +275,5 @@ class DeleteAccountSerializer(serializers.Serializer):
                 }
             ) from exc
 
+        OutstandingToken.objects.filter(user=user).delete()
         user.delete()

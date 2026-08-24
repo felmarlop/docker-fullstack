@@ -10,19 +10,7 @@
                 <AuthLink text="Don't have an account?" action="Create one" to="/register" />
               </div>
             </div>
-            <v-btn
-              variant="outlined"
-              block
-              height="44"
-              class="mb-6 font-weight-bold text-high-emphasis border-color-soft"
-              :disabled="loading"
-            >
-              <template #prepend>
-                <v-img :src="googleIcon" width="18" height="18" class="mr-2" />
-              </template>
-              Continue with Google
-            </v-btn>
-
+            <google-sign-in />
             <div class="d-flex align-center mb-6">
               <v-divider />
               <span class="font-weight-bold text-uppercase text-medium-emphasis mx-4"> OR </span>
@@ -102,8 +90,8 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
-import googleIcon from '@/assets/icons/google.svg'
 import AuthLink from '@/components/auth/AuthLink.vue'
+import GoogleSignIn from '@/components/auth/GoogleSignIn.vue'
 import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'
 

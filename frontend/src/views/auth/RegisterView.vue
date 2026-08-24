@@ -13,6 +13,14 @@
               </div>
             </div>
 
+            <GoogleSignIn />
+
+            <div class="d-flex align-center mb-6">
+              <v-divider />
+              <span class="font-weight-bold text-uppercase text-medium-emphasis mx-4"> OR </span>
+              <v-divider />
+            </div>
+
             <v-alert
               v-if="error"
               type="error"
@@ -31,7 +39,6 @@
                 </label>
                 <v-text-field
                   v-model="form.username"
-                  autofocus
                   placeholder="Leave empty for auto-generated"
                   prepend-inner-icon="mdi-account-outline"
                   autocomplete="username"
@@ -102,6 +109,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 
+import GoogleSignIn from '@/components/auth/GoogleSignIn.vue'
 import AuthLink from '@/components/auth/AuthLink.vue'
 import EmailSentMsg from '@/components/auth/EmailSentMsg.vue'
 import * as rules from '@/helpers/validation'

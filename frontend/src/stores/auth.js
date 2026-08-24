@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 import * as authApi from '@/core/api/modules/auth'
+import * as socialAuthApi from '@/core/api/modules/social-auth'
 import * as usersApi from '@/core/api/modules/users'
 
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/config/auth'
@@ -61,6 +62,16 @@ export const useAuthStore = defineStore('auth', {
 
     async login(credentials) {
       const { data } = await authApi.login(credentials)
+
+      this.setAccessToken(data.access)
+      this.setRefreshTokens(data.refresh)
+      this.setUser(data.user)
+
+      return data
+    },
+
+    async loginWithGoogle(credential) {
+      const { data } = await socialAuthApi.loginWithGoogle({ id_token: credential })
 
       this.setAccessToken(data.access)
       this.setRefreshTokens(data.refresh)
