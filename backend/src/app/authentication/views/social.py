@@ -13,7 +13,10 @@ class GoogleView(APIView):
     serializer_class = GoogleSerializer
 
     def post(self, request: Request) -> Response:
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(
+            data=request.data,
+            context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response(data)
@@ -27,7 +30,10 @@ class GithubView(APIView):
     serializer_class = GithubSerializer
 
     def post(self, request: Request) -> Response:
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(
+            data=request.data,
+            context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response(data)

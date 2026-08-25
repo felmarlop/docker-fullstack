@@ -10,6 +10,7 @@ django-stubs==6.0.7
 drf-spectacular==0.30.0
 google-auth[requests]==2.56.3
 gunicorn==26.0.0
+Pillow==12.3.0
 psycopg[binary]==3.3.4
 pyright==1.1.411
 pytest==9.1.1

@@ -15,7 +15,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from app.authentication import utils, validators
 from app.authentication.exceptions import AccountNotActivated
 from app.authentication.models import User
-from app.authentication.serializers.user import UserSerializer
 from app.authentication.services import send_email_verification
 from app.authentication.tokens import email_verification_token_generator
 
@@ -48,7 +47,7 @@ class LoginSerializer(BaseTokenObtainPairSerializer):
 
         return {
             **data,
-            "user": UserSerializer(self.user).data,
+            "user": utils.serialize_user(self.user, self.context.get("request")),
         }
 
 

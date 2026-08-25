@@ -15,6 +15,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView as BaseTokenRefreshView,
 )
 
+from app.authentication import utils
 from app.authentication.serializers.account import (
     ChangeEmailSerializer,
     ChangePasswordSerializer,
@@ -24,7 +25,6 @@ from app.authentication.serializers.account import (
     ResendEmailVerificationSerializer,
     VerifyEmailSerializer,
 )
-from app.authentication.serializers.user import UserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +105,7 @@ class ChangePasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         logger.info(f"Password changed successfully for user {user.username}.")  # type: ignore
-        return Response(UserSerializer(user).data)
+        return Response(utils.serialize_user(user, request))
 
 
 @extend_schema(
@@ -136,7 +136,7 @@ class ChangeEmailView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         logger.info(f"Email change requested for user {user.username}.")  # type: ignore
-        return Response(UserSerializer(user).data)
+        return Response(utils.serialize_user(user, request))
 
 
 @extend_schema(
@@ -158,7 +158,7 @@ class VerifyEmailView(APIView):
 
         user = serializer.verify()  # type: ignore
         logger.info(f"Email verified successfully for user {user.username}.")
-        return Response(UserSerializer(user).data)
+        return Response(utils.serialize_user(user, request))
 
 
 @extend_schema(
@@ -243,7 +243,7 @@ class DeleteAccountView(APIView):
     def post(self, request: Request) -> Response:
         serializer = self.serializer_class(
             data=request.data,
-            context={"request": request},
+            context={"request": request}
         )
         serializer.is_valid(raise_exception=True)
 

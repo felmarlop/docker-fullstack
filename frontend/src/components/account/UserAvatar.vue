@@ -1,13 +1,9 @@
 <template>
-  <v-avatar color="primary" :size="size" class="user-avatar">
-    <v-img
-      v-if="auth.user?.username"
-      :src="`https://i.pravatar.cc/180?u=${auth.user.username}`"
-      :alt="auth.user.username"
-    >
+  <v-avatar :size="size" class="user-avatar">
+    <v-img v-if="auth.user?.username" :src="auth.user?.avatar_url" :alt="auth.user.username">
       <template #placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
-          <h1 class="font-weight-light text-white">
+          <h1 class="font-weight-bold text-primary" :style="`font-size: ${size / 3}px`">
             {{ auth.user.username[0].toUpperCase() }}
           </h1>
         </v-row>
@@ -32,5 +28,6 @@ defineProps({
 <style scoped>
 .user-avatar {
   border: 1px solid rgb(var(--v-theme-primary));
+  background-color: rgb(var(--v-theme-background)) !important;
 }
 </style>

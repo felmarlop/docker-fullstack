@@ -10,6 +10,7 @@ class UserSerializer(BaseModelSerializer):
     """
 
     has_usable_password = serializers.SerializerMethodField()
+    avatar_url = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -23,7 +24,19 @@ class UserSerializer(BaseModelSerializer):
             "is_staff",
             "is_superuser",
             "has_usable_password",
+            "avatar_url",
         )
 
     def get_has_usable_password(self, obj: User) -> bool:
         return obj.has_usable_password()
+
+    def get_avatar_url(self, obj: User) -> str | None:
+        if not obj.avatar:
+            return None
+
+        request = self.context.get("request")
+        url = obj.avatar.url
+
+        if request:
+            return request.build_absolute_uri(url)
+        return url

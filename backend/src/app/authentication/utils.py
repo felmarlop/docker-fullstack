@@ -1,7 +1,11 @@
+from typing import Any
+
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
+from rest_framework.request import Request
 
 from app.authentication.models import User
+from app.authentication.serializers.user import UserSerializer
 
 
 def generate_username_from_email(email: str) -> str:
@@ -36,3 +40,10 @@ def get_user_from_uidb64(uidb64: str) -> User:
         ) from exc
 
     return user
+
+
+def serialize_user(user: User, request: Request | None) -> dict[str, Any]:
+    return UserSerializer(
+        user,
+        context={"request": request},
+    ).data

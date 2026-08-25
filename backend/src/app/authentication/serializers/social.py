@@ -3,6 +3,7 @@ from typing import Any
 
 import requests
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django.db import transaction
 from google.auth.transport.requests import Request
 from google.oauth2 import id_token as google_id_token
@@ -11,7 +12,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from app.authentication import utils
 from app.authentication.models import SocialAccount, SocialProvider, User
-from app.authentication.serializers.user import UserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -20,9 +20,11 @@ class BaseSocialSerializer(serializers.Serializer):
     def _get_or_create_user(
         self,
         provider: SocialProvider,
-        provider_id: str,
-        email: str,
+        data: dict,
     ) -> User:
+        provider_id = data["provider_id"]
+        email = data["email"]
+
         social_account = (
             SocialAccount.objects.select_related("user")
             .filter(
@@ -31,26 +33,30 @@ class BaseSocialSerializer(serializers.Serializer):
             )
             .first()
         )
+
         if social_account:
-            return utils.activate_user(social_account.user)
-
-        user = User.objects.filter(email__iexact=email).first()
-        if user is None:
-            user = User.objects.create(
-                username=utils.generate_username_from_email(email),
-                email=email,
-            )
-            user.set_unusable_password()
-            user.save(update_fields=["password"])
-            logger.info(f"Account created for {user.username} using {provider}.")
+            user = utils.activate_user(social_account.user)
         else:
-            user = utils.activate_user(user)
+            user = User.objects.filter(email__iexact=email).first()
+            if user is None:
+                user = User.objects.create(
+                    username=utils.generate_username_from_email(email),
+                    email=email,
+                )
+                user.set_unusable_password()
+                user.save(update_fields=["password"])
+                logger.info(f"Account created for {user.username} using {provider}.")
+            else:
+                user = utils.activate_user(user)
 
-        SocialAccount.objects.update_or_create(
-            user=user,
-            provider=provider,
-            defaults={"provider_id": provider_id},
-        )
+            SocialAccount.objects.update_or_create(
+                user=user,
+                provider=provider,
+                defaults={"provider_id": provider_id},
+            )
+
+        if data.get("avatar_url") and not user.avatar:
+            self._set_avatar_from_url(user, data["avatar_url"])
 
         return user
 
@@ -59,9 +65,20 @@ class BaseSocialSerializer(serializers.Serializer):
         return {
             "refresh": str(refresh),
             "access": str(refresh.access_token),  # type: ignore
-            "user": UserSerializer(user).data,
+            "user": utils.serialize_user(user, self.context.get("request")),
         }
 
+    def _set_avatar_from_url(self, user: User, avatar_url: str) -> None:
+        try:
+            response = requests.get(avatar_url, timeout=10)
+            response.raise_for_status()
+        except requests.RequestException as exc:
+            logger.warning(f"Unable to download avatar for {user.username}: {exc}")
+            return
+
+        filename = f"{user.username}_avatar.jpg"
+        user.avatar.save(filename, ContentFile(response.content), save=True)
+        user.save(update_fields=["avatar"])
 
 class GoogleSerializer(BaseSocialSerializer):
     """
@@ -96,10 +113,7 @@ class GoogleSerializer(BaseSocialSerializer):
 
     @transaction.atomic
     def save(self, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
-        provider_id = self.google_data["provider_id"]
-        email = self.google_data["email"]
-
-        user = self._get_or_create_user(SocialProvider.GOOGLE, provider_id, email)
+        user = self._get_or_create_user(SocialProvider.GOOGLE, self.google_data)
         tokens = self._get_tokens(user)
 
         logger.info(f"{user.username} authenticated successfully with Google.")  # type: ignore
@@ -193,10 +207,7 @@ class GithubSerializer(BaseSocialSerializer):
 
     @transaction.atomic
     def save(self, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
-        provider_id = self.github_data["provider_id"]
-        email = self.github_data["email"]
-
-        user = self._get_or_create_user(SocialProvider.GITHUB, provider_id, email)
+        user = self._get_or_create_user(SocialProvider.GITHUB, self.github_data)
         tokens = self._get_tokens(user)
 
         logger.info(f"{user.username} authenticated successfully with GitHub.")  # type: ignore

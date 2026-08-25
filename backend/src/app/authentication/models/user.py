@@ -1,6 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.validators import FileExtensionValidator
 from phonenumber_field.modelfields import PhoneNumberField
+
+from app.authentication import validators
 
 
 class User(AbstractUser):
@@ -22,3 +25,14 @@ class User(AbstractUser):
     )
 
     is_phone_verified = models.BooleanField(default=False)
+
+    avatar = models.ImageField(
+        upload_to="avatars/",
+        blank=True,
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=["jpg", "jpeg", "png", "webp"],
+            ),
+            validators.validate_avatar_size,
+        ],
+    )

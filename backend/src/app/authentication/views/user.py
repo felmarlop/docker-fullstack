@@ -4,6 +4,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app.authentication import utils
 from app.authentication.serializers.account import UpdateProfileSerializer
 from app.authentication.serializers.user import UserSerializer
 
@@ -26,8 +27,7 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]  # noqa
 
     def get(self, request: Request) -> Response:
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+        return Response(utils.serialize_user(request.user, request))
 
     def put(self, request: Request) -> Response:
         serializer = UpdateProfileSerializer(
@@ -37,4 +37,4 @@ class MeView(APIView):
         serializer.is_valid(raise_exception=True)
 
         user = serializer.save()
-        return Response(UserSerializer(user).data)
+        return Response(utils.serialize_user(user, request))
