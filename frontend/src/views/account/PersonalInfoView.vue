@@ -2,9 +2,9 @@
   <v-container class="py-10" fluid>
     <div class="mx-auto account-content">
       <div class="text-center mb-8">
-        <user-avatar :size="180" show-username />
+        <user-avatar :size="220" show-username show-edit />
         <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mt-4 mb-0">
-          {{ auth.user?.username || '...' }}
+          {{ auth.user?.username || '-' }}
         </h1>
         <span class="text-medium-emphasis">{{ auth.user?.email }}</span>
       </div>
@@ -122,6 +122,7 @@
                   variant="outlined"
                   density="comfortable"
                   hide-details="auto"
+                  :rules="[rules.required]"
                   :error-messages="detailErrors.username"
                   :disabled="loading"
                 />
@@ -171,6 +172,7 @@
 import { computed, reactive, ref, watch } from 'vue'
 
 import UserAvatar from '@/components/account/UserAvatar.vue'
+import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()

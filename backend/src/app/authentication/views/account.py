@@ -25,6 +25,7 @@ from app.authentication.serializers.account import (
     ResendEmailVerificationSerializer,
     VerifyEmailSerializer,
 )
+from app.authentication.serializers.user import UserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +82,8 @@ class RefreshTokenView(BaseTokenRefreshView):
     summary="Change password",
     description="Change the authenticated user's password",
     request=ChangePasswordSerializer,
-    tags=["Password"],
+    responses={200: UserSerializer},
+    tags=["Account"],
     examples=[
         OpenApiExample(
             "Change password",
@@ -98,21 +100,22 @@ class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]  # noqa
 
     def post(self, request: Request) -> Response:
-        serializer = self.serializer_class(
+        serializer = ChangePasswordSerializer(
             data=request.data,
             context={"request": request},
         )
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         logger.info(f"Password changed successfully for user {user.username}.")  # type: ignore
-        return Response(utils.serialize_user(user, request))
+        return Response(utils.serialize_user(user, request))  # type: ignore
 
 
 @extend_schema(
     summary="Change Email",
     description="Change the authenticated user's email",
     request=ChangeEmailSerializer,
-    tags=["Email"],
+    responses={200: UserSerializer},
+    tags=["Account"],
     examples=[
         OpenApiExample(
             "Change email",
@@ -136,19 +139,19 @@ class ChangeEmailView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         logger.info(f"Email change requested for user {user.username}.")  # type: ignore
-        return Response(utils.serialize_user(user, request))
+        return Response(utils.serialize_user(user, request))  # type: ignore
 
 
 @extend_schema(
     summary="Verify email",
     description="Verify a user's email using a user ID and activation token.",
     request=VerifyEmailSerializer,
-    tags=["Email"],
+    tags=["Account"],
 )
 class VerifyEmailView(APIView):
     serializer_class = VerifyEmailSerializer
 
-    def get(self, request: Request, uidb64: str, token: str) -> Response:  # noqa: ARG002
+    def get(self, request: Request, uidb64: str, token: str) -> Response:
         serializer = self.serializer_class(
             context={
                 "uidb64": uidb64,
@@ -165,7 +168,7 @@ class VerifyEmailView(APIView):
     summary="Resend email verification",
     description="Resend the email verification if user's pending email exists.",
     request=ResendEmailVerificationSerializer,
-    tags=["Email"],
+    tags=["Account"],
     examples=[
         OpenApiExample(
             "Resend email verification",
@@ -190,6 +193,25 @@ class ResendEmailVerificationView(APIView):
         serializer.send_email()  # type: ignore
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@extend_schema(
+    summary="Delete user avatar",
+    description="Delete the authenticated user's avatar.",
+    responses={200: UserSerializer},
+    tags=["Account"],
+)
+class DeleteAvatarView(APIView):
+    permission_classes = [IsAuthenticated]  # noqa
+
+    def delete(self, request: Request) -> Response:
+        user = request.user
+
+        if user.avatar:
+            user.avatar.delete(save=True)
+
+        logger.info(f"Avatar deleted for user {user.username}.")
+        return Response(utils.serialize_user(user, request))
 
 
 @extend_schema(
@@ -223,7 +245,7 @@ class LogoutView(APIView):
     summary="Delete account",
     description="Permanently delete the authenticated user's account.",
     request=DeleteAccountSerializer,
-    tags=["Authentication"],
+    tags=["Account"],
     examples=[
         OpenApiExample(
             "Delete request",
@@ -242,8 +264,7 @@ class DeleteAccountView(APIView):
 
     def post(self, request: Request) -> Response:
         serializer = self.serializer_class(
-            data=request.data,
-            context={"request": request}
+            data=request.data, context={"request": request}
         )
         serializer.is_valid(raise_exception=True)
 

@@ -139,7 +139,7 @@ async function submit() {
   try {
     await auth.deleteAccount(form)
 
-    router.push({ name: 'home' })
+    router.push({ name: 'login' })
     ui.showSuccess('Your account has been successfully deleted.')
   } catch (err) {
     const details = err.details ?? null

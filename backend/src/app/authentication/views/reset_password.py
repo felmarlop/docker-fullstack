@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     summary="Request password reset",
     description="Send instructions to reset the user's password",
     request=ForgotPasswordSerializer,
-    tags=["Password"],
+    tags=["Account"],
     examples=[
         OpenApiExample(
             "Forgot password",
@@ -47,7 +47,7 @@ class ForgotPasswordView(APIView):
     summary="Reset password",
     description="Reset the user's password using a valid reset token",
     request=ResetPasswordSerializer,
-    tags=["Password"],
+    tags=["Account"],
     examples=[
         OpenApiExample(
             "Reset password",

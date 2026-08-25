@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.files import File
 
 from app.authentication.constants import (
     RESERVED_PREFIXES,
@@ -20,7 +21,7 @@ def validate_username(username: str) -> str:
     return username
 
 
-def validate_avatar_size(value) -> None:
+def validate_avatar_size(value: File) -> None:
     max_size = 2 * 1024 * 1024  # 2 MB
     if value.size > max_size:
         raise ValidationError("Avatar image cannot exceed 2 MB.")

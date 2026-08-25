@@ -106,6 +106,20 @@ export const useAuthStore = defineStore('auth', {
       this.setUser(user)
     },
 
+    async changeAvatar(file) {
+      const payload = new FormData()
+      payload.append('avatar', file)
+      const { data: user } = await authApi.changeAvatar(payload)
+
+      this.setUser(user)
+    },
+
+    async deleteAvatar() {
+      const { data: user } = await authApi.deleteAvatar()
+
+      this.setUser(user)
+    },
+
     async changeEmail(payload) {
       const { data: user } = await authApi.changeEmail(payload)
 

@@ -27,6 +27,9 @@ urlpatterns = [
         register.ResendActivationEmailView.as_view(),
         name="resend-activation-email",
     ),
+    path(
+        "auth/delete-avatar/", account.DeleteAvatarView.as_view(), name="delete-avatar"
+    ),
     path("auth/change-email/", account.ChangeEmailView.as_view(), name="change-email"),
     path(
         "auth/verify-email/<uidb64>/<token>/",

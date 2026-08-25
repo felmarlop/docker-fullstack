@@ -28,7 +28,7 @@ import googleIcon from '@/assets/icons/google.svg'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 
-const ERROR_MESSAGE = 'We could not log you in with Google. Please try again later.'
+const ERROR_MESSAGE = 'We could not log you in with Google. Please try again.'
 
 const auth = useAuthStore()
 const ui = useUiStore()

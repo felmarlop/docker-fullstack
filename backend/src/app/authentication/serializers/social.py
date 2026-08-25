@@ -55,8 +55,8 @@ class BaseSocialSerializer(serializers.Serializer):
                 defaults={"provider_id": provider_id},
             )
 
-        if data.get("avatar_url") and not user.avatar:
-            self._set_avatar_from_url(user, data["avatar_url"])
+            if data.get("avatar_url"):
+                self._set_avatar_from_url(user, data["avatar_url"])
 
         return user
 
@@ -78,7 +78,7 @@ class BaseSocialSerializer(serializers.Serializer):
 
         filename = f"{user.username}_avatar.jpg"
         user.avatar.save(filename, ContentFile(response.content), save=True)
-        user.save(update_fields=["avatar"])
+
 
 class GoogleSerializer(BaseSocialSerializer):
     """
@@ -170,7 +170,7 @@ class GithubSerializer(BaseSocialSerializer):
             token_data = response.json()
         except requests.RequestException as exc:
             raise serializers.ValidationError(
-                "We could not log you in with GitHub. Please try again later."
+                "We could not log you in with GitHub. Please try again."
             ) from exc
 
         access_token = token_data.get("access_token")

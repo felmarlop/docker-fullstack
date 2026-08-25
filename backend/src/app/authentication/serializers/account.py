@@ -47,7 +47,7 @@ class LoginSerializer(BaseTokenObtainPairSerializer):
 
         return {
             **data,
-            "user": utils.serialize_user(self.user, self.context.get("request")),
+            "user": utils.serialize_user(user, self.context.get("request")),
         }
 
 

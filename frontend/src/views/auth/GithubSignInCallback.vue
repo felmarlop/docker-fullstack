@@ -31,7 +31,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 
 const STORAGE_KEY = 'github:oauth:state'
-const ERROR_MESSAGE = 'We could not log you in with GitHub. Please try again later.'
+const ERROR_MESSAGE = 'We could not log you in with GitHub. Please try again.'
 
 const auth = useAuthStore()
 const ui = useUiStore()

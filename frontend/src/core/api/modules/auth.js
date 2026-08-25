@@ -18,6 +18,14 @@ export function refresh(refreshToken) {
   })
 }
 
+export function changeAvatar(data) {
+  return api.post('auth/change-avatar/', data)
+}
+
+export function deleteAvatar() {
+  return api.delete('auth/delete-avatar/')
+}
+
 export function resendActivationEmail(data) {
   return api.post(`auth/activate/resend/`, data)
 }

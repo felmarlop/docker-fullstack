@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.core.validators import FileExtensionValidator
+from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from app.authentication import validators
@@ -36,9 +36,3 @@ class User(AbstractUser):
             validators.validate_avatar_size,
         ],
     )
-
-    def delete(self, *args, **kwargs):
-        if self.avatar:
-            self.avatar.delete(save=False)
-
-        return super().delete(*args, **kwargs)

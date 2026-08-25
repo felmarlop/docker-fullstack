@@ -20,8 +20,8 @@ from app.authentication.serializers.user import UserSerializer
     summary="Update current user",
     description="Update the authenticated user's personal information",
     request=UpdateProfileSerializer,
-    tags=["Users"],
     responses={200: UserSerializer},
+    tags=["Users"],
 )
 class MeView(APIView):
     permission_classes = [IsAuthenticated]  # noqa
@@ -37,4 +37,4 @@ class MeView(APIView):
         serializer.is_valid(raise_exception=True)
 
         user = serializer.save()
-        return Response(utils.serialize_user(user, request))
+        return Response(utils.serialize_user(user, request))  # type: ignore
