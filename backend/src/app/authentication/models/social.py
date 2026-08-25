@@ -8,6 +8,7 @@ class SocialProvider(models.TextChoices):
     """Providers defined for social account model"""
 
     GOOGLE = "google"
+    GITHUB = "github"
 
 
 class SocialAccount(models.Model):

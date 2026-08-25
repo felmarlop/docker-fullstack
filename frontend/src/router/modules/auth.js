@@ -1,5 +1,6 @@
 import ActivateAccountView from '@/views/auth/ActivateAccountView.vue'
 import ConfirmResetPasswordView from '@/views/auth/ConfirmResetPasswordView.vue'
+import GithubSignInCallback from '@/views/auth/GithubSignInCallback.vue'
 import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import ResendActivationView from '@/views/auth/ResendActivationView.vue'
@@ -50,6 +51,14 @@ export default [
     path: '/reset-password/:uidb64/:token',
     name: 'confirm-reset-password',
     component: ConfirmResetPasswordView,
+    meta: {
+      guestOnly: true,
+    },
+  },
+  {
+    path: '/oauth/github/callback',
+    name: 'github-signin-callback',
+    component: GithubSignInCallback,
     meta: {
       guestOnly: true,
     },

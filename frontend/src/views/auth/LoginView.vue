@@ -10,7 +10,8 @@
                 <AuthLink text="Don't have an account?" action="Create one" to="/register" />
               </div>
             </div>
-            <google-sign-in />
+            <GoogleSignIn />
+            <GithubSignIn />
             <div class="d-flex align-center mb-6">
               <v-divider />
               <span class="font-weight-bold text-uppercase text-medium-emphasis mx-4"> OR </span>
@@ -91,6 +92,7 @@ import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import AuthLink from '@/components/auth/AuthLink.vue'
+import GithubSignIn from '@/components/auth/GithubSignIn.vue'
 import GoogleSignIn from '@/components/auth/GoogleSignIn.vue'
 import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'

@@ -80,6 +80,16 @@ export const useAuthStore = defineStore('auth', {
       return data
     },
 
+    async loginWithGithub(credential) {
+      const { data } = await socialAuthApi.loginWithGithub({ code: credential })
+
+      this.setAccessToken(data.access)
+      this.setRefreshTokens(data.refresh)
+      this.setUser(data.user)
+
+      return data
+    },
+
     async register(payload) {
       const { data } = await authApi.register(payload)
       return data

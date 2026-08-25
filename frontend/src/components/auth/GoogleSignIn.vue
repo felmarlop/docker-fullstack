@@ -28,7 +28,7 @@ import googleIcon from '@/assets/icons/google.svg'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 
-const ERROR_MESSAGE = 'An error occurred while logging in with Google.'
+const ERROR_MESSAGE = 'We could not log you in with Google. Please try again later.'
 
 const auth = useAuthStore()
 const ui = useUiStore()
@@ -59,6 +59,7 @@ function loadGoogleScript() {
 
 async function showPrompt() {
   try {
+    loading.value = true
     await loadGoogleScript()
     if (!window.google?.accounts?.id || !googleButton.value) return showError()
 
@@ -81,13 +82,12 @@ async function showPrompt() {
     }
 
     const button = googleButton.value.querySelector('div[role="button"]')
-    if (button) {
-      button.click()
-    } else {
-      showError()
-    }
+    if (!button) return showError()
+    button.click()
   } catch (error) {
     showError(error)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -108,7 +108,11 @@ async function login(response) {
 
 function showError(error) {
   loading.value = false
-  ui.showError(error?.message ?? ERROR_MESSAGE)
+  let msg = error?.message ?? ERROR_MESSAGE
+  if (error.details && error.details.non_field_errors.length) {
+    msg = error.details.non_field_errors[0]
+  }
+  ui.showError(msg)
 }
 </script>
 

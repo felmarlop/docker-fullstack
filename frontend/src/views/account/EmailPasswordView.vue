@@ -41,7 +41,11 @@
                 Email Address
               </v-list-item-title>
 
-              <v-list-item-subtitle class="text-body-1 text-high-emphasis font-weight-medium">
+              <v-list-item-subtitle
+                class="text-body-1 text-high-emphasis font-weight-medium"
+                :class="{ 'text-medium-emphasis': !userEmail }"
+                :style="{ 'font-style': userEmail ? '' : 'italic' }"
+              >
                 {{ userEmail || 'Not provided' }}
               </v-list-item-subtitle>
 
@@ -210,6 +214,12 @@
               >
                 {{ passwordLabel }}
               </v-list-item-subtitle>
+
+              <template #append>
+                <v-avatar v-if="!usablePassword" color="primary-lighten-5" size="40" class="mr-2">
+                  <v-icon color="warning" size="30"> mdi-alert-outline </v-icon>
+                </v-avatar>
+              </template>
             </v-list-item>
           </v-list>
         </template>
@@ -326,11 +336,12 @@ const passwordState = reactive({
 })
 
 const userEmail = computed(() => {
-  return auth.user?.pending_email ?? auth.user?.email ?? ''
+  if (auth.user) return auth.user.pending_email ?? auth.user.email ?? ''
+  return '-'
 })
 
 const usablePassword = computed(() => {
-  return auth.user?.has_usable_password ?? false
+  return auth.user?.has_usable_password ?? true
 })
 
 const passwordLabel = computed(() => {

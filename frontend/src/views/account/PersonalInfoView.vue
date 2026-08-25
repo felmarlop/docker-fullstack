@@ -3,9 +3,10 @@
     <div class="mx-auto account-content">
       <div class="text-center mb-8">
         <user-avatar :size="180" show-username />
-        <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mt-4">
+        <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mt-4 mb-0">
           {{ auth.user?.username || '...' }}
         </h1>
+        <span class="text-medium-emphasis">{{ auth.user?.email }}</span>
       </div>
 
       <v-card variant="outlined" class="rounded-xl account-card">
@@ -14,7 +15,7 @@
             <div>
               <v-card-title class="text-h6 font-weight-bold"> Personal Information </v-card-title>
               <v-card-subtitle class="text-body-2 text-medium-emphasis">
-                Manage your public profile details and account roles.
+                Manage your public profile details.
               </v-card-subtitle>
             </div>
 

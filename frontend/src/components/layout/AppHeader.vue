@@ -13,7 +13,7 @@
       <template #activator="{ props }">
         <div v-bind="props" class="me-2">
           <user-avatar :size="40" />
-          <v-icon size="18" style="opacity: 0.8"> mdi-chevron-down </v-icon>
+          <v-icon size="20" style="opacity: 0.8"> mdi-chevron-down </v-icon>
         </div>
       </template>
 
@@ -67,7 +67,7 @@ const router = useRouter()
 
 async function logout() {
   await auth.logout()
-  router.push({ name: 'home' })
+  router.push({ name: 'login' })
 }
 </script>
 

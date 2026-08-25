@@ -15,7 +15,8 @@ urlpatterns = [
     path("auth/login/", account.LoginView.as_view(), name="login"),
     path("auth/register/", register.RegisterView.as_view(), name="register"),
     path("auth/refresh/", account.RefreshTokenView.as_view(), name="token-refresh"),
-    path("auth/social/google/", social.GoogleView.as_view(), name="auth-google"),
+    path("oauth/google/", social.GoogleView.as_view(), name="auth-google"),
+    path("oauth/github/", social.GithubView.as_view(), name="auth-github"),
     path(
         "auth/activate/<uidb64>/<token>/",
         register.ActivateAccountView.as_view(),

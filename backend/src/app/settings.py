@@ -36,6 +36,10 @@ APP_VERSION = env("APP_VERSION")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
+# GitHub
+GITHUB_CLIENT_ID = env("GITHUB_CLIENT_ID")
+GITHUB_SECRET_KEY = env("GITHUB_SECRET_KEY")
+
 # Google
 GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
 

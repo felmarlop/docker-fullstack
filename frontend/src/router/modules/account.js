@@ -9,6 +9,7 @@ import VerifyEmailView from '@/views/account/VerifyEmailView.vue'
 export default [
   {
     path: '/account',
+    name: 'account',
     redirect: { name: 'account-profile' },
     meta: {
       requiresAuth: true,

@@ -1,9 +1,10 @@
 import logging
 from typing import Any
 
+import requests
 from django.conf import settings
 from django.db import transaction
-from google.auth.transport import requests
+from google.auth.transport.requests import Request
 from google.oauth2 import id_token as google_id_token
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -15,7 +16,54 @@ from app.authentication.serializers.user import UserSerializer
 logger = logging.getLogger(__name__)
 
 
-class GoogleSerializer(serializers.Serializer):
+class BaseSocialSerializer(serializers.Serializer):
+    def _get_or_create_user(
+        self,
+        provider: SocialProvider,
+        provider_id: str,
+        email: str,
+    ) -> User:
+        social_account = (
+            SocialAccount.objects.select_related("user")
+            .filter(
+                provider=provider,
+                provider_id=provider_id,
+            )
+            .first()
+        )
+        if social_account:
+            return utils.activate_user(social_account.user)
+
+        user = User.objects.filter(email__iexact=email).first()
+        if user is None:
+            user = User.objects.create(
+                username=utils.generate_username_from_email(email),
+                email=email,
+            )
+            user.set_unusable_password()
+            user.save(update_fields=["password"])
+            logger.info(f"Account created for {user.username} using {provider}.")
+        else:
+            user = utils.activate_user(user)
+
+        SocialAccount.objects.update_or_create(
+            user=user,
+            provider=provider,
+            defaults={"provider_id": provider_id},
+        )
+
+        return user
+
+    def _get_tokens(self, user: User) -> dict[str, Any]:
+        refresh = TokenObtainPairSerializer.get_token(user)
+        return {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),  # type: ignore
+            "user": UserSerializer(user).data,
+        }
+
+
+class GoogleSerializer(BaseSocialSerializer):
     """
     Authenticate a user with Google.
     """
@@ -26,7 +74,7 @@ class GoogleSerializer(serializers.Serializer):
         try:
             id_info = google_id_token.verify_oauth2_token(
                 value,
-                requests.Request(),
+                Request(),
                 settings.GOOGLE_CLIENT_ID,
             )
         except ValueError as exc:
@@ -51,46 +99,105 @@ class GoogleSerializer(serializers.Serializer):
         provider_id = self.google_data["provider_id"]
         email = self.google_data["email"]
 
-        social_qs = SocialAccount.objects.select_related("user").filter(
-            provider=SocialProvider.GOOGLE,
-            provider_id=provider_id,
-        )
-        if social_account := social_qs.first():
-            user = social_account.user
-            user = utils.activate_user(user)
-            logger.info(f"{user.username} authenticated successfully with Google.")  # type: ignore
-        else:
-            user = User.objects.filter(email__iexact=email).first()
-            if user is None:
-                user = User.objects.create(
-                    username=utils.generate_username_from_email(email), email=email
-                )
+        user = self._get_or_create_user(SocialProvider.GOOGLE, provider_id, email)
+        tokens = self._get_tokens(user)
 
-                user.set_unusable_password()
-                user.save(update_fields=["password"])
-            else:
-                user = utils.activate_user(user)
+        logger.info(f"{user.username} authenticated successfully with Google.")  # type: ignore
+        return tokens
 
-            social_account = SocialAccount.objects.filter(
-                user=user,
-                provider=SocialProvider.GOOGLE,
-            ).first()
-            if social_account:
-                social_account.provider_id = provider_id
-                social_account.save(update_fields=["provider_id"])
-            else:
-                SocialAccount.objects.create(
-                    user=user,
-                    provider=SocialProvider.GOOGLE,
-                    provider_id=provider_id,
-                )
 
-            logger.info(f"Account created for {user.username} using Google.")  # type: ignore
+class GithubSerializer(BaseSocialSerializer):
+    """
+    Authenticate a user with GitHub.
+    """
 
-        refresh = TokenObtainPairSerializer.get_token(user)
+    code = serializers.CharField(write_only=True)
 
-        return {
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),  # type: ignore
-            "user": UserSerializer(user).data,
+    def _get_github_email(self, access_token: str) -> str | None:
+        try:
+            response = requests.get(
+                "https://api.github.com/user/emails",
+                headers={
+                    "Authorization": f"Bearer {access_token}",
+                    "Accept": "application/vnd.github+json",
+                },
+                timeout=10,
+            )
+            emails = response.json()
+        except requests.RequestException as exc:
+            raise serializers.ValidationError(
+                "Unable to retrieve GitHub account email."
+            ) from exc
+
+        for email_data in emails:
+            if email_data.get("primary") and email_data.get("verified"):
+                return email_data["email"]
+        return None
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        try:
+            response = requests.post(
+                "https://github.com/login/oauth/access_token",
+                data={
+                    "client_id": settings.GITHUB_CLIENT_ID,
+                    "client_secret": settings.GITHUB_SECRET_KEY,
+                    "code": attrs["code"],
+                },
+                headers={
+                    "Accept": "application/json",
+                },
+                timeout=10,
+            )
+            token_data = response.json()
+        except requests.RequestException as exc:
+            raise serializers.ValidationError(
+                "We could not log you in with GitHub. Please try again later."
+            ) from exc
+
+        access_token = token_data.get("access_token")
+
+        if not access_token:
+            raise serializers.ValidationError("Invalid GitHub authorization code.")
+
+        try:
+            response = requests.get(
+                "https://api.github.com/user",
+                headers={
+                    "Authorization": f"Bearer {access_token}",
+                    "Accept": "application/vnd.github+json",
+                },
+                timeout=10,
+            )
+            github_user = response.json()
+        except requests.RequestException as exc:
+            raise serializers.ValidationError(
+                "Unable to retrieve GitHub user information."
+            ) from exc
+
+        email = github_user.get("email")
+        if not email:
+            email = self._get_github_email(access_token)
+
+        if not email:
+            raise serializers.ValidationError(
+                "Unable to retrieve the GitHub account email."
+            )
+
+        self.github_data = {
+            "provider_id": str(github_user["id"]),
+            "email": email,
+            "avatar_url": github_user.get("avatar_url"),
         }
+
+        return attrs
+
+    @transaction.atomic
+    def save(self, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
+        provider_id = self.github_data["provider_id"]
+        email = self.github_data["email"]
+
+        user = self._get_or_create_user(SocialProvider.GITHUB, provider_id, email)
+        tokens = self._get_tokens(user)
+
+        logger.info(f"{user.username} authenticated successfully with GitHub.")  # type: ignore
+        return tokens
