@@ -36,3 +36,9 @@ class User(AbstractUser):
             validators.validate_avatar_size,
         ],
     )
+
+    def delete(self, *args, **kwargs):
+        if self.avatar:
+            self.avatar.delete(save=False)
+
+        return super().delete(*args, **kwargs)

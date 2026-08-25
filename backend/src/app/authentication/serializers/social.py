@@ -97,10 +97,15 @@ class GoogleSerializer(BaseSocialSerializer):
         except ValueError as exc:
             raise serializers.ValidationError("Invalid Google ID token.") from exc
 
+        avatar_url = id_info.get("picture")
+        if avatar_url:
+            avatar_url = avatar_url.split("=", 1)[0]
+
         return {
             "provider_id": id_info["sub"],
             "email": id_info["email"],
             "email_verified": id_info["email_verified"],
+            "avatar_url": avatar_url,
         }
 
     def validate_id_token(self, value: str) -> str:
