@@ -14,6 +14,7 @@
             </div>
 
             <GoogleSignIn />
+            <GithubSignIn />
 
             <div class="d-flex align-center mb-6">
               <v-divider />
@@ -109,6 +110,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 
+import GithubSignIn from '@/components/auth/GithubSignIn.vue'
 import GoogleSignIn from '@/components/auth/GoogleSignIn.vue'
 import AuthLink from '@/components/auth/AuthLink.vue'
 import EmailSentMsg from '@/components/auth/EmailSentMsg.vue'
