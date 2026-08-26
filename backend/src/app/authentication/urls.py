@@ -28,6 +28,9 @@ urlpatterns = [
         name="resend-activation-email",
     ),
     path(
+        "auth/change-avatar/", account.ChangeAvatarView.as_view(), name="change-avatar"
+    ),
+    path(
         "auth/delete-avatar/", account.DeleteAvatarView.as_view(), name="delete-avatar"
     ),
     path("auth/change-email/", account.ChangeEmailView.as_view(), name="change-email"),

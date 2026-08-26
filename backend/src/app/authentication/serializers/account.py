@@ -51,7 +51,21 @@ class LoginSerializer(BaseTokenObtainPairSerializer):
         }
 
 
+class ChangeAvatarSerializer(serializers.ModelSerializer):
+    """
+    Update the authenticated user's avatar.
+    """
+
+    class Meta:
+        model = User
+        fields = ("avatar",)
+
+
 class UpdateProfileSerializer(serializers.ModelSerializer):
+    """
+    Update personal info for the authenticated user.
+    """
+
     class Meta:
         model = User
         fields = (

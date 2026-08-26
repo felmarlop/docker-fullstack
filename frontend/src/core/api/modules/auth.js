@@ -19,7 +19,7 @@ export function refresh(refreshToken) {
 }
 
 export function changeAvatar(data) {
-  return api.post('auth/change-avatar/', data)
+  return api.put('auth/change-avatar/', data)
 }
 
 export function deleteAvatar() {

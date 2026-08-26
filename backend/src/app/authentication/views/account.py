@@ -3,6 +3,7 @@ from typing import Any
 
 from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -17,6 +18,7 @@ from rest_framework_simplejwt.views import (
 
 from app.authentication import utils
 from app.authentication.serializers.account import (
+    ChangeAvatarSerializer,
     ChangeEmailSerializer,
     ChangePasswordSerializer,
     DeleteAccountSerializer,
@@ -76,6 +78,23 @@ class LoginView(BaseTokenObtainPairView):
 class RefreshTokenView(BaseTokenRefreshView):
     serializer_class = TokenRefreshSerializer
     pass
+
+
+class ChangeAvatarView(APIView):
+    serializer_class = ChangeAvatarSerializer
+    permission_classes = [IsAuthenticated]  # noqa
+    parser_classes = [MultiPartParser]  # noqa
+
+    def put(self, request: Request) -> Response:
+        serializer = self.serializer_class(
+            instance=request.user,
+            data=request.data,
+        )
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.save()
+        logger.info(f"Avatar changed successfully for user {user.username}.")  # type: ignore
+        return Response(utils.serialize_user(user, request))  # type: ignore
 
 
 @extend_schema(

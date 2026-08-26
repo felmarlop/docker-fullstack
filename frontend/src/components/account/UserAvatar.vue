@@ -116,13 +116,13 @@ async function handleFileChange(event) {
     return
   }
 
-  event.target.value = ''
-
   try {
-    // API logic for upload goes here
+    await auth.changeAvatar(file)
     ui.showSuccess('Profile photo updated successfully.')
   } catch {
     ui.showError('Failed to upload photo. Please try again.')
+  } finally {
+    event.target.value = ''
   }
 }
 

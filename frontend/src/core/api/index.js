@@ -5,12 +5,7 @@ import env from '@/config/env'
 import setupRequestInterceptor from './interceptors/request'
 import setupResponseInterceptor from './interceptors/response'
 
-const api = axios.create({
-  baseURL: env.apiUrl,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
+const api = axios.create({ baseURL: env.apiUrl })
 
 setupRequestInterceptor(api)
 setupResponseInterceptor(api)
