@@ -75,6 +75,9 @@ flowchart LR
 
 ### Development Tools
 
+- pyenv
+- VS Code
+- Pylance
 - Ruff
 - Pyright
 - Pytest
@@ -119,6 +122,49 @@ Build the development environment and create a Django superuser:
 make build
 
 make create-superuser
+```
+
+## 💻 Local Development Environment
+
+The application runs entirely through Docker, so a local Python installation
+or virtual environment is not required to run the backend.
+
+A local Python environment is recommended for development tooling. It allows the editor
+to resolve backend dependencies correctly and provide type checking, import resolution,
+navigation and autocompletion.
+
+### Python with pyenv
+
+The backend currently uses Python 3.13.15.
+
+Install the required Python version using `pyenv`:
+
+```bash
+pyenv install 3.13.15
+pyenv virtualenv 3.13.15 docker-fullstack
+pyenv activate docker-fullstack
+
+# Verify the active environment
+python --version
+pyenv version
+pyenv which python
+
+# Install backend dependencies
+pip install -r backend/requirements.txt
+```
+
+### VS Code
+
+Select the project virtual environment as the Python interpreter:
+
+1. Open the Command Palette (`Cmd + Shift + P`).
+2. Select `Python: Select Interpreter`.
+3. Select `docker-fullstack (3.13.15)`.
+
+The interpreter should resolve to:
+
+```text
+~/.pyenv/versions/docker-fullstack/bin/python
 ```
 
 ## ✨ Features
