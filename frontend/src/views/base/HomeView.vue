@@ -31,7 +31,7 @@
             <div
               v-if="loading && !ui.pingData"
               class="d-flex flex-column align-center justify-center"
-              style="min-height: 177px"
+              style="min-height: 180px"
             >
               <v-progress-circular indeterminate color="primary" size="32" class="mb-3" />
               <div class="text-medium-emphasis">Connecting to API...</div>
