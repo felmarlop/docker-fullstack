@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :class="{ 'app-layout': auth.isAuthenticated }">
     <AppHeader />
 
     <AppDrawer v-if="auth.isAuthenticated && navigation" :items="navigation" />
