@@ -18,3 +18,4 @@ pytest-django==4.12.0
 redis==8.0.1
 requests==2.34.2
 ruff==0.15.20
+stripe==15.6.1
