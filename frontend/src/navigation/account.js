@@ -5,7 +5,7 @@ export default [
     to: { name: 'account-profile' },
   },
   {
-    title: 'Security & credentials',
+    title: 'Security & Credentials',
     icon: 'mdi-shield-account-outline',
     to: { name: 'account-security' },
   },
