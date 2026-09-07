@@ -45,6 +45,9 @@ GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
 
 # Stripe
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+STRIPE_PRICES = {
+    "pro-lifetime": env("STRIPE_PRO_LIFETIME_PRICE_ID"),
+}
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
@@ -73,6 +76,7 @@ INSTALLED_APPS = [
     # Local
     "app.authentication",
     "app.core",
+    "app.subscription",
 ]
 
 MIDDLEWARE = [

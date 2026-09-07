@@ -2,7 +2,6 @@ from django.urls import path
 
 from app.authentication.views import (
     account,
-    base,
     register,
     reset_password,
     social,
@@ -10,7 +9,6 @@ from app.authentication.views import (
 )
 
 urlpatterns = [
-    path("ping/", base.PingView.as_view(), name="ping"),
     path("users/me/", user.MeView.as_view(), name="users-me"),
     path("auth/login/", account.LoginView.as_view(), name="login"),
     path("auth/register/", register.RegisterView.as_view(), name="register"),

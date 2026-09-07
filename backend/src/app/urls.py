@@ -24,6 +24,8 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from app.authentication.views import base
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
@@ -37,6 +39,10 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+
     path("api/", RedirectView.as_view(pattern_name="swagger-ui", permanent=False)),
+
+    path("api/ping/", base.PingView.as_view(), name="ping"),
     path("api/", include("app.authentication.urls")),
+    path("api/", include("app.subscription.urls")),
 ]
