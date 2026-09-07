@@ -43,6 +43,9 @@ GITHUB_SECRET_KEY = env("GITHUB_SECRET_KEY")
 # Google
 GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
 
+# Stripe
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
 

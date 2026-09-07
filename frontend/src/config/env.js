@@ -3,6 +3,7 @@ export default {
   appName: import.meta.env.VITE_APP_NAME,
   githubClientId: import.meta.env.VITE_GITHUB_CLIENT_ID,
   googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+  stripePublishableKey: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY,
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
 
