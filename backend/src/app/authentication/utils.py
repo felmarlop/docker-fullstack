@@ -44,7 +44,7 @@ def get_user_from_uidb64(uidb64: str) -> User:
 
 def serialize_user(user: User | None, request: Request | None) -> dict[str, Any]:
     if user is None:
-        raise serializers.ValidationError("Authenticated user not found.")
+        raise serializers.ValidationError({"detail": ["Authenticated user not found."]})
 
     return UserSerializer(
         user,
