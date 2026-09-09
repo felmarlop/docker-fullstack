@@ -3,5 +3,14 @@ from django.urls import path
 from app.subscription.views import subscription
 
 urlpatterns = [
-    path("subscription/create/", subscription.SubscriptionView.as_view(), name="create-subscription"),
+    path(
+        "subscription//create/",
+        subscription.SubscriptionView.as_view(),
+        name="create-subscription",
+    ),
+    path(
+        "subscription/<int:pk>/cancel/",
+        subscription.CancelSubscriptionView.as_view(),
+        name="cancel-subscription",
+    ),
 ]
