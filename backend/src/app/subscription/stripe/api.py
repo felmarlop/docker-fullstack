@@ -3,8 +3,11 @@ from django.conf import settings
 
 from app.authentication.models import User
 from app.subscription.models import Subscription
+from app.subscription.models.choices import StripePaymentStatus
 from app.subscription.stripe.exceptions import (
     StripeGeneralError,
+    StripePaymentCannotBeResumed,
+    StripePaymentNotFound,
     StripePriceNoAmount,
     StripePriceNotActive,
     StripePriceNotFound,
@@ -16,6 +19,9 @@ class StripeAPI:
         self.client = stripe.StripeClient(settings.STRIPE_SECRET_KEY).v1
 
     def get_price(self, price_id: str) -> stripe.Price:
+        if not price_id:
+            raise StripePriceNotFound
+
         try:
             price = self.client.prices.retrieve(
                 price_id,
@@ -59,17 +65,39 @@ class StripeAPI:
                     "amount": price.unit_amount,
                     "currency": price.currency,
                     "customer": subscription.stripe_customer.stripe_customer_id,
-                    "automatic_payment_methods": {
-                        "enabled": True,
-                    },
+                    "payment_method_types": ["card"],
                 }
             )
         except stripe.StripeError as exc:
             raise StripeGeneralError from exc
 
-    def cancel_payment_intent(self, payment_intent_id: str) -> None:
+    def get_payment_intent(self, payment_intent_id: str) -> stripe.PaymentIntent:
         try:
-            self.client.payment_intents.cancel(
+            return self.client.payment_intents.retrieve(payment_intent_id)
+        except stripe.InvalidRequestError as exc:
+            raise StripePaymentNotFound from exc
+
+    def get_resumable_payment_intent(
+        self, payment_intent_id: str
+    ) -> stripe.PaymentIntent:
+        payment_intent = self.get_payment_intent(payment_intent_id)
+        if payment_intent.status not in [
+            StripePaymentStatus.REQUIRES_PAYMENT,
+            StripePaymentStatus.REQUIRES_CONFIRMATION,
+        ]:
+            raise StripePaymentCannotBeResumed
+        return payment_intent
+
+    def cancel_payment_intent(self, payment_intent_id: str) -> stripe.PaymentIntent:
+        try:
+            intent = self.get_payment_intent(payment_intent_id)
+            if intent.status in [
+                StripePaymentStatus.SUCCEEDED,
+                StripePaymentStatus.CANCELED,
+            ]:
+                return intent
+
+            return self.client.payment_intents.cancel(
                 payment_intent_id,
                 params={
                     "cancellation_reason": "requested_by_customer",

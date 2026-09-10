@@ -4,15 +4,7 @@ from django.conf import settings
 from django.db import models
 
 from app.core.models import BaseModel
-
-
-class SubscriptionStatus(models.TextChoices):
-    """Statuses defined for subscription model"""
-
-    PENDING = "pending"
-    ACTIVE = "active"
-    CANCELED = "canceled"
-    EXPIRED = "expired"
+from app.subscription.models.choices import SubscriptionStatus
 
 
 class StripeCustomer(BaseModel):
@@ -26,6 +18,7 @@ class StripeCustomer(BaseModel):
 
 class Subscription(BaseModel):
     name = models.CharField(max_length=255)
+    plan = models.CharField(max_length=255)
     status = models.CharField(
         max_length=20,
         choices=SubscriptionStatus.choices,
@@ -54,7 +47,7 @@ class Subscription(BaseModel):
             self.status == SubscriptionStatus.ACTIVE and self.current_period_end is None
         )
 
-    class Meta:
+    class Meta:  # type: ignore
         constraints: ClassVar = [
             models.CheckConstraint(
                 condition=(
@@ -71,7 +64,8 @@ class Subscription(BaseModel):
                 name="active_subscription_requires_start",
             ),
             models.UniqueConstraint(
-                fields=["stripe_customer", "stripe_price_id"],
-                name="unique_subscription_per_customer_price",
+                fields=["stripe_customer"],
+                condition=models.Q(status=SubscriptionStatus.ACTIVE),
+                name="unique_active_subscription_per_customer",
             ),
         ]

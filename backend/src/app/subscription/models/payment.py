@@ -4,15 +4,7 @@ from django.db import models
 
 from app.core.models import BaseModel
 from app.subscription.models import subscription
-
-
-class PaymentStatus(models.TextChoices):
-    """Statuses defined for subscription model"""
-
-    PENDING = "pending"
-    SUCCEEDED = "succeeded"
-    FAILED = "failed"
-    CANCELED = "canceled"
+from app.subscription.models.choices import PaymentStatus
 
 
 class Payment(BaseModel):
@@ -24,7 +16,7 @@ class Payment(BaseModel):
     status = models.CharField(
         max_length=20,
         choices=PaymentStatus.choices,
-        default=PaymentStatus.PENDING
+        default=PaymentStatus.PENDING,
     )
 
     # Stripe
@@ -38,7 +30,7 @@ class Payment(BaseModel):
     currency = models.CharField(max_length=3)
     paid_at = models.DateTimeField(null=True, blank=True)
 
-    class Meta:
+    class Meta:  # type: ignore
         constraints: ClassVar = [
             models.CheckConstraint(
                 condition=models.Q(amount__gt=0),

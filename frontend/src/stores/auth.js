@@ -7,6 +7,7 @@ import * as usersApi from '@/core/api/modules/users'
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/config/auth'
 
 import { clearAuthCookies, getAuthCookies, setCookie } from '@/helpers/cookies'
+import { useSubscriptionStore } from '@/stores/subscription'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -41,6 +42,7 @@ export const useAuthStore = defineStore('auth', {
       this.accessToken = null
       this.refreshToken = null
 
+      useSubscriptionStore().clear()
       clearAuthCookies()
     },
 
@@ -50,14 +52,7 @@ export const useAuthStore = defineStore('auth', {
 
       this.setAccessToken(accessToken)
       this.setRefreshTokens(refreshToken)
-
-      try {
-        const { data } = await usersApi.me()
-
-        this.setUser(data)
-      } catch {
-        this.clearSession()
-      }
+      this.getMe()
     },
 
     async login(credentials) {
@@ -98,6 +93,16 @@ export const useAuthStore = defineStore('auth', {
     async forgotPassword(payload) {
       const { data } = await authApi.forgotPassword(payload)
       return data
+    },
+
+    async getMe() {
+      try {
+        const { data } = await usersApi.me()
+
+        this.setUser(data)
+      } catch {
+        this.clearSession()
+      }
     },
 
     async updateMe(payload) {

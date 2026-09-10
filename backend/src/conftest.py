@@ -88,10 +88,83 @@ def stripe_payment_intent_mock() -> Generator[MagicMock]:
 
 
 @pytest.fixture
+def get_pending_payment_intent_mock() -> Generator[MagicMock]:
+    payment_intent = stripe.PaymentIntent.construct_from(
+        {
+            "id": "test_intent",
+            "amount": 999,
+            "currency": "eur",
+            "status": "requires_payment_method",
+            "client_secret": "test_intent_secret",
+        },
+        "sk_test",
+    )
+
+    with patch.object(
+        stripe_api,
+        "get_payment_intent",
+        return_value=payment_intent,
+    ) as mock:
+        yield mock
+
+
+@pytest.fixture
+def get_succeeded_payment_intent_mock() -> Generator[MagicMock]:
+    payment_intent = stripe.PaymentIntent.construct_from(
+        {
+            "id": "test_intent",
+            "amount": 999,
+            "currency": "eur",
+            "status": "succeeded",
+            "client_secret": "test_intent_secret",
+        },
+        "sk_test",
+    )
+
+    with patch.object(
+        stripe_api,
+        "get_payment_intent",
+        return_value=payment_intent,
+    ) as mock:
+        yield mock
+
+
+@pytest.fixture
+def get_processing_payment_intent_mock() -> Generator[MagicMock]:
+    payment_intent = stripe.PaymentIntent.construct_from(
+        {
+            "id": "test_intent",
+            "amount": 999,
+            "currency": "eur",
+            "status": "processing",
+            "client_secret": "test_intent_secret",
+        },
+        "sk_test",
+    )
+
+    with patch.object(
+        stripe_api,
+        "get_payment_intent",
+        return_value=payment_intent,
+    ) as mock:
+        yield mock
+
+
+@pytest.fixture
 def stripe_cancel_payment_intent_mock() -> Generator[MagicMock]:
+    payment_intent = stripe.PaymentIntent.construct_from(
+        {
+            "id": "test_intent",
+            "amount": 999,
+            "currency": "eur",
+            "status": "canceled",
+            "client_secret": "test_intent_secret",
+        },
+        "sk_test",
+    )
     with patch.object(
         stripe_api,
         "cancel_payment_intent",
-        return_value=None,
+        return_value=payment_intent,
     ) as mock:
         yield mock

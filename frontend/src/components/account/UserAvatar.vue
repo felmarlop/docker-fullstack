@@ -12,6 +12,9 @@
       </v-img>
     </v-avatar>
 
+    <UserBadge v-if="showBadge" :badge-size="badgeSize" :badge-icon-size="badgeIconSize" />
+
+    <!-- Edit Pill Button -->
     <v-menu v-if="showEdit" location="bottom start" offset="6">
       <template #activator="{ props: menuProps }">
         <v-btn
@@ -65,13 +68,14 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import UserBadge from '@/components/account/UserBadge.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 
 const auth = useAuthStore()
 const ui = useUiStore()
 
-defineProps({
+const props = defineProps({
   size: {
     type: Number,
     default: 40,
@@ -80,11 +84,18 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  showBadge: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const loading = ref(false)
 const fileInput = ref(null)
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB Limit
+
+const badgeSize = computed(() => Math.max(16, Math.round(props.size / 3.2)))
+const badgeIconSize = computed(() => Math.max(10, Math.round(props.size / 5)))
 
 const userLetters = computed(() => {
   let letters = ''
@@ -144,6 +155,14 @@ async function handleDeleteAvatar() {
 .user-avatar {
   border: 2px solid rgba(var(--v-border-color), var(--v-border-opacity));
   background-color: rgb(var(--v-theme-surface)) !important;
+}
+
+:deep(.subscription-badge) {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border: 1px solid rgb(var(--v-theme-surface)) !important;
+  z-index: 2;
 }
 
 .avatar-edit-pill {
