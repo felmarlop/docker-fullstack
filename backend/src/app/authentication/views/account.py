@@ -80,6 +80,7 @@ class RefreshTokenView(BaseTokenRefreshView):
     pass
 
 
+@extend_schema(exclude=True)
 class ChangeAvatarView(APIView):
     serializer_class = ChangeAvatarSerializer
     permission_classes = [IsAuthenticated]  # noqa

@@ -40,17 +40,20 @@ class CreateSubscriptionSerializer(serializers.Serializer):
         return customer
 
     def validate_plan(self, value: str) -> str:
-        if value not in settings.STRIPE_PRICES:
+        if value not in settings.STRIPE_PLANS:
             raise serializers.ValidationError("Invalid subscription plan.")
         return value
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         user = self.context["request"].user
-        price_id = settings.STRIPE_PRICES[attrs["plan"]]
 
         if Subscription.objects.filter(
             stripe_customer__user=user,
-            stripe_price_id=price_id,
+            plan=attrs["plan"],
+            status__in=[
+                SubscriptionStatus.PENDING,
+                SubscriptionStatus.ACTIVE,
+            ],
         ).exists():
             raise serializers.ValidationError(
                 {"detail": ["User already has this subscription."]}
@@ -62,7 +65,7 @@ class CreateSubscriptionSerializer(serializers.Serializer):
         plan = validated_data.pop("plan")
         user = self.context["request"].user
 
-        price_id = settings.STRIPE_PRICES[plan]
+        price_id = settings.STRIPE_PLANS[plan]["stripe_price_id"]
         price = stripe_api.get_price(price_id)
 
         customer = self._get_or_create_customer(user)
@@ -73,9 +76,10 @@ class CreateSubscriptionSerializer(serializers.Serializer):
 
         with transaction.atomic():
             subscription = Subscription.objects.create(
+                name=f"{product_name} - {price.id}",
+                plan=plan,
                 stripe_customer=customer,
                 stripe_price_id=price.id,
-                name=f"{product_name} - {price.id}",
             )
 
             payment_intent = stripe_api.create_payment_intent(price, subscription)  # type: ignore
@@ -157,6 +161,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
+            "plan",
             "status",
             "username",
             "current_period_start",

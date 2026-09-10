@@ -26,6 +26,7 @@ class StripeCustomer(BaseModel):
 
 class Subscription(BaseModel):
     name = models.CharField(max_length=255)
+    plan = models.CharField(max_length=255)
     status = models.CharField(
         max_length=20,
         choices=SubscriptionStatus.choices,
@@ -71,7 +72,13 @@ class Subscription(BaseModel):
                 name="active_subscription_requires_start",
             ),
             models.UniqueConstraint(
-                fields=["stripe_customer", "stripe_price_id"],
-                name="unique_subscription_per_customer_price",
+                fields=["stripe_customer", "plan"],
+                condition=models.Q(
+                    status__in=[
+                        SubscriptionStatus.PENDING,
+                        SubscriptionStatus.ACTIVE,
+                    ]
+                ),
+                name="unique_open_subscription_per_customer_plan",
             ),
         ]

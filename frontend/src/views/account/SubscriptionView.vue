@@ -17,7 +17,7 @@
           </div>
 
           <div>
-            <div class="font-weight-bold text-uppercase text-medium-emphasis mb-1">Current Plan</div>
+            <div v-if="!isPending" class="font-weight-bold text-uppercase text-medium-emphasis mb-1">Current Plan</div>
             <h2 class="text-h5 font-weight-bold text-high-emphasis tracking-tight">
               {{ currentTier.title }}
             </h2>
@@ -37,7 +37,7 @@
             </div>
 
             <v-btn
-              v-if="userTier !== 'free'"
+              v-if="plan !== 'free'"
               prepend-icon="mdi-close-circle-outline"
               variant="outlined"
               color="default"
@@ -51,20 +51,26 @@
         </v-card-text>
       </v-card>
 
-      <div v-if="userTier !== 'plus'" class="d-flex flex-column ga-6">
-        <v-card v-if="userTier === 'free'" variant="outlined" class="account-card pro-gradient-bg">
+      <div v-if="plan !== 'plus-lifetime'" class="d-flex flex-column ga-6">
+        <v-card
+          v-for="p in Object.values(subscriptionStore.plans)"
+          :key="p.id"
+          variant="outlined"
+          class="account-card"
+          :class="`${p.id}-gradient-bg`"
+        >
           <v-card-item class="pa-6 border-b">
             <div class="d-flex align-center justify-space-between w-100">
               <div>
-                <v-card-title class="text-h6 font-weight-bold"> Upgrade to Pro </v-card-title>
+                <v-card-title class="text-h6 font-weight-bold"> Upgrade to {{ p.name }} </v-card-title>
                 <v-card-subtitle class="text-body-2 text-medium-emphasis">
-                  Essential tools and expanded limits for active users.
+                  {{ p.description }}
                 </v-card-subtitle>
               </div>
 
               <div class="text-right">
-                <span class="text-h5 font-weight-bold text-high-emphasis">$19</span>
-                <span class="text-medium-emphasis"> / once</span>
+                <span class="text-h5 font-weight-bold text-high-emphasis">{{ `${p.amount} ${p.currency}` }}</span>
+                <span v-if="p.is_lifetime" class="text-medium-emphasis"> / once</span>
               </div>
             </div>
           </v-card-item>
@@ -88,73 +94,19 @@
             <div class="d-flex align-center justify-space-between">
               <div class="d-flex align-center text-medium-emphasis">
                 <v-icon icon="mdi-shield-check-outline" size="16" class="mr-1" />
-                256-bit encrypted checkout
-              </div>
-
-              <v-btn
-                color="accent"
-                elevation="0"
-                size="large"
-                prepend-icon="mdi-star-outline"
-                :loading="loadingTier === 'pro'"
-                :disabled="!!loadingTier"
-                @click="handleUpgrade('pro')"
-              >
-                Upgrade to <b class="mx-1">Pro</b> — $19
-              </v-btn>
-            </div>
-          </v-card-text>
-        </v-card>
-
-        <v-card variant="outlined" class="account-card plus-gradient-bg">
-          <v-card-item class="pa-6 border-b">
-            <div class="d-flex align-center justify-space-between w-100">
-              <div>
-                <v-card-title class="text-h6 font-weight-bold"> Upgrade to Plus </v-card-title>
-                <v-card-subtitle class="text-body-2 text-medium-emphasis">
-                  Maximum performance, unlimited capacity, and priority features.
-                </v-card-subtitle>
-              </div>
-
-              <div class="text-right">
-                <span class="text-h5 font-weight-bold text-high-emphasis">$49</span>
-                <span class="text-medium-emphasis"> / once</span>
-              </div>
-            </div>
-          </v-card-item>
-
-          <v-card-text v-if="plusFeatures.length" class="pa-6 border-b bg-grey-lighten-5">
-            <label class="font-weight-bold text-uppercase text-medium-emphasis mb-3 d-block"> Included in Plus </label>
-
-            <v-list density="compact" bg-color="transparent" class="pa-0">
-              <v-list-item v-for="(feature, index) in plusFeatures" :key="index" class="px-0 mb-2">
-                <template #prepend>
-                  <v-icon icon="mdi-check-circle-outline" style="color: #7c3aed" size="18" class="mr-3" />
-                </template>
-                <v-list-item-title class="text-body-2 text-high-emphasis">
-                  {{ feature }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-
-          <v-card-text class="pa-6">
-            <div class="d-flex align-center justify-space-between">
-              <div class="d-flex align-center text-medium-emphasis">
-                <v-icon icon="mdi-shield-check-outline" size="16" class="mr-1" />
                 Lifetime access unlocked
               </div>
 
               <v-btn
                 elevation="0"
                 size="large"
-                color="primary"
                 prepend-icon="mdi-lightning-bolt-outline"
-                :loading="loadingTier === 'plus'"
+                :color="PLAN_COLORS[p.id].button"
+                :loading="loadingTier === p.id"
                 :disabled="!!loadingTier"
-                @click="handleUpgrade('plus')"
+                @click="handleUpgrade(p.id)"
               >
-                Upgrade to <b class="mx-1">Plus</b> — $49
+                Upgrade to <b class="mx-1">{{ p.name }}</b> — {{ `${p.amount} ${p.currency}` }}
               </v-btn>
             </div>
           </v-card-text>
@@ -166,19 +118,50 @@
           <v-card-item class="pa-6 border-b">
             <v-card-title class="text-h6 font-weight-bold text-error"> Cancel Subscription? </v-card-title>
           </v-card-item>
-
           <v-card-text class="pa-6 text-body-2 text-medium-emphasis">
-            Are you sure you want to cancel your <strong>{{ userTier.toUpperCase() }}</strong> plan? Your account will
-            immediately revert to the Free Tier, and you will lose access to premium tier limits.
+            <span>
+              Are you sure you want to cancel your <strong>{{ plan.toUpperCase() }}</strong> plan? Your account will
+              immediately revert to the Free Tier, and you will lose access to premium tier limits.
+            </span>
+            <v-form ref="formRef" class="mt-5" @submit.prevent="handleCancelSubscription()">
+              <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
+                Type <span class="font-weight-black text-high-emphasis">CANCEL</span> to confirm
+              </label>
+              <v-text-field
+                v-model="form.confirmation"
+                placeholder="CANCEL"
+                variant="outlined"
+                density="comfortable"
+                hide-details="auto"
+                :disabled="subscriptionStore.loading"
+              />
+              <v-divider class="mb-6" />
+              <div class="d-flex justify-end ga-3">
+                <v-btn
+                  variant="text"
+                  color="default"
+                  size="large"
+                  class="px-6 font-weight-bold"
+                  :disabled="subscriptionStore.loading"
+                  @click="closeDialog"
+                >
+                  Keep Plan
+                </v-btn>
+                <v-btn
+                  type="submit"
+                  color="error"
+                  elevation="0"
+                  size="large"
+                  prepend-icon="mdi-close-circle-outline"
+                  :loading="subscriptionStore.loading"
+                  :disabled="cancelDisabled"
+                  class="px-6 font-weight-bold"
+                >
+                  Confirm Cancellation
+                </v-btn>
+              </div>
+            </v-form>
           </v-card-text>
-
-          <v-card-actions class="pa-6 pt-0 d-flex justify-end ga-3">
-            <v-btn variant="plain" :disabled="cancelling" @click="cancelDialog = false"> Keep Plan </v-btn>
-
-            <v-btn color="error" elevation="0" :loading="cancelling" @click="handleCancelSubscription">
-              Confirm Cancellation
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </v-dialog>
     </div>
@@ -186,47 +169,73 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
+import * as subscriptionApi from '@/core/api/modules/subscription'
+import { useSubscriptionStore } from '@/stores/subscription'
 import { useUiStore } from '@/stores/ui'
 
+const PLAN_COLORS = {
+  'plus-lifetime': {
+    button: 'primary',
+  },
+  'pro-lifetime': {
+    button: 'accent',
+  },
+}
+
+const subscriptionStore = useSubscriptionStore()
 const ui = useUiStore()
 
-// Tier state: 'free' | 'pro' | 'plus'
-const userTier = ref('free')
 const loadingTier = ref(null)
 const cancelDialog = ref(false)
-const cancelling = ref(false)
 
 const proFeatures = []
-
 const plusFeatures = []
 
+const formRef = ref(null)
+const form = reactive({
+  confirmation: '',
+})
+
+const plan = computed(() => {
+  return subscriptionStore.currentSubscription?.plan || 'free'
+})
+
+const isPending = computed(() => {
+  return subscriptionStore.currentSubscription?.status || 'pending'
+})
+
 const currentTier = computed(() => {
-  switch (userTier.value) {
-    case 'plus':
+  switch (plan.value) {
+    case 'plus-lifetime':
       return {
-        title: 'Lifetime Plus Access',
-        description: 'Highest performance tier with maximum speed and priority access.',
-        billing: 'One-time (Lifetime)',
-        bgClass: 'plus-gradient-bg',
-        avatarColor: 'primary',
-        icon: 'mdi-lightning-bolt-outline',
+        title: isPending.value ? 'Plus Access (Pending)' : 'Lifetime Plus Access',
+        description: isPending.value
+          ? 'Payment verification in progress. Full access will unlock shortly.'
+          : 'Highest performance tier with maximum speed and priority access.',
+        billing: isPending.value ? 'Processing...' : 'One-time (Lifetime)',
+        bgClass: isPending.value ? 'pending-gradient-bg' : 'plus-gradient-bg',
+        avatarColor: isPending.value ? 'warning' : 'primary',
+        icon: isPending.value ? 'mdi-clock-outline' : 'mdi-lightning-bolt-outline',
         iconColor: 'white',
-        badgeText: 'PLUS MEMBER',
-        badgeClass: 'plus-badge font-weight-bold px-3',
+        badgeText: isPending.value ? 'PENDING APPROVAL' : 'PLUS MEMBER',
+        badgeClass: isPending.value ? 'pending-badge font-weight-bold px-3' : 'plus-badge font-weight-bold px-3',
         badgeColor: undefined,
       }
-    case 'pro':
+    case 'pro-lifetime':
       return {
-        title: 'Lifetime Pro Access',
-        description: 'Expanded capabilities and workspace features.',
-        billing: 'One-time (Lifetime)',
-        bgClass: 'pro-gradient-bg',
-        avatarColor: 'accent',
-        icon: 'mdi-star-outline',
+        title: isPending.value ? 'Pro Access (Pending)' : 'Lifetime Pro Access',
+        description: isPending.value
+          ? 'Payment verification in progress. Full access will unlock shortly.'
+          : 'Expanded capabilities and workspace features.',
+        billing: isPending.value ? 'Processing...' : 'One-time (Lifetime)',
+        bgClass: isPending.value ? 'pending-gradient-bg' : 'pro-gradient-bg',
+        buttonColor: 'accent',
+        avatarColor: isPending.value ? 'warning' : 'accent',
+        icon: isPending.value ? 'mdi-clock-outline' : 'mdi-star-outline',
         iconColor: 'white',
-        badgeText: 'PRO MEMBER',
-        badgeClass: 'pro-badge font-weight-bold px-3',
+        badgeText: isPending.value ? 'PENDING APPROVAL' : 'PRO MEMBER',
+        badgeClass: isPending.value ? 'pending-badge font-weight-bold px-3' : 'pro-badge font-weight-bold px-3',
         badgeColor: undefined,
       }
     default:
@@ -235,6 +244,7 @@ const currentTier = computed(() => {
         description: 'Standard plan with core capabilities enabled.',
         billing: 'None',
         bgClass: 'basic-bg',
+        buttonColor: 'primary',
         avatarColor: 'grey-lighten-3',
         icon: 'mdi-account-outline',
         iconColor: 'medium-emphasis',
@@ -245,32 +255,48 @@ const currentTier = computed(() => {
   }
 })
 
+const cancelDisabled = computed(() => {
+  return form.confirmation != 'CANCEL'
+})
+
 async function handleUpgrade(tier) {
+  if (!subscriptionStore.plans[tier]) {
+    ui.showError('Plan not available. Please try again later.')
+    return
+  }
+
   loadingTier.value = tier
 
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    userTier.value = tier
+    const { data } = await subscriptionApi.create({ plan: subscriptionStore.plans[tier] })
+    subscriptionStore.setSubscription(data?.subscription || null)
     ui.showSuccess(`Congratulations! You have upgraded to ${tier.toUpperCase()}.`)
   } catch {
-    ui.showError('Payment processing failed. Please try again.')
+    ui.showError('Payment processing failed. Please try again later.')
   } finally {
     loadingTier.value = null
   }
 }
 
 async function handleCancelSubscription() {
-  cancelling.value = true
+  const { valid } = await formRef.value.validate()
+  if (!valid) return
 
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 1200))
-    userTier.value = 'free'
-    cancelDialog.value = false
-    ui.showSuccess('Your subscription has been cancelled. Your account is now on the Free Tier.')
-  } catch {
-    ui.showError('Could not process cancellation. Please try again.')
-  } finally {
-    cancelling.value = false
-  }
+  await subscriptionStore.cancelSubscription({ confirmation: form.confirmation })
+  this.closeDialog()
 }
+
+function closeDialog() {
+  cancelDialog.value = false
+  form.confirmation = ''
+}
+
+onMounted(async () => {
+  if (!subscriptionStore.plans.length) {
+    await subscriptionStore.getPlans()
+  }
+  /*if (Object.keys(subscriptionStore.plans).length) {
+    await subscriptionStore.listSubscriptions()
+  }*/
+})
 </script>

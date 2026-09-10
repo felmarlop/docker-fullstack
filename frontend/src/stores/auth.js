@@ -7,6 +7,7 @@ import * as usersApi from '@/core/api/modules/users'
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/config/auth'
 
 import { clearAuthCookies, getAuthCookies, setCookie } from '@/helpers/cookies'
+import { useSubscriptionStore } from '@/stores/subscription'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -41,6 +42,7 @@ export const useAuthStore = defineStore('auth', {
       this.accessToken = null
       this.refreshToken = null
 
+      useSubscriptionStore().clear()
       clearAuthCookies()
     },
 
