@@ -7,7 +7,7 @@
         <v-card-item class="pa-6 border-b">
           <template #prepend>
             <v-avatar color="error-lighten-5" size="44" class="mr-2">
-              <v-icon icon="mdi-alert-octagon-outline" color="error" size="24" />
+              <v-icon icon="mdi-alert-octagon-outline" color="error" size="40" />
             </v-avatar>
           </template>
 
@@ -72,7 +72,16 @@
             <v-divider class="mb-6" />
 
             <div class="d-flex justify-end ga-3">
-              <v-btn variant="text" color="default" :disabled="loading" @click="router.back()"> Cancel </v-btn>
+              <v-btn
+                variant="text"
+                color="default"
+                size="large"
+                class="px-6 font-weight-bold"
+                :disabled="loading"
+                @click="router.back()"
+              >
+                Cancel
+              </v-btn>
 
               <v-btn
                 type="submit"

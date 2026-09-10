@@ -39,9 +39,7 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
-
     path("api/", RedirectView.as_view(pattern_name="swagger-ui", permanent=False)),
-
     path("api/ping/", base.PingView.as_view(), name="ping"),
     path("api/", include("app.authentication.urls")),
     path("api/", include("app.subscription.urls")),

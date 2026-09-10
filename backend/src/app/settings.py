@@ -45,9 +45,8 @@ GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
 
 # Stripe
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_PRICES = {
-    "pro-lifetime": env("STRIPE_PRO_LIFETIME_PRICE_ID"),
-}
+STRIPE_PRO_LIFETIME_PRICE_ID = env("STRIPE_PRO_LIFETIME_PRICE_ID")
+STRIPE_PLUS_LIFETIME_PRICE_ID = env("STRIPE_PLUS_LIFETIME_PRICE_ID")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
@@ -145,6 +144,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "EXCEPTION_HANDLER": "app.core.exceptions.custom_exception_handler",

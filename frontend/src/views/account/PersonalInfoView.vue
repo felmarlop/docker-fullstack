@@ -3,9 +3,17 @@
     <div class="mx-auto account-content">
       <div class="text-center mb-8">
         <user-avatar :size="220" show-username show-edit />
-        <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mt-4 mb-0">
-          {{ auth.user?.username || '-' }}
-        </h1>
+        <div class="d-flex align-center justify-center mt-4">
+          <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis my-0">
+            {{ auth.user?.username || '-' }}
+          </h1>
+          <div v-if="auth.user?.subscription" class="d-flex align-center justify-center ms-4 me-n16">
+            <UserBadge />
+            <h3 class="text-medium-emphasis text-uppercase font-weight-bold ms-2">
+              {{ auth.user.subscription.plan_name }}
+            </h3>
+          </div>
+        </div>
         <span class="text-medium-emphasis">{{ auth.user?.email }}</span>
       </div>
 
@@ -172,6 +180,7 @@
 import { computed, reactive, ref, watch } from 'vue'
 
 import UserAvatar from '@/components/account/UserAvatar.vue'
+import UserBadge from '@/components/account/UserBadge.vue'
 import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'
 
