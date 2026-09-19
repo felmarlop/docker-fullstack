@@ -60,6 +60,12 @@ class ChangeAvatarSerializer(serializers.ModelSerializer):
         model = User
         fields = ("avatar",)
 
+    def update(self, instance: User, validated_data: dict[str, Any]) -> User:
+        if instance.avatar:
+            instance.avatar.delete(save=False)
+
+        return super().update(instance, validated_data)
+
 
 class UpdateProfileSerializer(serializers.ModelSerializer):
     """

@@ -1,9 +1,20 @@
+from __future__ import annotations
+
+from pathlib import Path
+
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
 from app.authentication import validators
+
+
+def avatar_upload_to(instance: User, filename: str) -> str:
+    extension = Path(filename).suffix.lower()
+    date = timezone.localdate().strftime("%Y%m%d")
+    return f"avatars/user-{instance.pk}-{date}{extension}"
 
 
 class User(AbstractUser):
@@ -27,7 +38,7 @@ class User(AbstractUser):
     is_phone_verified = models.BooleanField(default=False)
 
     avatar = models.ImageField(
-        upload_to="avatars/",
+        upload_to=avatar_upload_to,
         blank=True,
         validators=[
             FileExtensionValidator(
