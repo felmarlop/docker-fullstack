@@ -266,6 +266,48 @@ The project includes Celery, Redis and Celery Beat configured out of the box.
 
 Password reset emails are processed asynchronously through Celery, while recurring jobs can be managed from the Django admin using `django-celery-beat`.
 
+## 💳 Payments and Subscriptions
+
+The project includes a complete Stripe integration to handle payments and subscriptions.
+
+The current implementation provides two lifetime plans, **Pro** and **Plus**, primarily intended to test the payment infrastructure.
+
+The payment flow includes:
+
+- Stripe Customer, PaymentIntent and Payment Element integration.
+- Pro and Plus lifetime subscription plans.
+- Webhook-based synchronization of payments and subscriptions.
+- Automatic subscription activation, cancellation and activation emails.
+- Frontend synchronization and automated tests for payment flows.
+
+### Configuration
+
+The following environment variables are required:
+
+```env
+# Frontend
+VITE_STRIPE_PUBLISHABLE_KEY=change-me
+
+# Backend
+STRIPE_SECRET_KEY=change-me
+STRIPE_WEBHOOK_SECRET=change-me
+STRIPE_PRO_LIFETIME_PRICE_ID=change-me
+STRIPE_PLUS_LIFETIME_PRICE_ID=change-me
+```
+
+The publishable and secret keys are available from the Stripe Dashboard.
+
+`STRIPE_PRO_LIFETIME_PRICE_ID` and `STRIPE_PLUS_LIFETIME_PRICE_ID` correspond to the Stripe Price IDs configured for the example Pro and Plus lifetime plans.
+
+### Stripe CLI
+For local webhook development, the Stripe CLI can forward Stripe events to the backend:
+
+```bash
+stripe listen \
+  --events payment_intent.succeeded,payment_intent.processing,payment_intent.payment_failed,payment_intent.canceled \
+  --forward-to http://localhost:8088/api/subscriptions/stripe/webhook/
+```
+
 ## 🚦 Continuous Integration
 
 Every push and pull request automatically runs the backend quality checks using GitHub Actions.
