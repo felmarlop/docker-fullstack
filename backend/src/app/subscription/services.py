@@ -69,14 +69,16 @@ def sync_subscription_status(
         )
 
         was_pending = subscription.status == SubscriptionStatus.PENDING
+        was_succeeded = payment.status == PaymentStatus.SUCCEEDED
 
-        payment.status = STRIPE_PAYMENT_STATUS_MAP.get(
-            payment_intent_status,  # type: ignore
-            PaymentStatus.PROCESSING,
-        )
-        if payment.status == PaymentStatus.SUCCEEDED and payment.paid_at is None:
-            payment.paid_at = timezone.now()
-        payment.save(update_fields=["status", "paid_at", "updated_at"])
+        if not was_succeeded:
+            payment.status = STRIPE_PAYMENT_STATUS_MAP.get(
+                payment_intent_status,  # type: ignore
+                PaymentStatus.PROCESSING,
+            )
+            if payment.status == PaymentStatus.SUCCEEDED and payment.paid_at is None:
+                payment.paid_at = timezone.now()
+            payment.save(update_fields=["status", "paid_at", "updated_at"])
 
         if was_pending:
             subscription.status = PAYMENT_TO_SUBSCRIPTION_STATUS.get(
