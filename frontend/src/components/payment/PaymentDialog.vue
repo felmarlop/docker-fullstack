@@ -2,6 +2,7 @@
   <v-dialog
     :model-value="modelValue"
     max-width="600"
+    :persistent="loading || processing"
     @update:model-value="emit('update:modelValue', $event)"
     @after-leave="destroyPaymentElement"
   >
@@ -29,7 +30,7 @@
           <div class="mt-4">Please wait while we confirm your payment.</div>
         </div>
         <v-form v-else ref="formRef" class="mt-5" @submit.prevent="submitPayment()">
-          <div v-if="plan && plan.id !== 'free'" class="d-flex justify-end ga-3">
+          <div class="d-flex justify-end ga-3">
             <v-btn
               variant="text"
               color="default"
@@ -42,6 +43,7 @@
               Cancel
             </v-btn>
             <v-btn
+              v-if="plan && plan.id !== 'free'"
               type="submit"
               color="primary"
               elevation="0"
@@ -65,13 +67,16 @@
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
 import { stripePromise } from '@/config/stripe'
-import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 import { useSubscriptionStore } from '@/stores/subscription'
 
 const ui = useUiStore()
-const auth = useAuthStore()
 const subscription = useSubscriptionStore()
+
+const ERROR_OCURRED_MESSAGE = 'An error occurred processing your payment. Please try again later.'
+const ERROR_START_MESSAGE = 'We could not start your payment. Please try again later.'
+const PROCESSING_INTERVAL_TIMES = 3
+const PROCESSING_INTERVAL = 3000
 
 const props = defineProps({
   modelValue: {
@@ -92,6 +97,7 @@ const emit = defineEmits(['update:modelValue', 'success'])
 
 const loading = ref(false)
 const processing = ref(false)
+const intervalId = ref(null)
 const paymentElementRef = ref(null)
 const paymentElementReady = ref(false)
 
@@ -99,9 +105,29 @@ let stripe = null
 let elements = null
 let paymentElement = null
 
+function isActive() {
+  const s = subscription.subscriptions.find((s) => (s.plan = props.plan.id))
+  return s?.status == 'active'
+}
+
+function isPending() {
+  const s = subscription.subscriptions.find((s) => (s.plan = props.plan.id))
+  return s?.status == 'pending'
+}
+
+function isProcessing() {
+  const s = subscription.subscriptions.find((s) => (s.plan = props.plan.id))
+  return s?.payment_status == 'processing'
+}
+
+function isCanceled() {
+  const s = subscription.subscriptions.find((s) => (s.plan = props.plan.id))
+  return s?.status == 'canceled'
+}
+
 async function mountPaymentElement() {
   if (!props.clientSecret) {
-    ui.showError('We could not start your payment. Please try again later.')
+    ui.showError(ERROR_START_MESSAGE)
     return
   }
 
@@ -129,12 +155,12 @@ async function mountPaymentElement() {
 
 async function submitPayment() {
   if (!stripe || !elements) {
-    ui.showError('We could not process your payment. Please try again later.')
+    ui.showError(ERROR_START_MESSAGE)
     return
   }
 
-  loading.value = true
   try {
+    loading.value = true
     const { error } = await stripe.confirmPayment({
       elements,
       redirect: 'if_required',
@@ -143,30 +169,86 @@ async function submitPayment() {
       if (!['validation_error', 'card_error'].includes(error.type)) {
         throw error
       }
+      loading.value = false
       return
     }
-
-    processing.value = true
-    const data = await subscription.syncPayment()
-    processing.value = false
-    if (data) {
-      if (data.status == 'active') await auth.getMe()
-      emit('success')
-      emit('update:modelValue', false)
-    } else {
-      throw new Error('Synchronization failed')
-    }
   } catch {
-    ui.showError('An error occurred processing your payment. Please try again later.')
+    emit('update:modelValue', false)
+    ui.showError(ERROR_OCURRED_MESSAGE)
+    return
   } finally {
     loading.value = false
+  }
+
+  refreshPayment()
+}
+
+async function syncPendingPayment() {
+  try {
+    await subscription.syncPendingPayment()
+
+    if (isProcessing() || !isPending()) {
+      if (isActive()) {
+        emit('success')
+      } else if (isCanceled()) {
+        ui.showError(ERROR_OCURRED_MESSAGE)
+      }
+    }
+  } catch {
+    ui.showError(ERROR_OCURRED_MESSAGE)
+  } finally {
+    emit('update:modelValue', false)
   }
 }
 
 async function cancelPayment() {
-  await subscription.cancelPendingSubscription({ confirmation: 'CANCEL' })
   emit('update:modelValue', false)
+  await subscription.cancelPendingSubscription({ confirmation: 'CANCEL' })
   await subscription.listSubscriptions()
+}
+
+function refreshPayment() {
+  let count = 0
+  let loadingRefresh = false
+
+  processing.value = true
+
+  intervalId.value = setInterval(async () => {
+    if (loadingRefresh) return
+
+    if (count >= PROCESSING_INTERVAL_TIMES) {
+      clearInterval(intervalId.value)
+
+      if (isPending()) {
+        // Last request if pending. Try to synchronize directly with stripe.
+        return await syncPendingPayment()
+      } else {
+        emit('update:modelValue', false)
+        ui.showError(ERROR_OCURRED_MESSAGE)
+        return
+      }
+    }
+
+    try {
+      loadingRefresh = true
+      await subscription.listSubscriptions()
+      count++
+
+      if (isProcessing() || !isPending()) {
+        emit('update:modelValue', false)
+        if (isActive()) {
+          emit('success')
+        } else if (isCanceled()) {
+          ui.showError(ERROR_OCURRED_MESSAGE)
+        }
+      }
+    } catch {
+      emit('update:modelValue', false)
+      ui.showError(ERROR_OCURRED_MESSAGE)
+    } finally {
+      loadingRefresh = false
+    }
+  }, PROCESSING_INTERVAL)
 }
 
 function destroyPaymentElement() {
@@ -175,6 +257,7 @@ function destroyPaymentElement() {
   elements = null
   stripe = null
   loading.value = false
+  processing.value = false
   paymentElementReady.value = false
 }
 

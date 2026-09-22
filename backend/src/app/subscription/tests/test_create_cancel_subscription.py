@@ -1,4 +1,7 @@
+from collections.abc import Callable
+
 import pytest
+import stripe
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -11,11 +14,14 @@ from app.subscription.models.choices import PaymentStatus, SubscriptionStatus
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures("stripe_payment_intent_mock")
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_create_subscription_success(
     authenticated_api_client: APIClient,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
     user: User,
 ) -> None:
+    stripe_payment_intent_mock()
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -58,11 +64,17 @@ def test_create_subscription_invalid_plan(authenticated_api_client: APIClient) -
 
 @pytest.mark.django_db
 @pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "stripe_cancel_payment_intent_mock"
+    "get_stripe_customer_mock",
+    "get_stripe_price_mock",
+    "stripe_cancel_payment_intent_mock",
 )
 def test_cancel_subscription_success(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -104,10 +116,14 @@ def test_cancel_subscription_success(
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures("stripe_payment_intent_mock")
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_cancel_subscription_invalid_pk(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -142,10 +158,14 @@ def test_cancel_subscription_invalid_pk(
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures("stripe_payment_intent_mock")
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_cancel_subscription_invalid_confirmation(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -181,11 +201,17 @@ def test_cancel_subscription_invalid_confirmation(
 
 @pytest.mark.django_db
 @pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "stripe_cancel_payment_intent_mock"
+    "get_stripe_customer_mock",
+    "get_stripe_price_mock",
+    "stripe_cancel_payment_intent_mock",
 )
 def test_cancel_subscription_twice(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {

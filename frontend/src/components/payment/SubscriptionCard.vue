@@ -54,7 +54,7 @@
             size="small"
             class="px-4 me-4"
             :disabled="subscriptionStore.loadingSubscription == subscription?.id"
-            @click="emit('resume')"
+            @click="emit('resume', plan.id)"
           >
             Continue payment
           </v-btn>

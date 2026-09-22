@@ -39,19 +39,18 @@ export const useSubscriptionStore = defineStore('subscription', {
         this.loadingSubscription = null
       }
     },
-    async syncPayment() {
+    async syncPendingPayment() {
       if (!this.pendingSubscription) {
         useUiStore().showError('We could not find a pending subscription. Please try again later')
         return
       }
       try {
         this.loadingSubscription = this.pendingSubscription.id
-        const { data } = await subscriptionApi.sync(this.pendingSubscription.id)
-        await this.listSubscriptions()
-        return data
+        await subscriptionApi.sync(this.pendingSubscription.id)
       } catch {
         useUiStore().showError('An error occurred with your payment. Please try again later')
       } finally {
+        await this.listSubscriptions()
         this.loadingSubscription = null
       }
     },
@@ -78,7 +77,6 @@ export const useSubscriptionStore = defineStore('subscription', {
       try {
         this.loadingSubscription = this.pendingSubscription.id
         await subscriptionApi.cancel(this.pendingSubscription.id, params)
-        useUiStore().showSuccess('The pending subscription has been cancelled.')
       } catch {
         useUiStore().showError('An error occurred canceling the pending subscription. Please try again later')
       } finally {

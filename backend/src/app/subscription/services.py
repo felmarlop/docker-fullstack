@@ -1,6 +1,5 @@
 import logging
 
-import stripe
 from django.db import transaction
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
@@ -24,7 +23,9 @@ def send_subscription_activation(subscription_id: int) -> None:
     tasks.send_active_subscription_email.delay(subscription_id)  # pyright: ignore[reportFunctionMemberAccess]
 
 
-def sync_subscription_status(subscription_id: int) -> Subscription:
+def sync_subscription_status(
+    subscription_id: int, payment_intent_status: str | None = None
+) -> Subscription:
     """
     Synchronize a subscription and its latest payment with Stripe.
 
@@ -33,9 +34,7 @@ def sync_subscription_status(subscription_id: int) -> Subscription:
     active subscriptions, and send an email after the database transaction commits.
     """
 
-    def _get_payment_intent(
-        subscription_id: int,
-    ) -> tuple[Payment, stripe.PaymentIntent]:
+    def _get_payment(subscription_id: int) -> Payment:
         payment = (
             Payment.objects.filter(subscription_id=subscription_id)
             .order_by("-created_at")
@@ -45,7 +44,7 @@ def sync_subscription_status(subscription_id: int) -> Subscription:
             raise ValidationError(
                 {"detail": ["No payment found associated to the subscription."]}
             )
-        return payment, stripe_api.get_payment_intent(payment.stripe_payment_intent_id)
+        return payment
 
     def _cancel_active_subscriptions(current_subscription: Subscription) -> None:
         user = current_subscription.stripe_customer.user
@@ -57,7 +56,10 @@ def sync_subscription_status(subscription_id: int) -> Subscription:
         for old_subscription in old_subscriptions:
             cancel_subscription(old_subscription)
 
-    payment, payment_intent = _get_payment_intent(subscription_id)
+    payment = _get_payment(subscription_id)
+    if payment and not payment_intent_status:
+        payment_intent = stripe_api.get_payment_intent(payment.stripe_payment_intent_id)
+        payment_intent_status = payment_intent.status
 
     with transaction.atomic():
         # block instances before updating them
@@ -69,7 +71,7 @@ def sync_subscription_status(subscription_id: int) -> Subscription:
         was_pending = subscription.status == SubscriptionStatus.PENDING
 
         payment.status = STRIPE_PAYMENT_STATUS_MAP.get(
-            payment_intent.status,  # type: ignore
+            payment_intent_status,  # type: ignore
             PaymentStatus.PROCESSING,
         )
         if payment.status == PaymentStatus.SUCCEEDED and payment.paid_at is None:

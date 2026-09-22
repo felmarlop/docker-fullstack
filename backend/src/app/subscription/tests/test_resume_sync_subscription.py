@@ -1,4 +1,7 @@
+from collections.abc import Callable
+
 import pytest
+import stripe
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
@@ -9,16 +12,24 @@ from app.subscription.models import (
     Payment,
     Subscription,
 )
-from app.subscription.models.choices import PaymentStatus, SubscriptionStatus
+from app.subscription.models.choices import (
+    PaymentStatus,
+    StripePaymentStatus,
+    SubscriptionStatus,
+)
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "get_pending_payment_intent_mock"
-)
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_resume_subscription_success(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
+    get_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+    get_payment_intent_mock(status=StripePaymentStatus.REQUIRES_PAYMENT)
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -49,12 +60,16 @@ def test_resume_subscription_success(
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "get_pending_payment_intent_mock"
-)
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_resume_active_subscription_fail(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
+    get_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+    get_payment_intent_mock(status=StripePaymentStatus.REQUIRES_PAYMENT)
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -90,12 +105,16 @@ def test_resume_active_subscription_fail(
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "get_succeeded_payment_intent_mock"
-)
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_resume_subscription_succeeded_payment_fail(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
+    get_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+    get_payment_intent_mock(status=StripePaymentStatus.SUCCEEDED)
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -123,12 +142,16 @@ def test_resume_subscription_succeeded_payment_fail(
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "get_succeeded_payment_intent_mock"
-)
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_sync_subscription_succeeded_payment(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
+    get_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+    get_payment_intent_mock(status=StripePaymentStatus.SUCCEEDED)
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -165,12 +188,16 @@ def test_sync_subscription_succeeded_payment(
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "get_pending_payment_intent_mock"
-)
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_sync_subscription_pending_payment(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
+    get_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+    get_payment_intent_mock(status=StripePaymentStatus.REQUIRES_PAYMENT)
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -207,12 +234,16 @@ def test_sync_subscription_pending_payment(
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "get_processing_payment_intent_mock"
-)
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_sync_subscription_processing_payment(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
+    get_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+    get_payment_intent_mock(status=StripePaymentStatus.PROCESSING)
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {
@@ -249,12 +280,16 @@ def test_sync_subscription_processing_payment(
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures(
-    "stripe_payment_intent_mock", "get_succeeded_payment_intent_mock"
-)
+@pytest.mark.usefixtures("get_stripe_customer_mock", "get_stripe_price_mock")
 def test_sync_active_subscription_fail(
-    authenticated_api_client: APIClient, user: User
+    authenticated_api_client: APIClient,
+    user: User,
+    stripe_payment_intent_mock: Callable[..., stripe.Event],
+    get_payment_intent_mock: Callable[..., stripe.Event],
 ) -> None:
+    stripe_payment_intent_mock()
+    get_payment_intent_mock(status=StripePaymentStatus.SUCCEEDED)
+
     response = authenticated_api_client.post(
         reverse("create-subscription"),
         {

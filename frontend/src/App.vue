@@ -2,7 +2,7 @@
   <v-app :class="{ 'app-layout': auth.isAuthenticated }">
     <AppHeader />
 
-    <AppDrawer v-if="auth.isAuthenticated && navigation" :items="navigation" />
+    <AppDrawer v-if="auth.isAuthenticated && accountNavigation" :items="accountNavigation" />
 
     <v-main class="app-main">
       <AppSnackbar />
@@ -23,7 +23,7 @@ import AppSnackbar from '@/components/common/AppSnackbar.vue'
 import AppDrawer from '@/components/layout/AppDrawer.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
-import navigation from '@/navigation/account'
+import accountNavigation from '@/navigation/account'
 
 import { useAuthStore } from '@/stores/auth'
 

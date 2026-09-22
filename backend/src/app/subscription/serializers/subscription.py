@@ -38,6 +38,7 @@ class MinimumSubscriptionSerializer(serializers.ModelSerializer):
 class SubscriptionSerializer(MinimumSubscriptionSerializer):
     is_lifetime = serializers.BooleanField(read_only=True)
     payment_status = serializers.SerializerMethodField()
+    payment_intent_id = serializers.SerializerMethodField()
     username = serializers.CharField(
         source="stripe_customer.user.username",
         read_only=True,
@@ -51,6 +52,7 @@ class SubscriptionSerializer(MinimumSubscriptionSerializer):
             "username",
             "is_lifetime",
             "payment_status",
+            "payment_intent_id",
             "current_period_start",
             "current_period_end",
             "created_at",
@@ -60,6 +62,10 @@ class SubscriptionSerializer(MinimumSubscriptionSerializer):
     def get_payment_status(self, obj: Subscription) -> str | None:
         payment = obj.payments.order_by("-created_at").first()  # type: ignore
         return payment.status if payment else None
+
+    def get_payment_intent_id(self, obj: Subscription) -> str | None:
+        payment = obj.payments.order_by("-created_at").first()  # type: ignore
+        return payment.stripe_payment_intent_id if payment else None
 
 
 class SubscriptionPurchaseSerializer(serializers.Serializer):

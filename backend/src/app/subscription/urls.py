@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 from app.subscription.views import subscription
 
@@ -38,4 +38,10 @@ urlpatterns = [
         subscription.CancelSubscriptionView.as_view(),
         name="cancel-subscription",
     ),
+    path(
+        "subscriptions/<int:pk>/cancel/",
+        subscription.CancelSubscriptionView.as_view(),
+        name="cancel-subscription",
+    ),
+    path("subscriptions/", include("app.subscription.stripe.urls")),
 ]

@@ -4,6 +4,7 @@ from typing import Any
 from django.conf import settings
 from django.db.models import QuerySet
 from drf_spectacular.utils import OpenApiExample, extend_schema
+from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -59,6 +60,7 @@ STRIPE_PLANS = {
     responses={200: {"type": "list"}},
 )
 class SubscriptionPlansView(APIView):
+    authentication_classes = []  # noqa
     permission_classes = [AllowAny]  # noqa
 
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:  # noqa: ARG002
@@ -130,7 +132,7 @@ class CreateSubscriptionView(APIView):
         logger.info(f"{user.username} started a purchase for the plan {plan}")
         return Response(
             SubscriptionPurchaseSerializer(data).data,
-            status=201,
+            status=status.HTTP_201_CREATED,
         )
 
 
@@ -158,7 +160,9 @@ class ResumeSubscriptionView(APIView):
         logger.info(
             f"{user.username} resumed payment for the plan {data['subscription'].plan}"  # type: ignore
         )
-        return Response(SubscriptionPurchaseSerializer(data).data, status=200)
+        return Response(
+            SubscriptionPurchaseSerializer(data).data, status=status.HTTP_200_OK
+        )
 
 
 @extend_schema(exclude=True)
@@ -173,7 +177,9 @@ class SyncSubscriptionView(APIView):
         serializer.is_valid(raise_exception=True)
 
         subscription = serializer.save(subscription_id=kwargs["pk"])
-        return Response(SubscriptionSerializer(subscription).data, status=200)
+        return Response(
+            SubscriptionSerializer(subscription).data, status=status.HTTP_200_OK
+        )
 
 
 @extend_schema(

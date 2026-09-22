@@ -20,7 +20,7 @@
         v-if="subscription.plans.length && !firstLoading"
         :plan="currentPlan"
         :subscription="subscription.currentSubscription"
-        @resume="handleResume()"
+        @resume="handleResume($event)"
         @cancel="isPending ? cancelPendingSubscription() : openCancelDialog()"
       />
 
@@ -28,8 +28,7 @@
         v-if="pendingPlan && pendingPlan.id != currentPlan.id && !firstLoading"
         :plan="pendingPlan"
         :subscription="subscription.pendingSubscription"
-        :tier-props="PENDING_PROPS"
-        @resume="handleResume()"
+        @resume="handleResume($event)"
         @cancel="cancelPendingSubscription()"
       />
 
@@ -45,9 +44,9 @@
 
       <PaymentDialog
         v-model="paymentDialog"
-        :plan="currentPlan"
+        :plan="selectedPlan"
         :client-secret="clientSecret"
-        @success="successMessage()"
+        @success="handleSuccess()"
       />
 
       <v-dialog v-model="cancelDialog" max-width="600">
@@ -128,12 +127,13 @@ const ui = useUiStore()
 
 const firstLoading = ref(true)
 const loadingTier = ref(null)
+const selectedPlan = ref(null)
 const clientSecret = ref(null)
 const paymentDialog = ref(false)
 const cancelDialog = ref(false)
 
 let synchronizing = false
-let syncInterval = null
+let intervalId = null
 
 const formRef = ref(null)
 const form = reactive({
@@ -170,6 +170,11 @@ const isProcessing = computed(() => {
   return subscription.currentSubscription.payment_status == 'processing'
 })
 
+const isCanceled = computed(() => {
+  if (!subscription.currentSubscription) return false
+  return subscription.currentSubscription.payment_status == 'canceled'
+})
+
 const plansToShow = computed(() => {
   let toShow = []
   let _plans = subscription.plans.slice().reverse()
@@ -189,6 +194,7 @@ async function handleUpgrade(tier) {
 
   try {
     loadingTier.value = tier
+    selectedPlan.value = plan
     const { data } = await subscriptionApi.create({ plan: plan.id })
     clientSecret.value = data?.client_secret || null
     paymentDialog.value = true
@@ -200,7 +206,15 @@ async function handleUpgrade(tier) {
   }
 }
 
-async function handleResume() {
+async function handleResume(tier) {
+  const plan = subscription.plans.find((p) => p.id == tier)
+  if (!plan) {
+    ui.showError('Plan not available. Please try again later.')
+    return
+  }
+
+  selectedPlan.value = plan
+
   const data = await subscription.resumePayment()
   if (data?.client_secret) {
     clientSecret.value = data?.client_secret || null
@@ -219,15 +233,18 @@ async function handleCancelSubscription() {
 }
 
 function handleProcessingPayment() {
-  if (syncInterval) return
-  syncInterval = setInterval(async () => {
+  if (intervalId || !isProcessing.value) return
+  intervalId = setInterval(async () => {
     if (synchronizing) return
     try {
       synchronizing = true
-      await subscription.syncPayment()
+      await subscription.listSubscriptions()
       if (isActive.value) {
-        await auth.getMe()
-        successMessage()
+        await handleSuccess()
+        clearInterval(intervalId)
+      } else if (isCanceled.value) {
+        clearInterval(intervalId)
+        ui.showError('Payment processing failed. Please try again later.')
       }
     } finally {
       synchronizing = false
@@ -240,8 +257,8 @@ async function cancelPendingSubscription() {
   await subscription.listSubscriptions()
 }
 
-function successMessage() {
-  if (!isActive.value) return
+async function handleSuccess() {
+  await auth.getMe()
   ui.showSuccess(`Congratulations! You now have ${currentPlan.value.name} access.`)
 }
 
@@ -261,23 +278,28 @@ onMounted(async () => {
   }
   if (subscription.plans.length) {
     await subscription.listSubscriptions()
+    if (subscription.pendingSubscription) {
+      // Try to synchronize the subscription directly with stripe
+      await subscription.syncPendingPayment()
+    }
+
     await auth.getMe()
   }
-  if (isProcessing.value) handleProcessingPayment()
+  handleProcessingPayment()
   firstLoading.value = false
 })
 
 onBeforeUnmount(() => {
-  clearInterval(syncInterval)
-  syncInterval = null
+  clearInterval(intervalId)
+  intervalId = null
 })
 
 watch(isProcessing, (v) => {
   if (v) {
     handleProcessingPayment()
   } else {
-    clearInterval(syncInterval)
-    syncInterval = null
+    clearInterval(intervalId)
+    intervalId = null
   }
 })
 </script>
