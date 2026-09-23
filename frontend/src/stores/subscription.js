@@ -98,7 +98,7 @@ export const useSubscriptionStore = defineStore('subscription', {
       try {
         this.loading = true
         const { data } = await subscriptionApi.list({ status__in: 'active,pending' })
-        this.setSubscriptions(data || [])
+        this.setSubscriptions(data?.results || [])
       } catch {
         useUiStore().showError('An error occurred retrieving your subscriptions.')
       } finally {

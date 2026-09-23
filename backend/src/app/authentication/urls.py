@@ -9,6 +9,7 @@ from app.authentication.views import (
 )
 
 urlpatterns = [
+    path("users/", user.UserListView.as_view(), name="list-users"),
     path("users/me/", user.MeView.as_view(), name="users-me"),
     path("auth/login/", account.LoginView.as_view(), name="login"),
     path("auth/register/", register.RegisterView.as_view(), name="register"),

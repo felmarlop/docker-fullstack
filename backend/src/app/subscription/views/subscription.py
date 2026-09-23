@@ -3,6 +3,7 @@ from typing import Any
 
 from django.conf import settings
 from django.db.models import QuerySet
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
@@ -11,6 +12,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app.core.pagination import DefaultPagination
 from app.subscription.models import Subscription
 from app.subscription.models.choices import SubscriptionBilling
 from app.subscription.serializers.subscription import (
@@ -91,6 +93,8 @@ class SubscriptionListView(ListAPIView):
     serializer_class = SubscriptionSerializer
     permission_classes = [IsAuthenticated]  # noqa
     filterset_class = SubscriptionFilter
+    filter_backends = [DjangoFilterBackend]  # noqa
+    pagination_class = DefaultPagination
 
     def get_queryset(self) -> QuerySet[Subscription]:  # pyright: ignore[reportIncompatibleMethodOverride]
         return Subscription.objects.filter(
