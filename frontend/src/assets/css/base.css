@@ -70,6 +70,14 @@ body {
     text-transform: uppercase;
   }
 
+  .v-btn--disabled {
+    background: transparent !important;
+    border-color: rgba(var(--v-border-color), 0.2) !important;
+    color: rgba(var(--v-theme-on-surface), 0.38) !important;
+    cursor: not-allowed !important;
+    pointer-events: auto !important;
+  }
+
   .terminal-body {
     background-color: #1e1e1e;
     text-align: left;

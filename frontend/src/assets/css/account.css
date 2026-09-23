@@ -51,18 +51,18 @@
   }
 
   .pro-lifetime-bg {
-    background: rgba(var(--v-theme-accent), 0.09) !important;
+    background: rgba(var(--v-theme-accent), 0.1) !important;
   }
 
   .plus-lifetime-bg {
-    background: rgba(var(--v-theme-primary), 0.09) !important;
+    background: rgba(var(--v-theme-primary), 0.1) !important;
   }
 
   /* Plus Tier */
   .pro-lifetime-gradient-bg {
     background: linear-gradient(
       135deg,
-      rgba(var(--v-theme-accent), 0.12) 0%,
+      rgba(var(--v-theme-accent), 0.3) 0%,
       rgba(var(--v-theme-accent), 0.02) 100%
     ) !important;
   }
@@ -80,7 +80,7 @@
   .plus-lifetime-gradient-bg {
     background: linear-gradient(
       135deg,
-      rgba(var(--v-theme-primary), 0.12) 0%,
+      rgba(var(--v-theme-primary), 0.3) 0%,
       rgba(var(--v-theme-primary), 0.02) 100%
     ) !important;
   }
