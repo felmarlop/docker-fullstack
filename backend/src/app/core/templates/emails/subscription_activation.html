@@ -1,0 +1,25 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Activate your account{% endblock %}
+
+{% block content %}
+  <h1 style="font-size: 24px; margin: 0 0 24px;">
+    Congratulations!
+  </h1>
+
+  <p style="margin: 0 0 16px;">
+    Hi {{ user.username }},
+  </p>
+
+  <p style="margin: 0 0 16px;">
+    Your subscription is now active, and your new benefits are ready to enjoy.
+  </p>
+
+  <p style="margin: 0 0 24px;">
+    Your plan: <strong>{{ plan_title }}</strong>
+  </p>
+
+  <p style="margin: 0;">
+    Thank you for upgrading!
+  </p>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Verify your new email address{% endblock %}
+
+{% block content %}
+  <h1 style="font-size: 24px; margin: 0 0 24px;">
+    Verify your new email address
+  </h1>
+
+  <p style="margin: 0 0 16px;">Hello,</p>
+
+  <p style="margin: 0 0 24px;">
+    We received a request to change the email address associated with your account.
+  </p>
+
+  <a href="{{ url }}" style="
+    display: inline-block;
+    padding: 12px 20px;
+    background: #4F46E5;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+  ">
+    Verify email address
+  </a>
+
+  <p style="margin: 24px 0 0; color: #64748b; font-size: 14px;">
+    If you didn't request this change, you can safely ignore this email.
+  </p>
+{% endblock %}

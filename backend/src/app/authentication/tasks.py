@@ -3,6 +3,7 @@ import logging
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +13,9 @@ def send_activation_email(email: str, url: str) -> None:
     """
     Send an email to activate the account.
     """
+
+    html_content = render_to_string("emails/account_activation.html", {"url": url})
+
     msg = (
         "Hello,\n\n"
         "Thank you for registering.\n\n"
@@ -27,6 +31,8 @@ def send_activation_email(email: str, url: str) -> None:
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[email],
         )
+
+        email_msg.attach_alternative(html_content, "text/html")
         email_msg.send()
     except Exception:
         logger.exception(f"Failed to send activation email to {email}.")
@@ -38,6 +44,9 @@ def send_email_verification_email(email: str, url: str) -> None:
     """
     Send an email to verify a new email address.
     """
+
+    html_content = render_to_string("emails/email_verification.html", {"url": url})
+
     msg = (
         "Hello,\n\n"
         "We received a request to change the email address associated with your "
@@ -54,6 +63,8 @@ def send_email_verification_email(email: str, url: str) -> None:
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[email],
         )
+
+        email_msg.attach_alternative(html_content, "text/html")
         email_msg.send()
     except Exception:
         logger.exception(f"Failed to send verification email to {email}.")
@@ -65,6 +76,9 @@ def send_password_reset_email(email: str, url: str) -> None:
     """
     Send an email to reset the password.
     """
+
+    html_content = render_to_string("emails/password_reset.html", {"url": url})
+
     msg = (
         "Hello,\n\n"
         "We received a request to reset your password.\n\n"
@@ -80,6 +94,8 @@ def send_password_reset_email(email: str, url: str) -> None:
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[email],
         )
+
+        email_msg.attach_alternative(html_content, "text/html")
         email_msg.send()
     except Exception:
         logger.exception(f"Failed to send password reset email to {email}.")

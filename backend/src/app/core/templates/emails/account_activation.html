@@ -1,0 +1,35 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Activate your account{% endblock %}
+
+{% block content %}
+  <h1 style="font-size: 24px; margin: 0 0 24px;">
+    Activate your account
+  </h1>
+
+  <p style="margin: 0 0 16px;">Hello,</p>
+
+  <p style="margin: 0 0 16px;">
+    Thank you for registering.
+  </p>
+
+  <p style="margin: 0 0 24px;">
+    Please click the following button to activate your account:
+  </p>
+
+  <a href="{{ url }}" style="
+    display: inline-block;
+    padding: 12px 20px;
+    background: #4F46E5;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+  ">
+    Activate account
+  </a>
+
+  <p style="margin: 24px 0 0; color: #64748b; font-size: 14px;">
+    If you didn't create this account, you can safely ignore this email.
+  </p>
+{% endblock %}
