@@ -1,7 +1,7 @@
 <template>
   <v-card variant="outlined" class="account-card mb-8">
     <v-progress-linear
-      v-if="isProcessing || subscriptionStore.loadingSubscription == subscription?.id"
+      v-if="isProcessing || subscriptionStore.loadingSubscription === subscription?.id"
       indeterminate
       :color="avatarColor"
       height="3"
@@ -117,7 +117,7 @@ const bgClass = computed(() => {
 })
 
 const avatarColor = computed(() => {
-  if (isFree.value) return 'grey-lighten-3'
+  if (isFree.value) return 'bg-surface-light'
   return isPending.value ? 'warning' : PLAN_PROPS[props.plan.id].color
 })
 

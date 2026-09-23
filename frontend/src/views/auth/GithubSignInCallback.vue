@@ -9,7 +9,7 @@
 
           <v-card-text class="pa-8">
             <div class="text-center py-4">
-              <v-avatar color="grey-lighten-4" size="60" class="mb-6">
+              <v-avatar color="bg-surface-light" size="60" class="mb-6">
                 <v-img :src="githubIcon" width="60" height="60" alt="GitHub Logo" />
               </v-avatar>
               <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">Connecting to GitHub</h1>

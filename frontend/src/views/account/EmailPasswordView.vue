@@ -76,7 +76,7 @@
 
             <template v-if="auth.user?.pending_email">
               <v-divider />
-              <v-card-text class="pa-6 bg-grey-lighten-5">
+              <v-card-text class="pa-6 bg-surface-light">
                 <div class="d-flex flex-column align-center text-center">
                   <p class="text-body-2 text-medium-emphasis mb-4">
                     We've sent a verification link to

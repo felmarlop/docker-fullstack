@@ -23,7 +23,7 @@
       </div>
     </v-card-item>
 
-    <v-card-text v-if="plan.features && plan.features.length" class="pa-6 border-b bg-grey-lighten-5">
+    <v-card-text v-if="plan.features && plan.features.length" class="pa-6 border-b bg-surface-light">
       <label class="font-weight-bold text-uppercase text-medium-emphasis mb-3 d-block">
         Included in {{ plan.name }}
       </label>

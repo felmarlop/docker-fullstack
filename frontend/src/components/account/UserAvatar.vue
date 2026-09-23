@@ -3,7 +3,7 @@
     <v-avatar :size="size" class="user-avatar">
       <v-img v-if="auth.user?.username" :src="auth.user?.avatar_url" :alt="auth.user.username">
         <template #placeholder>
-          <div class="d-flex fill-height align-center justify-center bg-grey-lighten-4">
+          <div class="d-flex fill-height align-center justify-center bg-surface-light">
             <span class="text-high-emphasis font-weight-bold" :style="{ fontSize: `${size / 3.5}px` }">
               {{ userLetters }}
             </span>

@@ -1,10 +1,10 @@
 <template>
-  <div class="google-signin">
+  <div class="github-signin">
     <v-btn
       variant="outlined"
       block
       height="44"
-      class="mb-6 font-weight-bold text-high-emphasis border-color-soft"
+      class="mb-6 font-weight-bold text-high-emphasis border-color-soft bg-white"
       :loading="loading"
       :disabled="loading"
       @click="showPrompt"

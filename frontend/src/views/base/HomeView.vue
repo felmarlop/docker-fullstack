@@ -38,7 +38,7 @@
             </div>
 
             <div v-else key="content">
-              <v-card-item class="py-2 border-b bg-grey-lighten-4">
+              <v-card-item class="py-2 border-b bg-surface-light">
                 <div class="d-flex align-center justify-space-between w-100">
                   <div class="d-flex align-center">
                     <span class="text-primary font-weight-black mr-2">GET</span>

@@ -64,13 +64,13 @@
 
             <v-divider />
 
-            <v-card-text class="pa-6 bg-grey-lighten-5">
+            <v-card-text class="pa-6 bg-surface-light">
               <p class="text-medium-emphasis mb-4">Permissions & Roles</p>
 
               <div class="d-flex justify-space-around align-center py-2">
                 <div class="text-center">
                   <v-avatar
-                    :color="auth.user?.is_staff ? 'primary-lighten-5' : 'grey-lighten-3'"
+                    :color="auth.user?.is_staff ? 'primary-lighten-5' : 'bg-surface-light'"
                     size="44"
                     class="mb-2"
                   >
@@ -88,7 +88,7 @@
 
                 <div class="text-center">
                   <v-avatar
-                    :color="auth.user?.is_superuser ? 'amber-lighten-5' : 'grey-lighten-3'"
+                    :color="auth.user?.is_superuser ? 'amber-lighten-5' : 'bg-surface-light'"
                     size="44"
                     class="mb-2"
                   >

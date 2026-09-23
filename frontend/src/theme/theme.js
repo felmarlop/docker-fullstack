@@ -1,9 +1,10 @@
 import indigo from './colors/indigo'
 import emerald from './colors/emerald'
 import slate from './colors/slate'
+import obsidian from './colors/obsidian'
 
 export default {
-  defaultTheme: 'indigo',
+  defaultTheme: 'obsidian',
 
   themes: {
     indigo: {
@@ -19,6 +20,11 @@ export default {
     slate: {
       dark: false,
       colors: slate,
+    },
+
+    obsidian: {
+      dark: true,
+      colors: obsidian,
     },
   },
 }

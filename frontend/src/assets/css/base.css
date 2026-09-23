@@ -56,7 +56,7 @@ body {
   }
 
   .v-card {
-    background-color: white;
+    background-color: rgb(var(--v-theme-surface));
   }
 
   .v-list-item-title {
