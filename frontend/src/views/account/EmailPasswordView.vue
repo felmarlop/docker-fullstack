@@ -1,15 +1,15 @@
 <template>
-  <v-container class="py-10" fluid>
+  <v-container class="py-10 py-md-14" fluid>
     <div class="mx-auto account-content">
-      <div class="mb-8">
-        <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis">Security & Credentials</h1>
+      <div class="text-md-headline-large text-headline-small font-weight-bold tracking-tight text-high-emphasis mb-8">
+        Security & Credentials
       </div>
 
       <v-card variant="outlined" class="account-card mb-8">
         <v-card-item class="pa-6 border-b">
           <div class="d-flex align-center justify-space-between w-100">
             <div>
-              <v-card-title class="text-h6 font-weight-bold"> Direct Email </v-card-title>
+              <v-card-title class="font-weight-bold"> Direct Email </v-card-title>
               <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Primary email used for account authentication.
               </v-card-subtitle>
@@ -176,7 +176,7 @@
         <v-card-item class="pa-6 border-b">
           <div class="d-flex align-center justify-space-between w-100">
             <div>
-              <v-card-title class="text-h6 font-weight-bold"> Password </v-card-title>
+              <v-card-title class="font-weight-bold"> Password </v-card-title>
               <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Set a secure password to protect your account.
               </v-card-subtitle>

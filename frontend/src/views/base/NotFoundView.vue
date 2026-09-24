@@ -2,11 +2,13 @@
   <v-container class="fill-height py-10" fluid>
     <v-row align="center" justify="center">
       <v-col cols="12" class="text-center">
-        <v-avatar color="primary-lighten-5" size="112" class="mb-2">
+        <v-avatar color="primary-lighten-5" size="112" class="mb-6">
           <v-icon color="primary" icon="mdi-magnify" size="56" class="magnify-icon" />
         </v-avatar>
 
-        <h1 class="text-h2 font-weight-bold tracking-tight text-high-emphasis mt-6">404: Page not found</h1>
+        <div class="text-md-headline-large text-headline-small font-weight-bold tracking-tight text-high-emphasis">
+          404: Page not found
+        </div>
 
         <p class="text-body-1 text-medium-emphasis mt-3">Sorry, we couldn't find the page you're looking for.</p>
 

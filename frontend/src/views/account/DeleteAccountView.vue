@@ -1,7 +1,9 @@
 <template>
-  <v-container class="py-10" fluid>
+  <v-container class="py-10 py-md-14" fluid>
     <div class="mx-auto account-content">
-      <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis">Delete account</h1>
+      <div class="text-md-headline-large text-headline-small font-weight-bold tracking-tight text-high-emphasis mb-8">
+        Delete account
+      </div>
 
       <v-card variant="outlined" class="danger-card border-error">
         <v-card-item class="pa-6 border-b">
@@ -11,7 +13,7 @@
             </v-avatar>
           </template>
 
-          <v-card-title class="text-h6 font-weight-bold text-error"> Account deletion </v-card-title>
+          <v-card-title class="font-weight-bold text-error"> Account deletion </v-card-title>
           <v-card-subtitle class="text-body-2 text-medium-emphasis">
             Permanently remove your account and all your data.
           </v-card-subtitle>

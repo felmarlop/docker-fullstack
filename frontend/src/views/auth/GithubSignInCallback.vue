@@ -12,7 +12,11 @@
               <v-avatar color="bg-surface-light" size="60" class="mb-6">
                 <v-img :src="githubIcon" width="60" height="60" alt="GitHub Logo" />
               </v-avatar>
-              <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">Connecting to GitHub</h1>
+              <div
+                class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis mb-2"
+              >
+                Connecting to GitHub
+              </div>
               <p class="text-body-2 text-medium-emphasis mb-0">Please wait while we verify your credentials...</p>
             </div>
           </v-card-text>

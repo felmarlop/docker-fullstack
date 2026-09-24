@@ -13,7 +13,7 @@
             <v-icon icon="mdi-credit-card-outline" color="primary" size="40" />
           </v-avatar>
         </template>
-        <v-card-title class="text-h6 font-weight-bold"> Complete payment </v-card-title>
+        <v-card-title class="font-weight-bold"> Complete payment </v-card-title>
         <v-card-subtitle v-if="plan && plan.id !== 'free'" class="text-medium-emphasis">{{
           plan.title
         }}</v-card-subtitle>

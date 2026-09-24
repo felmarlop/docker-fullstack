@@ -7,7 +7,7 @@
             <template v-if="loading">
               <div class="text-center py-8">
                 <v-progress-circular indeterminate color="primary" size="48" class="mb-6" />
-                <h1 class="text-h5 font-weight-bold mb-3">Verifying email</h1>
+                <div class="text-md-headline-medium text-headline-small font-weight-bold mb-3">Verifying email</div>
                 <p class="text-medium-emphasis">Please wait while we verify your email.</p>
               </div>
             </template>
@@ -21,9 +21,9 @@
                   class="mb-6"
                 />
 
-                <h1 class="text-h5 font-weight-bold mb-3">
+                <div class="text-md-headline-medium text-headline-small font-weight-bold mb-3">
                   {{ success ? 'Email verified' : 'Email verification failed' }}
-                </h1>
+                </div>
 
                 <p class="text-medium-emphasis mb-8">
                   {{ message }}

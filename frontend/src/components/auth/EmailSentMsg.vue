@@ -10,8 +10,11 @@
           <v-icon icon="mdi-email-check-outline" color="primary" size="32" />
         </v-avatar>
 
-        <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">Check your email</h1>
-
+        <div
+          class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis mb-2"
+        >
+          Check your email
+        </div>
         <p class="text-body-1 text-medium-emphasis mb-0">
           If an account exists for <strong class="text-high-emphasis">{{ email }}</strong
           >, you will receive an email shortly to {{ action }}.

@@ -4,14 +4,18 @@
       <div class="text-center mb-8">
         <user-avatar :size="220" show-username show-edit />
         <div class="d-flex align-center justify-center mt-4">
-          <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis my-0">
+          <span
+            class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis my-0"
+          >
             {{ auth.user?.username || '-' }}
-          </h1>
-          <div v-if="auth.user?.subscription" class="d-flex align-center justify-center ms-4 me-n16">
+          </span>
+          <div v-if="auth.user?.subscription" class="d-flex align-center justify-center ms-6 me-n16">
             <UserBadge />
-            <h3 class="text-medium-emphasis text-uppercase font-weight-bold ms-2">
+            <div
+              class="text-md-title-large text-title-medium text-medium-emphasis text-uppercase font-weight-bold ms-2 mt-1"
+            >
               {{ auth.user.subscription.plan_name }}
-            </h3>
+            </div>
           </div>
         </div>
         <span class="text-medium-emphasis">{{ auth.user?.email }}</span>
@@ -21,7 +25,7 @@
         <v-card-item class="pa-6 border-b">
           <div class="d-flex align-center justify-space-between w-100">
             <div>
-              <v-card-title class="text-h6 font-weight-bold"> Personal Information </v-card-title>
+              <v-card-title class="font-weight-bold"> Personal Information </v-card-title>
               <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Manage your public profile details.
               </v-card-subtitle>

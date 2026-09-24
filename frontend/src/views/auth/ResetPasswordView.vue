@@ -7,7 +7,11 @@
         <v-card v-else variant="outlined" class="auth-card">
           <v-card-text class="pa-8">
             <div class="text-center mb-8">
-              <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-1">Reset password</h1>
+              <div
+                class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis mb-1"
+              >
+                Reset password
+              </div>
               <div class="mt-1">
                 <AuthLink text="Remember your password?" action="Log in" to="/login" />
               </div>

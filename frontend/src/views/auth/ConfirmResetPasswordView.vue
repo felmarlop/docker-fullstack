@@ -16,7 +16,11 @@
                   <v-icon icon="mdi-check-circle-outline" color="success" size="32" />
                 </v-avatar>
 
-                <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">Password updated</h1>
+                <div
+                  class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis mb-2"
+                >
+                  Password updated
+                </div>
 
                 <p class="text-body-1 text-medium-emphasis mb-8">
                   Your password has been successfully updated. You can now log in with your new credentials.
@@ -38,7 +42,11 @@
 
             <template v-else>
               <div class="text-center mb-8">
-                <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-1">Set new password</h1>
+                <div
+                  class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis mb-1"
+                >
+                  Set new password
+                </div>
                 <p class="text-body-2 text-medium-emphasis mt-1">Please enter your new password below.</p>
               </div>
 

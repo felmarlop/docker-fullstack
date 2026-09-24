@@ -3,11 +3,15 @@
     <v-row align="center" justify="center" class="fill-height">
       <v-col cols="12" md="8" lg="6" class="mx-auto">
         <div class="text-center mb-8">
-          <v-avatar color="primary-lighten-5" size="112" class="mb-4">
+          <v-avatar color="primary-lighten-5" size="112" class="mb-6">
             <v-icon icon="mdi-rocket-launch" class="rocket-icon" color="primary" size="56" />
           </v-avatar>
 
-          <h1 class="text-h3 font-weight-bold tracking-tight text-high-emphasis mb-2">Docker Fullstack Boilerplate</h1>
+          <div
+            class="text-md-headline-large text-headline-small font-weight-bold tracking-tight text-high-emphasis mb-2"
+          >
+            Docker Fullstack Boilerplate
+          </div>
 
           <p class="text-body-1 text-medium-emphasis mx-auto" style="max-width: 520px">
             Ready-to-use development environment for modern Django REST Framework and Vue 3 applications.

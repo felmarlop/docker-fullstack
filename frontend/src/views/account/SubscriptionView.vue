@@ -1,8 +1,8 @@
 <template>
-  <v-container class="py-10" fluid>
+  <v-container class="py-10 py-md-14" fluid>
     <div class="mx-auto account-content">
-      <div class="mb-8">
-        <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis">Subscription & Billing</h1>
+      <div class="text-md-headline-large text-headline-small font-weight-bold tracking-tight text-high-emphasis mb-8">
+        Subscription & Billing
       </div>
 
       <v-skeleton-loader v-if="firstLoading" class="mx-auto border" type="image, article" />
@@ -11,7 +11,9 @@
           <v-avatar color="primary-lighten-5" size="112" class="mb-2">
             <v-icon color="primary" icon="mdi-magnify" size="56" class="magnify-icon" />
           </v-avatar>
-          <h2 class="text-h2 tracking-tight text-high-emphasis mt-6">Subscription plans not found</h2>
+          <div class="text-md-headline-large text-headline-small tracking-tight text-high-emphasis mt-6">
+            Subscription plans not found
+          </div>
           <p class="text-body-1 text-medium-emphasis mt-3">We couldn't retrieve the plans. Please try again later.</p>
         </v-card-text>
       </v-card>
@@ -57,7 +59,7 @@
                 <v-icon icon="mdi-alert-octagon-outline" color="error" size="40" />
               </v-avatar>
             </template>
-            <v-card-title class="text-h6 font-weight-bold text-error"> Cancel Subscription? </v-card-title>
+            <v-card-title class="font-weight-bold text-error"> Cancel Subscription? </v-card-title>
           </v-card-item>
           <v-card-text class="pa-6 text-body-2 text-medium-emphasis">
             <span>

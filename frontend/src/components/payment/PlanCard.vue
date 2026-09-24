@@ -10,14 +10,16 @@
     <v-card-item class="pa-6 border-b" :class="`${plan.id}-gradient-bg`">
       <div class="d-flex align-center justify-space-between w-100">
         <div>
-          <v-card-title class="text-h6 font-weight-bold"> Upgrade to {{ plan.name }} </v-card-title>
+          <v-card-title class="font-weight-bold"> Upgrade to {{ plan.name }} </v-card-title>
           <v-card-subtitle class="text-body-2 text-medium-emphasis">
             {{ plan.description }}
           </v-card-subtitle>
         </div>
 
         <div class="text-right">
-          <span class="text-h5 font-weight-bold text-high-emphasis">{{ `${plan.amount} ${plan.currency}` }}</span>
+          <span class="text-md-headline-medium text-headline-small font-weight-bold text-high-emphasis">{{
+            `${plan.amount} ${plan.currency}`
+          }}</span>
           <span v-if="plan.is_lifetime" class="text-medium-emphasis"> / once</span>
         </div>
       </div>

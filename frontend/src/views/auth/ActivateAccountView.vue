@@ -20,7 +20,11 @@
               <div class="text-center py-6">
                 <v-progress-circular indeterminate color="primary" size="48" class="mb-6" />
 
-                <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">Activating account</h1>
+                <div
+                  class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis mb-2"
+                >
+                  Activating account
+                </div>
 
                 <p class="text-body-1 text-medium-emphasis mb-0">
                   Please wait while we verify and activate your account...
@@ -38,9 +42,11 @@
                   />
                 </v-avatar>
 
-                <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">
+                <div
+                  class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis mb-2"
+                >
                   {{ success ? 'Account activated' : 'Activation failed' }}
-                </h1>
+                </div>
 
                 <p class="text-body-1 text-medium-emphasis mb-8">
                   {{ message }}

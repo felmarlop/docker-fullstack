@@ -5,7 +5,11 @@
         <v-card variant="outlined" class="auth-card">
           <v-card-text class="pa-8">
             <div class="text-center mb-8">
-              <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis">Sign in</h1>
+              <div
+                class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis"
+              >
+                Sign in
+              </div>
               <div class="mt-1">
                 <AuthLink text="Don't have an account?" action="Create one" to="/register" />
               </div>

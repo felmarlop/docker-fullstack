@@ -25,9 +25,9 @@
 
       <div>
         <div v-if="!isPending" class="font-weight-bold text-uppercase text-medium-emphasis mb-1">Current Plan</div>
-        <h2 class="text-h5 font-weight-bold text-high-emphasis tracking-tight">
+        <div class="text-md-headline-medium text-headline-small font-weight-bold text-high-emphasis tracking-tight">
           {{ isPending ? `${plan.title} (Pending)` : plan.title }}
-        </h2>
+        </div>
         <p class="text-body-2 text-medium-emphasis mt-1 mb-0">
           {{ isPending ? PENDING_DESCRIPTION : isProcessing ? PROCESSING_DESCRIPTION : plan.description }}
         </p>

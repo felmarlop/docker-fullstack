@@ -17,7 +17,11 @@
                 <v-icon icon="mdi-email-alert-outline" color="primary" size="32" />
               </v-avatar>
 
-              <h1 class="text-h4 font-weight-bold tracking-tight text-high-emphasis mb-2">Activate your account</h1>
+              <div
+                class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis mb-2"
+              >
+                Activate your account
+              </div>
 
               <p class="text-body-2 text-medium-emphasis">
                 Enter the email address associated with your account to receive a new activation link.
