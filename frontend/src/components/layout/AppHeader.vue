@@ -1,7 +1,17 @@
 <template>
-  <v-app-bar color="primary" elevation="1" class="px-2">
+  <v-app-bar color="primary" elevation="1" class="d-flex px-2">
+    <v-btn
+      v-if="auth.isAuthenticated && smAndDown"
+      variant="text"
+      size="44"
+      rounded
+      @click="uiStore.toggleDrawerRail()"
+    >
+      <v-icon :icon="uiStore.drawerRail ? 'mdi-menu' : 'mdi-menu-open'" size="28" />
+    </v-btn>
+
     <v-app-bar-title>
-      <RouterLink to="/" class="header-link text-decoration-none">
+      <RouterLink to="/" class="header-link text-decoration-none font-weight-500 text-title-large">
         <v-icon icon="mdi-rocket-launch" class="me-4" />
         <span>Docker Fullstack Boilerplate</span>
       </RouterLink>
@@ -55,15 +65,20 @@
 </template>
 
 <script setup>
+import { useDisplay } from 'vuetify'
 import { useRouter } from 'vue-router'
 
 import UserAvatar from '@/components/account/UserAvatar.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useUiStore } from '@/stores/ui'
 
 import headerMenu from '@/navigation/header-menu'
 
+const { smAndDown } = useDisplay()
+
 const auth = useAuthStore()
 const router = useRouter()
+const uiStore = useUiStore()
 
 async function logout() {
   await auth.logout()

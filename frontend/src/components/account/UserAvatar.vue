@@ -4,7 +4,7 @@
       <v-img v-if="auth.user?.username" :src="auth.user?.avatar_url" :alt="auth.user.username">
         <template #placeholder>
           <div class="d-flex fill-height align-center justify-center bg-surface-light">
-            <span class="text-high-emphasis font-weight-bold" :style="{ fontSize: `${size / 3.5}px` }">
+            <span class="text-high-emphasis" :style="{ fontSize: `${size / 3.5}px` }">
               {{ userLetters }}
             </span>
           </div>
@@ -23,7 +23,7 @@
           color="surface"
           size="small"
           prepend-icon="mdi-pencil-outline"
-          class="avatar-edit-pill border-color-soft px-3 font-weight-bold"
+          class="avatar-edit-pill border-color-soft px-3"
           :loading="loading"
           :disabled="loading"
         >

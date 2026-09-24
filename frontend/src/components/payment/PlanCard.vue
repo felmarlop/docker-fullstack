@@ -17,7 +17,7 @@
         </div>
 
         <div class="text-right">
-          <span class="text-md-headline-medium text-headline-small font-weight-bold text-high-emphasis">{{
+          <span class="text-title-medium font-weight-bold text-high-emphasis">{{
             `${plan.amount} ${plan.currency}`
           }}</span>
           <span v-if="plan.is_lifetime" class="text-medium-emphasis"> / once</span>

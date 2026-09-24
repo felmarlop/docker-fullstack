@@ -2,11 +2,23 @@
   <v-navigation-drawer
     v-model:rail="uiStore.drawerRail"
     :rail-width="APP_DRAWER_RAIL_WIDTH"
-    permanent
+    :permanent="!smAndDown || !uiStore.drawerRail"
+    :temporary="smAndDown || uiStore.drawerRail"
     class="app-drawer border-e"
   >
+    <v-overlay
+      v-if="smAndDown"
+      :model-value="!uiStore.drawerRail"
+      class="drawer-overlay"
+      scrim="#000000"
+      :opacity="0.4"
+      z-index="90"
+      @click="uiStore.drawerRail = true"
+    />
+
     <div class="drawer-header" :class="{ rail: uiStore.drawerRail }">
       <v-btn
+        v-if="!smAndDown"
         :icon="uiStore.drawerRail ? 'mdi-chevron-right' : 'mdi-chevron-left'"
         variant="text"
         density="comfortable"
@@ -27,13 +39,19 @@
           <v-list-item
             v-bind="props"
             :to="item.to"
-            :title="uiStore.drawerRail ? undefined : item.title"
             rounded="lg"
             color="primary"
             class="mb-1 drawer-item"
+            @click="smAndDown ? (uiStore.drawerRail = true) : null"
           >
             <template #prepend>
               <v-icon :icon="item.icon" size="20" class="drawer-icon" />
+            </template>
+
+            <template v-if="!uiStore.drawerRail" #title>
+              <span class="text-caption font-weight-bold text-uppercase tracking-wider text-label-medium">
+                {{ item.title }}
+              </span>
             </template>
           </v-list-item>
         </template>
@@ -43,6 +61,7 @@
 </template>
 
 <script setup>
+import { useDisplay } from 'vuetify'
 import { APP_DRAWER_RAIL_WIDTH } from '@/config/layout'
 import { useUiStore } from '@/stores/ui'
 
@@ -53,6 +72,7 @@ defineProps({
   },
 })
 
+const { smAndDown } = useDisplay()
 const uiStore = useUiStore()
 </script>
 
@@ -69,13 +89,12 @@ const uiStore = useUiStore()
   }
 }
 
-:deep(.v-list-item-title) {
-  font-weight: 500 !important;
-  letter-spacing: -0.01em !important;
+.drawer-overlay {
+  pointer-events: auto;
 }
 
 :deep(.v-list-item__prepend) {
-  margin-inline-end: 12px !important;
+  margin-inline-end: -12px !important;
 }
 
 :deep(.v-list-item) {
