@@ -6,6 +6,9 @@ export default [
     path: '/',
     name: 'home',
     component: HomeView,
+    meta: {
+      guestOnly: true,
+    },
   },
   {
     path: '/:pathMatch(.*)*',

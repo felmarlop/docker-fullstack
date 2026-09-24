@@ -27,42 +27,51 @@
       />
     </div>
 
-    <v-list density="comfortable" nav class="px-2 py-0">
-      <v-tooltip
-        v-for="item in items"
-        :key="item.to.name"
-        :text="item.title"
-        location="right"
-        :disabled="!uiStore.drawerRail"
-      >
-        <template #activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            :to="item.to"
-            rounded="lg"
-            color="primary"
-            class="mb-1 drawer-item"
-            @click="smAndDown ? (uiStore.drawerRail = true) : null"
-          >
-            <template #prepend>
-              <v-icon :icon="item.icon" size="20" class="drawer-icon" />
-            </template>
+    <div class="d-flex flex-column align-center align-md-stretch">
+      <v-avatar v-if="smAndDown" color="primary-lighten-5" size="60" class="brand-avatar text-center mt-2 mb-6">
+        <BrandLogo :size="200" />
+      </v-avatar>
 
-            <template v-if="!uiStore.drawerRail" #title>
-              <span class="text-caption font-weight-bold text-uppercase tracking-wider text-label-medium">
-                {{ item.title }}
-              </span>
-            </template>
-          </v-list-item>
-        </template>
-      </v-tooltip>
-    </v-list>
+      <v-list density="comfortable" nav class="px-2 py-0">
+        <v-tooltip
+          v-for="item in items"
+          :key="item.to.name"
+          :text="item.title"
+          location="right"
+          :disabled="!uiStore.drawerRail"
+        >
+          <template #activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              :to="item.to"
+              rounded="lg"
+              color="primary"
+              class="mb-1 drawer-item"
+              @click="smAndDown ? (uiStore.drawerRail = true) : null"
+            >
+              <template #prepend>
+                <v-icon :icon="item.icon" size="20" class="drawer-icon" />
+              </template>
+
+              <template v-if="!uiStore.drawerRail" #title>
+                <span class="text-caption font-weight-bold text-uppercase tracking-wider text-label-medium">
+                  {{ item.title }}
+                </span>
+              </template>
+            </v-list-item>
+          </template>
+        </v-tooltip>
+      </v-list>
+    </div>
   </v-navigation-drawer>
 </template>
 
 <script setup>
 import { useDisplay } from 'vuetify'
+
+import BrandLogo from '@/components/common/BrandLogo.vue'
 import { APP_DRAWER_RAIL_WIDTH } from '@/config/layout'
+
 import { useUiStore } from '@/stores/ui'
 
 defineProps({

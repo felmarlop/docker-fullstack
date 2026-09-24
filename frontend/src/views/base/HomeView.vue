@@ -69,56 +69,32 @@
           </v-fade-transition>
         </v-card>
 
-        <template v-if="auth.isAuthenticated">
-          <div class="d-flex flex-column align-center my-8">
-            <!-- Status Chip / Pill Badge -->
-            <v-chip color="success" variant="tonal" size="small" class="mb-4 text-body-medium px-3" border>
-              <v-icon start icon="mdi-check-circle-outline" size="16" />
-              Authenticated as <strong class="ms-1">{{ auth.user?.username }}</strong>
-            </v-chip>
-
+        <div class="d-flex flex-column align-center gap-3 my-8">
+          <div class="d-flex align-center ga-3 flex-wrap justify-center">
             <v-btn
               color="primary"
               elevation="0"
-              prepend-icon="mdi-tray-arrow-up"
-              to="/account"
+              prepend-icon="mdi-login"
+              to="/login"
               size="large"
               rounded="lg"
-              class="px-8 font-weight-bold"
+              class="px-6 font-weight-bold"
             >
-              Enter dashboard
+              Sign In
+            </v-btn>
+
+            <v-btn
+              variant="outlined"
+              prepend-icon="mdi-account-plus-outline"
+              to="/register"
+              size="large"
+              rounded="lg"
+              class="px-6 font-weight-semibold"
+            >
+              Register
             </v-btn>
           </div>
-        </template>
-
-        <template v-else>
-          <div class="d-flex flex-column align-center gap-3 my-8">
-            <div class="d-flex align-center ga-3 flex-wrap justify-center">
-              <v-btn
-                color="primary"
-                elevation="0"
-                prepend-icon="mdi-login"
-                to="/login"
-                size="large"
-                rounded="lg"
-                class="px-6 font-weight-bold"
-              >
-                Sign In
-              </v-btn>
-
-              <v-btn
-                variant="outlined"
-                prepend-icon="mdi-account-plus-outline"
-                to="/register"
-                size="large"
-                rounded="lg"
-                class="px-6 font-weight-semibold"
-              >
-                Register
-              </v-btn>
-            </div>
-          </div>
-        </template>
+        </div>
 
         <div class="d-flex align-center my-6">
           <v-divider />
@@ -171,10 +147,8 @@ import { computed, onMounted, ref } from 'vue'
 
 import BrandLogo from '@/components/common/BrandLogo.vue'
 import api from '@/core/api'
-import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 
-const auth = useAuthStore()
 const ui = useUiStore()
 const loading = ref(true)
 const error = ref(null)

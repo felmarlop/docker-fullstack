@@ -3,36 +3,51 @@
     <v-btn
       v-if="auth.isAuthenticated && smAndDown"
       variant="text"
-      size="44"
-      rounded
-      @click="uiStore.toggleDrawerRail()"
+      size="40"
+      rounded="lg"
+      class="me-1"
+      @click="handleDrawerClick()"
     >
-      <v-icon :icon="uiStore.drawerRail ? 'mdi-menu' : 'mdi-menu-open'" size="28" />
+      <v-icon :icon="uiStore.drawerRail ? 'mdi-menu' : 'mdi-menu-open'" size="24" />
     </v-btn>
 
-    <v-app-bar-title class="ms-md-4 ms-2">
-      <RouterLink to="/" class="header-link text-decoration-none font-weight-500 text-title-large">
-        <v-avatar color="primary-lighten-5" size="50" class="me-4">
-          <BrandLogo :size="25" />
+    <v-app-bar-title class="ms-0 ms-md-2">
+      <RouterLink
+        v-if="!smAndDown || !auth.isAuthenticated"
+        to="/"
+        class="header-link text-decoration-none ms-2 ms-md-0"
+      >
+        <v-avatar color="primary-lighten-5" size="38" class="me-3 brand-avatar">
+          <BrandLogo :size="20" />
         </v-avatar>
-        <span>Docker Fullstack Boilerplate</span>
+
+        <span class="font-weight-bold text-title-medium text-md-title-large text-no-wrap">
+          Docker Fullstack Boilerplate
+        </span>
       </RouterLink>
     </v-app-bar-title>
 
-    <v-spacer />
+    <v-spacer v-if="auth.isAuthenticated" />
 
-    <v-menu v-if="auth.isAuthenticated" open-on-hover location="bottom end" :close-on-content-click="true" offset="8">
+    <v-menu
+      v-if="auth.isAuthenticated"
+      v-model="isUserMenuOpen"
+      open-on-hover
+      location="bottom end"
+      :close-on-content-click="true"
+      offset="8"
+    >
       <template #activator="{ props }">
-        <div v-bind="props" class="me-2">
-          <user-avatar :size="40" />
-          <v-icon size="20" style="opacity: 0.8"> mdi-chevron-down </v-icon>
+        <div v-bind="props" class="me-2 d-flex align-center cursor-pointer">
+          <user-avatar :size="36" />
+          <v-icon size="20" class="ms-1 opacity-80"> mdi-chevron-down </v-icon>
         </div>
       </template>
 
       <v-card min-width="260" rounded="lg" elevation="4">
         <div class="d-flex flex-column mx-2 my-5 align-center">
-          <user-avatar :size="100" />
-          <div class="mt-4 username">
+          <user-avatar :size="80" />
+          <div class="mt-3 username">
             {{ auth.user?.username }}
           </div>
         </div>
@@ -53,7 +68,9 @@
               {{ item.title }}
             </v-list-item-title>
           </v-list-item>
+
           <v-divider class="my-1" />
+
           <v-list-item rounded="lg" @click="logout">
             <template #prepend>
               <v-icon icon="mdi-logout" size="20" class="mr-5" />
@@ -67,6 +84,8 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
+
 import { useDisplay } from 'vuetify'
 import { useRouter } from 'vue-router'
 
@@ -83,22 +102,46 @@ const auth = useAuthStore()
 const router = useRouter()
 const uiStore = useUiStore()
 
+const isUserMenuOpen = ref(false)
+
+function handleDrawerClick() {
+  uiStore.toggleDrawerRail()
+  isUserMenuOpen.value = !smAndDown.value
+}
+
 async function logout() {
   await auth.logout()
-  router.push({ name: 'login' })
+  router.push({ name: 'home' })
 }
+
+watch(isUserMenuOpen, (v) => {
+  if (v && smAndDown.value) uiStore.drawerRail = true
+})
 </script>
 
 <style scoped>
 .header-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   color: inherit;
   text-decoration: none;
 }
 
+.brand-avatar {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
 .username {
   font-weight: 600;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.opacity-80 {
+  opacity: 0.8;
 }
 
 :deep(.v-list-item__prepend) {
