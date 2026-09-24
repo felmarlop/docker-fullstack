@@ -4,7 +4,7 @@
       <v-col cols="12" md="8" lg="6" class="mx-auto">
         <div class="text-center mb-8">
           <v-avatar color="primary-lighten-5" size="112" class="mb-6">
-            <v-icon icon="mdi-rocket-launch" class="rocket-icon" color="primary" size="56" />
+            <BrandLogo :size="60" animated />
           </v-avatar>
 
           <div
@@ -69,19 +69,53 @@
           </v-fade-transition>
         </v-card>
 
-        <template v-if="!auth.isAuthenticated">
-          <div class="d-flex align-center my-6">
-            <v-divider />
-            <span class="mx-4 font-weight-bold text-uppercase text-medium-emphasis text-no-wrap"> Authentication </span>
-            <v-divider />
-          </div>
+        <template v-if="auth.isAuthenticated">
+          <div class="d-flex flex-column align-center my-8">
+            <!-- Status Chip / Pill Badge -->
+            <v-chip color="success" variant="tonal" size="small" class="mb-4 text-body-medium px-3" border>
+              <v-icon start icon="mdi-check-circle-outline" size="16" />
+              Authenticated as <strong class="ms-1">{{ auth.user?.username }}</strong>
+            </v-chip>
 
-          <div class="text-center mb-6">
-            <v-btn color="primary" elevation="0" prepend-icon="mdi-login" to="/login" class="px-8 font-weight-bold">
-              Log In
+            <v-btn
+              color="primary"
+              elevation="0"
+              prepend-icon="mdi-tray-arrow-up"
+              to="/account"
+              size="large"
+              rounded="lg"
+              class="px-8 font-weight-bold"
+            >
+              Enter dashboard
             </v-btn>
-            <div>
-              <AuthLink text="Don't have an account?" action="Create one" to="/register" />
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="d-flex flex-column align-center gap-3 my-8">
+            <div class="d-flex align-center ga-3 flex-wrap justify-center">
+              <v-btn
+                color="primary"
+                elevation="0"
+                prepend-icon="mdi-login"
+                to="/login"
+                size="large"
+                rounded="lg"
+                class="px-6 font-weight-bold"
+              >
+                Sign In
+              </v-btn>
+
+              <v-btn
+                variant="outlined"
+                prepend-icon="mdi-account-plus-outline"
+                to="/register"
+                size="large"
+                rounded="lg"
+                class="px-6 font-weight-semibold"
+              >
+                Register
+              </v-btn>
             </div>
           </div>
         </template>
@@ -135,7 +169,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 
-import AuthLink from '@/components/auth/AuthLink.vue'
+import BrandLogo from '@/components/common/BrandLogo.vue'
 import api from '@/core/api'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
@@ -174,26 +208,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.rocket-icon {
-  animation: rocketTakeoff 3s cubic-bezier(0.45, 0.05, 0.55, 0.95);
-}
-
-@keyframes rocketTakeoff {
-  0% {
-    transform: translateY(20px) translateX(-10px) rotate(0deg);
-    filter: drop-shadow(0 0 0px rgba(var(--v-theme-primary), 0));
-  }
-  50% {
-    /* Upward thrust with engine glow */
-    transform: translateY(-15px) translateX(15px) rotate(-4deg);
-    filter: drop-shadow(-4px 8px 14px rgba(var(--v-theme-primary), 0.6));
-  }
-  100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
-    filter: drop-shadow(0 0 0px rgba(var(--v-theme-primary), 0));
-  }
-}
-
 .api-response-card {
   border-radius: 12px;
   overflow: hidden;

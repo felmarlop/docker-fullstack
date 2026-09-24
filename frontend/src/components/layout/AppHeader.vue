@@ -10,9 +10,11 @@
       <v-icon :icon="uiStore.drawerRail ? 'mdi-menu' : 'mdi-menu-open'" size="28" />
     </v-btn>
 
-    <v-app-bar-title>
+    <v-app-bar-title class="ms-md-4 ms-2">
       <RouterLink to="/" class="header-link text-decoration-none font-weight-500 text-title-large">
-        <v-icon icon="mdi-rocket-launch" class="me-4" />
+        <v-avatar color="primary-lighten-5" size="50" class="me-4">
+          <BrandLogo :size="25" />
+        </v-avatar>
         <span>Docker Fullstack Boilerplate</span>
       </RouterLink>
     </v-app-bar-title>
@@ -68,6 +70,7 @@
 import { useDisplay } from 'vuetify'
 import { useRouter } from 'vue-router'
 
+import BrandLogo from '@/components/common/BrandLogo.vue'
 import UserAvatar from '@/components/account/UserAvatar.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'

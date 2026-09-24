@@ -1,6 +1,6 @@
 <template>
   <v-footer class="app-footer">
-    <div class="footer-content ms-md-4">
+    <div class="footer-content ms-md-4 ms-2">
       <span class="text-medium-emphasis text-md-body-medium text-body-small">
         © {{ currentYear }} Docker Fullstack Boilerplate
       </span>
