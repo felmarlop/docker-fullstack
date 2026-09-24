@@ -8,15 +8,15 @@
       class="position-absolute top-0 start-0 z-index-1"
     />
     <v-card-item class="pa-6 border-b" :class="`${plan.id}-gradient-bg`">
-      <div class="d-flex align-center justify-space-between w-100">
-        <div>
+      <div class="d-flex align-center justify-space-between flex-column flex-md-row">
+        <div class="w-100">
           <v-card-title class="font-weight-bold"> Upgrade to {{ plan.name }} </v-card-title>
-          <v-card-subtitle class="text-body-2 text-medium-emphasis">
+          <span class="text-body-medium text-medium-emphasis">
             {{ plan.description }}
-          </v-card-subtitle>
+          </span>
         </div>
 
-        <div class="text-right">
+        <div class="text-right w-100 w-md-50">
           <span class="text-title-medium font-weight-bold text-high-emphasis">{{
             `${plan.amount} ${plan.currency}`
           }}</span>
@@ -43,8 +43,8 @@
     </v-card-text>
 
     <v-card-text class="pa-6">
-      <div class="d-flex align-center justify-space-between">
-        <div class="d-flex align-center text-medium-emphasis">
+      <div class="d-flex align-center justify-space-between flex-column flex-md-row">
+        <div class="d-flex align-center text-medium-emphasis mb-md-0 mb-4">
           <v-icon icon="mdi-shield-check-outline" size="16" class="mr-1" />
           Lifetime access unlocked
         </div>

@@ -14,9 +14,7 @@
           </template>
 
           <v-card-title class="font-weight-bold text-error"> Account deletion </v-card-title>
-          <v-card-subtitle class="text-body-2 text-medium-emphasis">
-            Permanently remove your account and all your data.
-          </v-card-subtitle>
+          <span class="text-body-medium text-medium-emphasis">Permanently remove your account and all your data.</span>
         </v-card-item>
 
         <v-card-text class="pa-6">
