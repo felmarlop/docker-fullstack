@@ -37,6 +37,7 @@ async function showPrompt() {
     redirect_uri: `${window.location.origin}/oauth/github/callback`,
     scope: 'user:email',
     state: localStorage.getItem(STORAGE_KEY),
+    prompt: 'select_account', // Always show the GitHub account picker
   })
 
   window.location.href = `https://github.com/login/oauth/authorize?${params}`
