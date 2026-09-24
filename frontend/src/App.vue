@@ -27,9 +27,12 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 import accountNavigation from '@/navigation/account'
 
 import { useAuthStore } from '@/stores/auth'
+import { useUiStore } from '@/stores/ui'
 
 const { smAndDown } = useDisplay()
 const auth = useAuthStore()
+
+if (smAndDown.value) useUiStore().drawerRail = true
 </script>
 
 <style scoped>
