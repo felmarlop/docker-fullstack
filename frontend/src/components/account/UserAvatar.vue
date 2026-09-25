@@ -153,7 +153,7 @@ async function handleDeleteAvatar() {
 }
 
 .user-avatar {
-  border: 2px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   background-color: rgb(var(--v-theme-surface)) !important;
 }
 

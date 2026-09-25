@@ -2,7 +2,7 @@
   <v-container class="py-10" fluid>
     <div class="mx-auto account-content">
       <div class="text-center mb-8">
-        <user-avatar :size="220" show-username show-edit />
+        <user-avatar :size="200" show-username show-edit />
         <div class="d-flex align-center justify-center mt-4">
           <span
             class="text-md-headline-large text-headline-medium font-weight-bold tracking-tight text-high-emphasis my-0"
@@ -23,25 +23,20 @@
 
       <v-card variant="outlined" class="rounded-xl account-card">
         <v-card-item class="pa-6 border-b">
-          <div class="d-flex align-start justify-space-between w-100 flex-column flex-sm-row">
-            <div>
+          <v-row class="align-start justify-space-between">
+            <v-col cols="9">
               <v-card-title class="font-weight-bold"> Personal Information </v-card-title>
-              <v-card-subtitle class="text-body-2 text-medium-emphasis tracking-tight">
+              <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Manage your public profile details.
               </v-card-subtitle>
-            </div>
-            <div class="justify-center justify-sm-end w-100 mt-2 mt-sm-0" :class="editing ? 'd-none' : 'd-flex'">
-              <v-btn
-                variant="outlined"
-                size="small"
-                prepend-icon="mdi-pencil-outline"
-                class="px-4 v-100"
-                @click="startEditing"
-              >
-                Edit
+            </v-col>
+            <v-col cols="3" class="justify-center justify-sm-end mt-2" :class="editing ? 'd-none' : 'd-flex'">
+              <v-btn variant="outlined" size="small" @click="startEditing">
+                <v-icon icon="mdi-pencil-outline" size="18" />
+                <span v-if="!smAndDown" class="ms-2">Edit</span>
               </v-btn>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </v-card-item>
 
         <template v-if="!editing">
@@ -182,6 +177,7 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
+import { useDisplay } from 'vuetify'
 
 import UserAvatar from '@/components/account/UserAvatar.vue'
 import UserBadge from '@/components/account/UserBadge.vue'
@@ -189,6 +185,7 @@ import * as rules from '@/helpers/validation'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
+const { smAndDown } = useDisplay()
 
 const loading = ref(false)
 const editing = ref(false)

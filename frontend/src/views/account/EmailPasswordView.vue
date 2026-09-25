@@ -7,28 +7,24 @@
 
       <v-card variant="outlined" class="account-card mb-8">
         <v-card-item class="pa-6 border-b">
-          <div class="d-flex align-start justify-space-between w-100 flex-column flex-sm-row">
-            <div>
+          <v-row class="align-start justify-space-between">
+            <v-col cols="9">
               <v-card-title class="font-weight-bold"> Direct Email </v-card-title>
-              <v-card-subtitle class="text-body-2 text-medium-emphasis tracking-tight">
+              <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Primary email used for account authentication.
               </v-card-subtitle>
-            </div>
-            <div
-              class="justify-center justify-sm-end w-100 mt-2 mt-sm-0"
+            </v-col>
+            <v-col
+              cols="3"
+              class="mt-2 justify-center justify-sm-end mt-2"
               :class="emailState.editing ? 'd-none' : 'd-flex'"
             >
-              <v-btn
-                variant="outlined"
-                size="small"
-                prepend-icon="mdi-pencil-outline"
-                class="font-weight-bold px-4"
-                @click="startEditingEmail"
-              >
-                Edit
+              <v-btn variant="outlined" size="small" class="font-weight-bold" @click="startEditingEmail">
+                <v-icon icon="mdi-pencil-outline" size="18" />
+                <span v-if="!smAndDown" class="ms-2">Edit</span>
               </v-btn>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </v-card-item>
 
         <template v-if="!emailState.editing">
@@ -177,28 +173,24 @@
 
       <v-card variant="outlined" class="account-card">
         <v-card-item class="pa-6 border-b">
-          <div class="d-flex align-start justify-space-between w-100 flex-column flex-sm-row">
-            <div>
+          <v-row class="align-start justify-space-between">
+            <v-col cols="9">
               <v-card-title class="font-weight-bold"> Password </v-card-title>
-              <v-card-subtitle class="text-body-2 text-medium-emphasis tracking-tight">
+              <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Set a secure password to protect your account.
               </v-card-subtitle>
-            </div>
-            <div
-              class="justify-center justify-sm-end w-100 mt-2 mt-sm-0"
+            </v-col>
+            <v-col
+              cols="3"
+              class="justify-center justify-sm-end mt-2"
               :class="passwordState.editing ? 'd-none' : 'd-flex'"
             >
-              <v-btn
-                variant="outlined"
-                size="small"
-                prepend-icon="mdi-pencil-outline"
-                class="font-weight-bold px-4"
-                @click="startEditingPassword"
-              >
-                {{ usablePassword ? 'Edit' : 'Set password' }}
+              <v-btn variant="outlined" size="small" class="font-weight-bold" @click="startEditingPassword">
+                <v-icon icon="mdi-pencil-outline" size="18" />
+                <span v-if="!smAndDown" class="ms-2">{{ usablePassword ? 'Edit' : 'Set password' }}</span>
               </v-btn>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </v-card-item>
 
         <template v-if="!passwordState.editing">
@@ -316,6 +308,7 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
+import { useDisplay } from 'vuetify'
 
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
@@ -325,6 +318,7 @@ import * as rules from '@/helpers/validation'
 
 const auth = useAuthStore()
 const ui = useUiStore()
+const { smAndDown } = useDisplay()
 
 const emailState = reactive({
   loading: false,
