@@ -39,7 +39,7 @@
     >
       <template #activator="{ props }">
         <div v-bind="props" class="me-2 d-flex align-center cursor-pointer">
-          <user-avatar :size="36" />
+          <user-avatar :size="40" />
           <v-icon size="20" class="ms-1 opacity-80"> mdi-chevron-down </v-icon>
         </div>
       </template>

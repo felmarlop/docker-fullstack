@@ -94,7 +94,7 @@ const loading = ref(false)
 const fileInput = ref(null)
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB Limit
 
-const badgeSize = computed(() => Math.max(16, Math.round(props.size / 3.2)))
+const badgeSize = computed(() => Math.max(16, Math.round(props.size / 3.5)))
 const badgeIconSize = computed(() => Math.max(10, Math.round(props.size / 5)))
 
 const userLetters = computed(() => {
