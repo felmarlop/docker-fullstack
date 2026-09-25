@@ -48,7 +48,9 @@ export const useAuthStore = defineStore('auth', {
 
     async initialize() {
       const { accessToken, refreshToken } = getAuthCookies()
-      if (!accessToken || !refreshToken) return
+      if (!accessToken || !refreshToken) {
+        return this.clearSession()
+      }
 
       this.setAccessToken(accessToken)
       this.setRefreshTokens(refreshToken)

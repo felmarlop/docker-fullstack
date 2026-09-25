@@ -44,7 +44,7 @@ const route = useRoute()
 
 function showError(error) {
   let msg = error?.message ?? ERROR_MESSAGE
-  if (error.details && error.details.non_field_errors.length) {
+  if (error && error.details && error.details.non_field_errors.length) {
     msg = error.details.non_field_errors[0]
   }
   ui.showError(msg)
@@ -54,7 +54,10 @@ onMounted(async () => {
   const code = route.query.code
   const state = route.query.state
   try {
-    if (state != localStorage.getItem(STORAGE_KEY) || !code) return showError()
+    if (state != localStorage.getItem(STORAGE_KEY) || !code) {
+      router.push({ name: 'login' })
+      return showError()
+    }
     await auth.loginWithGithub(code)
     router.push('/')
   } catch (error) {

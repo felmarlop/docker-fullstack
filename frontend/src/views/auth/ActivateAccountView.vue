@@ -38,7 +38,7 @@
                   <v-icon
                     :icon="success ? 'mdi-check-circle-outline' : 'mdi-alert-circle-outline'"
                     :color="success ? 'success' : 'error'"
-                    size="32"
+                    size="50"
                   />
                 </v-avatar>
 

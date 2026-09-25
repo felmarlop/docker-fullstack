@@ -109,7 +109,7 @@ async function login(response) {
 function showError(error) {
   loading.value = false
   let msg = error?.message ?? ERROR_MESSAGE
-  if (error.details && error.details.non_field_errors.length) {
+  if (error && error.details && error.details.non_field_errors.length) {
     msg = error.details.non_field_errors[0]
   }
   ui.showError(msg)

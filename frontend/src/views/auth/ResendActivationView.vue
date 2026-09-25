@@ -14,7 +14,7 @@
 
             <div class="text-center mb-8">
               <v-avatar color="primary-lighten-5" size="64" class="mb-4">
-                <v-icon icon="mdi-email-alert-outline" color="primary" size="32" />
+                <v-icon icon="mdi-email-alert-outline" color="primary" size="50" />
               </v-avatar>
 
               <div

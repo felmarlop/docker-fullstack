@@ -13,7 +13,7 @@
             <template v-if="success">
               <div class="text-center">
                 <v-avatar color="success-lighten-5" size="64" class="mb-6">
-                  <v-icon icon="mdi-check-circle-outline" color="success" size="32" />
+                  <v-icon icon="mdi-check-circle-outline" color="success" size="50" />
                 </v-avatar>
 
                 <div

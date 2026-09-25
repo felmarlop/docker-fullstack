@@ -7,7 +7,7 @@
 
       <div class="text-center">
         <v-avatar color="primary-lighten-5" size="64" class="mb-6">
-          <v-icon icon="mdi-email-check-outline" color="primary" size="32" />
+          <v-icon icon="mdi-email-check-outline" color="primary" size="50" />
         </v-avatar>
 
         <div
