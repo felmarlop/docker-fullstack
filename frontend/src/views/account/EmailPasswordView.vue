@@ -7,24 +7,27 @@
 
       <v-card variant="outlined" class="account-card mb-8">
         <v-card-item class="pa-6 border-b">
-          <div class="d-flex align-center justify-space-between w-100">
+          <div class="d-flex align-start justify-space-between w-100 flex-column flex-sm-row">
             <div>
               <v-card-title class="font-weight-bold"> Direct Email </v-card-title>
-              <v-card-subtitle class="text-body-2 text-medium-emphasis">
+              <v-card-subtitle class="text-body-2 text-medium-emphasis tracking-tight">
                 Primary email used for account authentication.
               </v-card-subtitle>
             </div>
-
-            <v-btn
-              variant="outlined"
-              size="small"
-              prepend-icon="mdi-pencil-outline"
-              :class="{ invisible: emailState.editing }"
-              class="font-weight-bold px-4"
-              @click="startEditingEmail"
+            <div
+              class="justify-center justify-sm-end w-100 mt-2 mt-sm-0"
+              :class="emailState.editing ? 'd-none' : 'd-flex'"
             >
-              Edit
-            </v-btn>
+              <v-btn
+                variant="outlined"
+                size="small"
+                prepend-icon="mdi-pencil-outline"
+                class="font-weight-bold px-4"
+                @click="startEditingEmail"
+              >
+                Edit
+              </v-btn>
+            </div>
           </div>
         </v-card-item>
 
@@ -174,24 +177,27 @@
 
       <v-card variant="outlined" class="account-card">
         <v-card-item class="pa-6 border-b">
-          <div class="d-flex align-center justify-space-between w-100">
+          <div class="d-flex align-start justify-space-between w-100 flex-column flex-sm-row">
             <div>
               <v-card-title class="font-weight-bold"> Password </v-card-title>
-              <v-card-subtitle class="text-body-2 text-medium-emphasis">
+              <v-card-subtitle class="text-body-2 text-medium-emphasis tracking-tight">
                 Set a secure password to protect your account.
               </v-card-subtitle>
             </div>
-
-            <v-btn
-              variant="outlined"
-              size="small"
-              prepend-icon="mdi-pencil-outline"
-              :class="{ invisible: passwordState.editing }"
-              class="font-weight-bold px-4"
-              @click="startEditingPassword"
+            <div
+              class="justify-center justify-sm-end w-100 mt-2 mt-sm-0"
+              :class="passwordState.editing ? 'd-none' : 'd-flex'"
             >
-              {{ usablePassword ? 'Edit' : 'Set password' }}
-            </v-btn>
+              <v-btn
+                variant="outlined"
+                size="small"
+                prepend-icon="mdi-pencil-outline"
+                class="font-weight-bold px-4"
+                @click="startEditingPassword"
+              >
+                {{ usablePassword ? 'Edit' : 'Set password' }}
+              </v-btn>
+            </div>
           </div>
         </v-card-item>
 

@@ -9,7 +9,7 @@
           >
             {{ auth.user?.username || '-' }}
           </span>
-          <div v-if="auth.user?.subscription" class="d-flex align-center justify-center ms-6 me-n16">
+          <div v-if="auth.user?.subscription" class="d-flex align-center justify-center ms-6 me-n6 me-md-n16">
             <UserBadge />
             <div
               class="text-md-title-large text-title-medium text-medium-emphasis text-uppercase font-weight-bold ms-2 mt-1"
@@ -23,24 +23,24 @@
 
       <v-card variant="outlined" class="rounded-xl account-card">
         <v-card-item class="pa-6 border-b">
-          <div class="d-flex align-center justify-space-between w-100">
+          <div class="d-flex align-start justify-space-between w-100 flex-column flex-sm-row">
             <div>
               <v-card-title class="font-weight-bold"> Personal Information </v-card-title>
-              <v-card-subtitle class="text-body-2 text-medium-emphasis">
+              <v-card-subtitle class="text-body-2 text-medium-emphasis tracking-tight">
                 Manage your public profile details.
               </v-card-subtitle>
             </div>
-
-            <v-btn
-              variant="outlined"
-              size="small"
-              prepend-icon="mdi-pencil-outline"
-              :class="{ invisible: editing }"
-              class="px-4"
-              @click="startEditing"
-            >
-              Edit
-            </v-btn>
+            <div class="justify-center justify-sm-end w-100 mt-2 mt-sm-0" :class="editing ? 'd-none' : 'd-flex'">
+              <v-btn
+                variant="outlined"
+                size="small"
+                prepend-icon="mdi-pencil-outline"
+                class="px-4 v-100"
+                @click="startEditing"
+              >
+                Edit
+              </v-btn>
+            </div>
           </div>
         </v-card-item>
 

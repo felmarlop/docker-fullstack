@@ -4,7 +4,7 @@
       <v-col cols="12" md="8" lg="6" class="mx-auto">
         <div class="text-center mb-8">
           <v-avatar color="primary-lighten-5" size="112" class="mb-6">
-            <BrandLogo :size="60" animated />
+            <BrandLogo :size="70" animated />
           </v-avatar>
 
           <div

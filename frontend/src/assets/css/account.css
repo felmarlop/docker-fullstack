@@ -10,15 +10,6 @@
     letter-spacing: 0.05em !important;
   }
 
-  /* Card Header Titles & Actions */
-  .v-card-item {
-    .v-btn {
-      &.invisible {
-        visibility: hidden;
-      }
-    }
-  }
-
   /* Shared Card Shell Setup */
   .account-card,
   .danger-card {
