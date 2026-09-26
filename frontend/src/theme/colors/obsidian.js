@@ -12,4 +12,7 @@ export default {
   surface: '#111827',
 
   terminal: '#F59E0B',
+
+  plan1: '#0284C7',
+  plan2: '#059669',
 }

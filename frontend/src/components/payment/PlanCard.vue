@@ -51,12 +51,13 @@
         <v-btn
           elevation="0"
           size="large"
+          class="text-white"
           :prepend-icon="planIcon"
           :color="planColor"
           :disabled="loadingTier != null"
           @click="emit('upgrade', plan.id)"
         >
-          Upgrade to <b class="mx-1">{{ plan.name }} — {{ `${plan.amount} ${plan.currency}` }}</b>
+          Upgrade - <strong class="mx-1">{{ `${plan.amount} ${plan.currency}` }}</strong>
         </v-btn>
       </div>
     </v-card-text>

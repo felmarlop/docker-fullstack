@@ -4,14 +4,14 @@ export const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_
 
 // Check plans here: backend/src/app/subscription/views/subscription.py
 export const PLAN_PROPS = {
-  'pro-lifetime': {
-    icon: 'mdi-star-outline',
-    color: 'accent',
-    class: 'pro-badge',
-  },
   'plus-lifetime': {
     icon: 'mdi-lightning-bolt-outline',
-    color: 'primary',
+    color: 'plan1',
     class: 'plus-badge',
+  },
+  'pro-lifetime': {
+    icon: 'mdi-star-outline',
+    color: 'plan2',
+    class: 'pro-badge',
   },
 }

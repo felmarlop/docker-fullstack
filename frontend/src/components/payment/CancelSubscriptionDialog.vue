@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :model-value="modelValue" max-width="600">
+  <v-dialog :model-value="modelValue" max-width="600" @update:model-value="emit('update:modelValue', $event)">
     <v-card variant="outlined" class="danger-card bg-surface">
       <v-card-item class="pa-6 border-b">
         <template #prepend>
@@ -11,8 +11,8 @@
       </v-card-item>
       <v-card-text class="pa-6 text-body-2 text-medium-emphasis">
         <span>
-          Are you sure you want to cancel your <strong>{{ currentPlan.name.toUpperCase() }}</strong> plan? Your account
-          will immediately revert to the Free Tier, and you will lose access to tier limits.
+          Are you sure you want to cancel your <strong>{{ plan.name.toUpperCase() }}</strong> plan? Your account will
+          immediately revert to the <strong>Free Tier</strong>, and you will lose access to tier limits.
         </span>
         <v-form ref="formRef" class="mt-5" @submit.prevent="handleCancelSubscription()">
           <label class="font-weight-bold text-uppercase text-medium-emphasis mb-1 d-block">
@@ -34,7 +34,7 @@
               size="large"
               class="px-6 font-weight-bold"
               :disabled="subscription.cancelling"
-              @click="closeCancelDialog()"
+              @click="closeDialog()"
             >
               {{ isPending ? 'Close' : 'Keep Plan' }}
             </v-btn>
@@ -71,6 +71,14 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  plan: {
+    type: Object,
+    required: true,
+  },
+  isPending: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const formRef = ref(null)
@@ -85,10 +93,10 @@ async function handleCancelSubscription() {
   await subscription.cancelCurrentSubscription({ confirmation: form.confirmation })
   await subscription.listSubscriptions()
   await auth.getMe()
-  closeCancelDialog()
+  closeDialog()
 }
 
-function closeCancelDialog() {
+function closeDialog() {
   emit('update:modelValue', false)
   form.confirmation = ''
 }

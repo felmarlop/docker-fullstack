@@ -12,4 +12,7 @@ export default {
 
   accent: '#14B8A6',
   terminal: '#4EC9B0',
+
+  plan1: '#0284C7',
+  plan2: '#059669',
 }

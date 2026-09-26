@@ -40,11 +40,12 @@
           :key="p.id"
           :plan="p"
           :loading-tier="loadingTier"
-          @upgrade="handleUpgrade($event)"
+          @upgrade="openConfirmDialog($event)"
         />
       </div>
 
-      <CancelSubscriptionDialog v-model="cancelDialog" />
+      <ConfirmSubscriptionDialog v-model="confirmDialog" :plan="selectedPlan" @upgrade="handleUpgrade($event)" />
+      <CancelSubscriptionDialog v-model="cancelDialog" :plan="currentPlan" :is-pending="isPending" />
 
       <PaymentDialog
         v-model="paymentDialog"
@@ -59,6 +60,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import CancelSubscriptionDialog from '@/components/payment/CancelSubscriptionDialog.vue'
+import ConfirmSubscriptionDialog from '@/components/payment/ConfirmSubscriptionDialog.vue'
 import PaymentDialog from '@/components/payment/PaymentDialog.vue'
 import PlanCard from '@/components/payment/PlanCard.vue'
 import SubscriptionCard from '@/components/payment/SubscriptionCard.vue'
@@ -78,6 +80,7 @@ const loadingTier = ref(null)
 const selectedPlan = ref(null)
 const clientSecret = ref(null)
 const paymentDialog = ref(false)
+const confirmDialog = ref(false)
 const cancelDialog = ref(false)
 
 let synchronizing = false
@@ -128,16 +131,15 @@ const plansToShow = computed(() => {
   return toShow.reverse()
 })
 
-async function handleUpgrade(tier) {
-  const plan = subscription.plans.find((p) => p.id == tier)
+async function handleUpgrade(plan) {
+  confirmDialog.value = false
   if (!plan) {
     ui.showError('Plan not available. Please try again later.')
     return
   }
 
   try {
-    loadingTier.value = tier
-    selectedPlan.value = plan
+    loadingTier.value = plan.id
     const { data } = await subscriptionApi.create({ plan: plan.id })
     clientSecret.value = data?.client_secret || null
     paymentDialog.value = true
@@ -193,6 +195,16 @@ async function cancelPendingSubscription() {
 async function handleSuccess() {
   await auth.getMe()
   ui.showSuccess(`Congratulations! You now have ${currentPlan.value.name} access.`)
+}
+
+function openConfirmDialog(tier) {
+  const plan = subscription.plans.find((p) => p.id == tier)
+  if (!plan) {
+    ui.showError('Plan not available. Please try again later.')
+    return
+  }
+  selectedPlan.value = plan
+  confirmDialog.value = true
 }
 
 function openCancelDialog() {

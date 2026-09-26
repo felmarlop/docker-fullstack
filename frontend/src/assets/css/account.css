@@ -2,7 +2,6 @@
 .v-overlay__content {
   max-width: 640px;
 
-  /* Universal Form Label Styling */
   label {
     display: block;
     font-weight: 700 !important;
@@ -10,7 +9,6 @@
     letter-spacing: 0.05em !important;
   }
 
-  /* Shared Card Shell Setup */
   .account-card,
   .danger-card {
     border-radius: 12px;
@@ -19,7 +17,6 @@
       box-shadow 0.2s ease;
   }
 
-  /* Standard Card Border Accent */
   .account-card {
     border-color: rgba(var(--v-theme-primary), 0.3) !important;
 
@@ -28,7 +25,6 @@
     }
   }
 
-  /* Danger Card Border Accent */
   .danger-card {
     border-color: rgba(var(--v-theme-error), 0.3) !important;
 
@@ -41,51 +37,40 @@
     background: rgba(var(--v-theme-on-surface), 0.03) !important;
   }
 
-  .pro-lifetime-bg {
-    background: rgba(var(--v-theme-accent), 0.1) !important;
-  }
-
   .plus-lifetime-bg {
-    background: rgba(var(--v-theme-primary), 0.1) !important;
+    background: rgba(var(--v-theme-plan1), 0.5) !important;
   }
 
-  /* Plus Tier */
-  .pro-lifetime-gradient-bg {
-    background: linear-gradient(
-      135deg,
-      rgba(var(--v-theme-accent), 0.3) 0%,
-      rgba(var(--v-theme-accent), 0.02) 100%
-    ) !important;
-  }
-
-  .pro-badge {
-    background: linear-gradient(
-      135deg,
-      rgb(var(--v-theme-accent)) 0%,
-      rgba(var(--v-theme-accent), 0.85) 100%
-    ) !important;
-    color: white !important;
-  }
-
-  /* Pro Tier */
   .plus-lifetime-gradient-bg {
     background: linear-gradient(
       135deg,
-      rgba(var(--v-theme-primary), 0.3) 0%,
-      rgba(var(--v-theme-primary), 0.02) 100%
+      rgba(var(--v-theme-plan1), 0.5) 0%,
+      rgba(var(--v-theme-plan1), 0.02) 100%
     ) !important;
   }
 
   .plus-badge {
-    background: linear-gradient(
-      135deg,
-      rgb(var(--v-theme-primary)) 0%,
-      rgba(var(--v-theme-primary), 0.85) 100%
-    ) !important;
+    background: linear-gradient(135deg, rgb(var(--v-theme-plan1)) 0%, rgba(var(--v-theme-plan1), 0.85) 100%) !important;
     color: white !important;
   }
 
-  /* Pending subscription */
+  .pro-lifetime-bg {
+    background: rgba(var(--v-theme-plan2), 0.5) !important;
+  }
+
+  .pro-lifetime-gradient-bg {
+    background: linear-gradient(
+      135deg,
+      rgba(var(--v-theme-plan2), 0.5) 0%,
+      rgba(var(--v-theme-plan2), 0.02) 100%
+    ) !important;
+  }
+
+  .pro-badge {
+    background: linear-gradient(135deg, rgb(var(--v-theme-plan2)) 0%, rgba(var(--v-theme-plan2), 0.85) 100%) !important;
+    color: white !important;
+  }
+
   .pending-gradient-bg {
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.02) 100%) !important;
   }

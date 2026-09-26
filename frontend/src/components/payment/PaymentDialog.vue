@@ -14,7 +14,7 @@
           </v-avatar>
         </template>
         <v-card-title class="font-weight-bold"> Complete payment </v-card-title>
-        <v-card-subtitle v-if="plan && plan.id !== 'free'" class="text-medium-emphasis">{{
+        <v-card-subtitle v-if="plan && plan.id !== 'free'" class="font-weight-bold text-high-emphasis">{{
           plan.title
         }}</v-card-subtitle>
       </v-card-item>
@@ -30,6 +30,10 @@
           <div class="mt-4">Please wait while we confirm your payment.</div>
         </div>
         <v-form v-else ref="formRef" class="mt-5" @submit.prevent="submitPayment()">
+          <div class="d-flex align-center justify-center text-caption text-medium-emphasis my-8">
+            <v-icon icon="mdi-shield-check-outline" size="18" class="mr-2" color="primary" />
+            Encrypted & secure checkout
+          </div>
           <div class="d-flex justify-end ga-3">
             <v-btn
               variant="text"
@@ -45,7 +49,7 @@
             <v-btn
               v-if="plan && plan.id !== 'free'"
               type="submit"
-              color="primary"
+              :color="planColor"
               elevation="0"
               size="large"
               :disabled="subscription.cancelling"
@@ -54,7 +58,7 @@
               class="px-6 font-weight-bold"
             >
               <span class="me-1">Pay</span>
-              <b v-if="plan">{{ `${plan.amount} ${plan.currency}` }}</b>
+              <strong v-if="plan">{{ `${plan.amount} ${plan.currency}` }}</strong>
             </v-btn>
           </div>
         </v-form>
@@ -64,9 +68,9 @@
 </template>
 
 <script setup>
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
-import { stripePromise } from '@/config/stripe'
+import { PLAN_PROPS, stripePromise } from '@/config/stripe'
 import { useUiStore } from '@/stores/ui'
 import { useSubscriptionStore } from '@/stores/subscription'
 
@@ -125,6 +129,10 @@ function isCanceled() {
   return s?.status == 'canceled'
 }
 
+const planColor = computed(() => {
+  return PLAN_PROPS[props.plan.id]?.color || 'primary'
+})
+
 async function mountPaymentElement() {
   if (!props.clientSecret) {
     ui.showError(ERROR_START_MESSAGE)
@@ -138,18 +146,42 @@ async function mountPaymentElement() {
   elements = stripe.elements({
     clientSecret: props.clientSecret,
     appearance: {
-      theme: 'stripe',
+      theme: 'night',
       variables: {
-        colorPrimary: '#4F46E5',
-        colorBackground: '#FFFFFF',
-        colorText: '#1E293B',
+        colorPrimary: '#F97316',
+        colorBackground: '#111827',
+        colorText: '#FFFFFF',
       },
     },
   })
-  paymentElement = elements.create('payment')
+
+  paymentElement = elements.create('payment', {
+    layout: 'tabs',
+    wallets: {
+      applePay: 'never',
+      googlePay: 'never',
+      link: 'never',
+    },
+    fields: {
+      billingDetails: {
+        name: 'auto',
+        email: 'auto',
+        phone: 'auto',
+        address: {
+          country: 'auto',
+          line1: 'auto',
+          line2: 'auto',
+          city: 'auto',
+          state: 'auto',
+        },
+      },
+    },
+  })
+
   paymentElement.on('ready', () => {
     paymentElementReady.value = true
   })
+
   paymentElement.mount(paymentElementRef.value)
 }
 
