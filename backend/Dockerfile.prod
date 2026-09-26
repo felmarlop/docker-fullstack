@@ -27,9 +27,6 @@ RUN chmod +x /app/entrypoint.sh
 # Application source
 WORKDIR /app/src
 
-# Collect static files during image build
-RUN python manage.py collectstatic --noinput
-
 # Production WSGI server
 ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["gunicorn", "app.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]

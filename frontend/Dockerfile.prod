@@ -1,0 +1,34 @@
+# Node 24 Alpine as the base image (Stage 1)
+FROM node:24-alpine as builder
+
+# Set the working directory
+WORKDIR /app
+
+# Enable pnpm via Corepack
+RUN corepack enable
+
+# Use the non-root node user and give it ownership of /app
+RUN chown node:node /app
+USER node
+
+# Copy dependency files with node ownership and install dependencies
+COPY --chown=node:node package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# Copy the application source with node ownership
+COPY --chown=node:node . .
+
+# Declare needed args
+ARG VITE_APP_NAME
+ARG VITE_API_URL
+ARG VITE_GITHUB_CLIENT_ID
+ARG VITE_GOOGLE_CLIENT_ID
+ARG VITE_STRIPE_PUBLISHABLE_KEY
+
+# Build Vue/Vite application into /app/dist
+RUN pnpm build
+
+# Copy the compiled frontend into Nginx root
+FROM nginx:stable-alpine3.24
+
+COPY --from=builder /app/dist /usr/share/nginx/html

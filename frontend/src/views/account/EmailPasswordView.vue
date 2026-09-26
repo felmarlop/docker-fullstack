@@ -8,14 +8,15 @@
       <v-card variant="outlined" class="account-card mb-8">
         <v-card-item class="pa-6 border-b">
           <v-row class="align-start justify-space-between">
-            <v-col cols="9">
+            <v-col cols="8" md="9">
               <v-card-title class="font-weight-bold"> Direct Email </v-card-title>
               <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Primary email used for account authentication.
               </v-card-subtitle>
             </v-col>
             <v-col
-              cols="3"
+              cols="4"
+              md="3"
               class="mt-2 justify-center justify-sm-end mt-2"
               :class="emailState.editing ? 'd-none' : 'd-flex'"
             >
@@ -174,7 +175,7 @@
       <v-card variant="outlined" class="account-card">
         <v-card-item class="pa-6 border-b">
           <v-row class="align-start justify-space-between">
-            <v-col cols="9">
+            <v-col cols="9" md="8">
               <v-card-title class="font-weight-bold"> Password </v-card-title>
               <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Set a secure password to protect your account.
@@ -182,6 +183,7 @@
             </v-col>
             <v-col
               cols="3"
+              md="4"
               class="justify-center justify-sm-end mt-2"
               :class="passwordState.editing ? 'd-none' : 'd-flex'"
             >

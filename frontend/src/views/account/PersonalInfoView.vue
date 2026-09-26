@@ -24,13 +24,13 @@
       <v-card variant="outlined" class="rounded-xl account-card">
         <v-card-item class="pa-6 border-b">
           <v-row class="align-start justify-space-between">
-            <v-col cols="9">
+            <v-col cols="8" md="9">
               <v-card-title class="font-weight-bold"> Personal Information </v-card-title>
               <v-card-subtitle class="text-body-2 text-medium-emphasis">
                 Manage your public profile details.
               </v-card-subtitle>
             </v-col>
-            <v-col cols="3" class="justify-center justify-sm-end mt-2" :class="editing ? 'd-none' : 'd-flex'">
+            <v-col cols="4" md="3" class="justify-center justify-sm-end mt-2" :class="editing ? 'd-none' : 'd-flex'">
               <v-btn variant="outlined" size="small" @click="startEditing">
                 <v-icon icon="mdi-pencil-outline" size="18" />
                 <span v-if="!smAndDown" class="ms-2">Edit</span>

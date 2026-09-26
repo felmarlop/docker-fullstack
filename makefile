@@ -5,12 +5,12 @@
 # -----------------------------------------------------------------------------
 
 ENV_FILE = .env
+ENV_FILE_PROD = .env.production.local
 
 include $(ENV_FILE)
-export
 
-COMPOSE = docker compose -f compose.dev.yml
-COMPOSE_PROD = docker compose -f compose.prod.yml
+COMPOSE = docker compose --env-file $(ENV_FILE) -f compose.dev.yml
+COMPOSE_PROD = docker compose --env-file $(ENV_FILE_PROD) -f compose.prod.yml
 BACKEND = $(COMPOSE) exec backend
 BACKEND_PROD = $(COMPOSE_PROD) exec backend
 FRONTEND = $(COMPOSE) exec frontend
@@ -51,10 +51,12 @@ BACKEND_CI = $(COMPOSE) run --rm backend
 	backend-ci-test \
 	backend-ci-type-check \
 	build-prod \
+	rebuild-prod \
 	start-prod \
 	stop-prod \
 	restart-prod \
 	backend-shell-prod \
+	create-superuser-prod \
 	logs-prod
 
 help:
@@ -101,9 +103,9 @@ show-dev-urls:
 	@echo ""
 	@echo "Available services:"
 	@echo ""
-	@echo "  ✔ Application	http://localhost:$(NGINX_PORT)"
-	@echo "  ✔ API		http://localhost:$(NGINX_PORT)/api/"
-	@echo "  ✔ Admin	http://localhost:$(NGINX_PORT)/admin/"
+	@echo "  ✔ Application	http://localhost:$(NGINX_HOST_PORT)"
+	@echo "  ✔ API		http://localhost:$(NGINX_HOST_PORT)/api/"
+	@echo "  ✔ Admin	http://localhost:$(NGINX_HOST_PORT)/admin/"
 	@echo ""
 
 # -----------------------------------------------------------------------------
@@ -218,6 +220,10 @@ backend-ci-test:
 build-prod:
 	$(COMPOSE_PROD) up -d --build
 
+rebuild-prod:
+	$(COMPOSE_PROD) build --no-cache
+	$(COMPOSE_PROD) up -d
+
 start-prod:
 	$(COMPOSE_PROD) up -d
 
@@ -231,3 +237,6 @@ backend-shell-prod:
 
 logs-prod:
 	$(COMPOSE_PROD) logs -f
+
+create-superuser-prod:
+	$(BACKEND_PROD) python manage.py createsuperuser

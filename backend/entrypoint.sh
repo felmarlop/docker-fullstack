@@ -8,17 +8,17 @@ if [ -z "$ENVIRONMENT" ]; then
     exit 1
 fi
 
-if [ "$ENVIRONMENT" = "dev" ] || [ "$ENVIRONMENT" = "prod" ]; then
-    echo "Running database migrations..."
-    python manage.py migrate --noinput
+if [ "$SKIP_INITIALIZATION" != "true" ]; then
+    if [ "$ENVIRONMENT" = "dev" ] || [ "$ENVIRONMENT" = "prod" ]; then
+        echo "Running database migrations..."
+        python manage.py migrate --noinput
 
-    echo "Setting up periodic tasks..."
-    python manage.py setup_periodic_tasks
-fi
+        echo "Setting up periodic tasks..."
+        python manage.py setup_periodic_tasks
 
-if [ "$ENVIRONMENT" = "dev" ]; then
-    echo "Collecting static files..."
-    python manage.py collectstatic --noinput
+        echo "Collecting static files..."
+        python manage.py collectstatic --noinput
+    fi
 fi
 
 echo "Starting server..."
