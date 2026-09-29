@@ -42,6 +42,7 @@ GITHUB_SECRET_KEY = env("GITHUB_SECRET_KEY")
 
 # Google
 GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
+GEMINI_API_KEY = env("GEMINI_API_KEY")
 
 # Stripe
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
@@ -74,6 +75,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     # Local
+    "app.agentia",
     "app.authentication",
     "app.core",
     "app.subscription",

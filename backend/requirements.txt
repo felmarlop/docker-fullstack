@@ -10,6 +10,7 @@ django-phonenumber-field[phonenumbers]==8.5.0
 django-stubs==6.0.7
 drf-spectacular==0.30.0
 google-auth[requests]==2.56.3
+google-genai==2.25.0
 gunicorn==26.0.0
 Pillow==12.3.0
 psycopg[binary]==3.3.4
