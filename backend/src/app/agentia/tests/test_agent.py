@@ -29,7 +29,7 @@ def test_prompt_unauthorized(public_api_client: APIClient) -> None:
     response = public_api_client.post(
         reverse("ai-agent"),
         {
-            "plan": "hello!",
+            "prompt": "hello!",
         },
         format="json",
     )

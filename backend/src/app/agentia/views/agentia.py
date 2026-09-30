@@ -7,7 +7,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from app.agentia.serializers import AgentIaAnswerSerializer, AgentIaRequestSerializer
+from app.agentia.serializers import (
+    AgentIaAnswerSerializer,
+    AgentIaRequestSerializer,
+)
 
 
 @extend_schema(
@@ -36,8 +39,11 @@ class AgentIaView(APIView):
         )
         serializer.is_valid(raise_exception=True)
 
-        answer, prompt = serializer.generate()  # type: ignore
+        answer_msg, prompt_msg = serializer.generate()  # type: ignore
         response_serializer = AgentIaAnswerSerializer(
-            {"prompt": prompt, "answer": answer}
+            {
+                "prompt": prompt_msg,
+                "answer": answer_msg,
+            }
         )
         return Response(response_serializer.data, status=status.HTTP_200_OK)
