@@ -6,4 +6,4 @@ from app.agentia.models import Message
 class MessageFilter(django_filters.FilterSet):
     class Meta:
         model = Message
-        fields = ["role"]  # noqa
+        fields = ["conversation", "role"]  # noqa

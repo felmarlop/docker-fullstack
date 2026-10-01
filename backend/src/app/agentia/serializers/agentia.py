@@ -9,6 +9,8 @@ from app.agentia.serializers import conversation
 
 logger = logging.getLogger(__name__)
 
+PROMPT_SPLITS = 20
+
 
 class AgentIaRequestSerializer(serializers.Serializer):
     prompt = serializers.CharField()
@@ -26,11 +28,14 @@ class AgentIaRequestSerializer(serializers.Serializer):
         )
 
     def generate(self) -> tuple[Message, Message]:
-        user = self.context["request"].user
+
         prompt = str(self.validated_data["prompt"])  # type: ignore
         prompt_msg = self._create_message(prompt, MessageRole.USER)
 
-        logger.info("%s sent a prompt to AgentIA", user.username)
+        username = self.context["request"].user.username
+        logger.info(
+            f"{username} sent a prompt to AgentIA: {prompt[:PROMPT_SPLITS]}...",
+        )
         answer = GeminiApi.generate(prompt)
         answer_msg = self._create_message(answer, MessageRole.ASSISTANT)
 

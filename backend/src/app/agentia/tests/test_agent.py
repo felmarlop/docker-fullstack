@@ -20,8 +20,8 @@ def test_prompt_success(authenticated_api_client: APIClient) -> None:
     assert "prompt" in response.data
     assert "answer" in response.data
 
-    assert response.data["prompt"] == prompt
-    assert response.data["answer"] == "Hello from Gemini!"
+    assert response.data["prompt"]["content"] == prompt
+    assert response.data["answer"]["content"] == "Hello from Gemini!"
 
 
 @pytest.mark.django_db

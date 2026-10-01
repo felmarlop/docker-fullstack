@@ -8,8 +8,8 @@ class MinimumConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
         fields = (
+            "id",
             "name",
-            "updated_at",
         )
 
 
@@ -17,8 +17,8 @@ class ConversationSerializer(MinimumConversationSerializer):
     class Meta(MinimumConversationSerializer.Meta):
         fields = (
             *MinimumConversationSerializer.Meta.fields,
-            "id",
             "user",
+            "updated_at",
             "created_at",
         )
 

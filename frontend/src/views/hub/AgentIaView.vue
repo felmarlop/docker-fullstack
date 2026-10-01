@@ -2,7 +2,7 @@
   <v-container class="py-10 py-md-14" fluid>
     <div class="mx-auto hub-content">
       <div class="text-md-headline-large text-headline-small font-weight-bold tracking-tight text-high-emphasis mb-8">
-        Lia Agent
+        LIA Agent
       </div>
 
       <v-card variant="outlined" class="hub-card d-flex flex-column">
@@ -15,7 +15,7 @@
             color="error"
             size="small"
             class="mx-0"
-            :disabled="messages.length < 2"
+            :disabled="!conversation || listingMessages"
             @click="confirmDeleteDialog = true"
           >
             <v-icon icon="mdi-trash-can-outline font-weight-bold" size="18" />
@@ -30,7 +30,7 @@
 
           <div v-else-if="!messages.length" class="text-center text-muted ma-auto">
             <v-icon size="48" class="mb-2">mdi-robot-outline</v-icon>
-            <p class="typewritten-reveal">Hello! I'm <b>Lia</b>, ask anything about your system!</p>
+            <p class="typewritten-reveal">Hello! I'm <b>LIA</b>, ask anything about your system!</p>
           </div>
 
           <div
@@ -45,7 +45,7 @@
               :class="msg.role === 'user' ? 'bg-primary text-white' : 'bg-grey-darken-3 text-high-emphasis'"
             >
               <div class="text-caption font-weight-bold mb-1 opacity-70">
-                {{ msg.role === 'user' ? 'You' : 'Lia' }}
+                {{ msg.role === 'user' ? 'You' : 'LIA' }}
               </div>
               <div class="text-body-medium whitespace-pre-wrap">{{ msg.content }}</div>
             </div>
@@ -139,9 +139,11 @@ import { useUiStore } from '@/stores/ui'
 
 const ui = useUiStore()
 
-const PAGE_SIZE = 6
+const MSG_SIZE = 6
+const CONVERSATION_SIZE = 1
 const AGENT_ERROR_MSG = 'An error occurred connecting to Lia. Please try again later.'
 
+const conversation = ref(null)
 const messages = ref([])
 const prompt = ref('')
 const loading = ref(false)
@@ -153,9 +155,15 @@ const listingMessages = ref(true)
 async function listMessages() {
   try {
     loading.value = true
-    const { data } = await aiApi.listMessages({ page_size: PAGE_SIZE })
-    messages.value = data.results
-    messages.value.reverse()
+    const { data: conv } = await aiApi.listConversations({ page_size: CONVERSATION_SIZE })
+
+    if (conv.results.length) {
+      conversation.value = conv.results[0].id
+
+      const { data: msg } = await aiApi.listMessages({ page_size: MSG_SIZE, conversation: conversation.value })
+      messages.value = msg.results
+      messages.value.reverse()
+    }
   } catch {
     ui.showError(AGENT_ERROR_MSG)
   } finally {
@@ -174,8 +182,10 @@ async function runAgent(msg) {
 
     addMessage(formatUserPrompt(msg))
 
-    const { data } = await aiApi.runAgent(msg)
+    const { data } = await aiApi.runAgent(msg.trim())
     if (data.prompt && data.answer) {
+      conversation.value = data.prompt.conversation
+
       messages.value.pop()
       addMessage(data.prompt)
       addMessage(data.answer)
@@ -184,17 +194,18 @@ async function runAgent(msg) {
   } catch {
     ui.showError(AGENT_ERROR_MSG)
   } finally {
+    if (!run) await listMessages()
     loading.value = false
-    if (!run) listMessages()
   }
 }
 
 async function clearConversation() {
-  if (!messages.value.length) return false
+  if (!conversation.value) return false
 
   try {
     deleting.value = true
-    await aiApi.deleteConversation(messages.value[0].conversation)
+    await aiApi.deleteConversation(conversation.value)
+    conversation.value = null
     messages.value = []
     confirmDeleteDialog.value = false
   } catch {
@@ -206,7 +217,7 @@ async function clearConversation() {
 
 const addMessage = (msg) => {
   messages.value.push(msg)
-  messages.value = messages.value.slice(-PAGE_SIZE)
+  messages.value = messages.value.slice(-MSG_SIZE)
 }
 
 const formatUserPrompt = (msg) => {

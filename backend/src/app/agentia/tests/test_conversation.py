@@ -35,7 +35,7 @@ def test_conversation_and_messages(
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["answer"] == "Great job!"
+    assert response.data["answer"]["content"] == "Great job!"
 
     conversations = Conversation.objects.filter(user=user)
     assert conversations.exists()
