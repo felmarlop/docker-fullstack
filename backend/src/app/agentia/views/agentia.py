@@ -39,7 +39,7 @@ class AgentIaView(APIView):
         )
         serializer.is_valid(raise_exception=True)
 
-        answer_msg, prompt_msg = serializer.generate()  # type: ignore
+        answer_msg, prompt_msg = serializer.send_message()  # type: ignore
         response_serializer = AgentIaAnswerSerializer(
             {
                 "prompt": prompt_msg,

@@ -27,16 +27,17 @@ class AgentIaRequestSerializer(serializers.Serializer):
             content=content, conversation=conversation, role=role
         )
 
-    def generate(self) -> tuple[Message, Message]:
+    def send_message(self) -> tuple[Message, Message]:
 
         prompt = str(self.validated_data["prompt"])  # type: ignore
         prompt_msg = self._create_message(prompt, MessageRole.USER)
 
         username = self.context["request"].user.username
         logger.info(
-            f"{username} sent a prompt to AgentIA: {prompt[:PROMPT_SPLITS]}...",
+            f"{username} sent a prompt to AgentIA: {prompt[:PROMPT_SPLITS]} ...",
         )
-        answer = GeminiApi.generate(prompt)
+
+        answer = GeminiApi.send_message(prompt)
         answer_msg = self._create_message(answer, MessageRole.ASSISTANT)
 
         return answer_msg, prompt_msg

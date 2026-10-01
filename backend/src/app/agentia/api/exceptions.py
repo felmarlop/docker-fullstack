@@ -1,19 +1,19 @@
 from rest_framework.exceptions import APIException
 
 
-class GeminiGeneralError(APIException):
+class AgentGeneralError(APIException):
     status_code = 502
-    default_detail = "An error occurred while communicating with Gemini."
-    default_code = "gemini_general_error"
+    default_detail = "An error occurred while communicating with the AI agent."
+    default_code = "agent_general_error"
 
 
-class GeminiClientError(APIException):
+class AgentClientError(APIException):
     status_code = 502
-    default_detail = "Gemini rejected the request."
-    default_code = "gemini_client_error"
+    default_detail = "The AI agent rejected the request."
+    default_code = "agent_client_error"
 
 
-class GeminiServerError(APIException):
+class AgentServerError(APIException):
     status_code = 503
-    default_detail = "Gemini service is temporarily unavailable."
-    default_code = "gemini_server_error"
+    default_detail = "The AI agent is temporarily unavailable."
+    default_code = "agent_server_error"
