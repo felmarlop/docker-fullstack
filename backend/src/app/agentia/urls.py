@@ -24,4 +24,9 @@ urlpatterns = [
         conversation.MessageListView.as_view(),
         name="message-list",
     ),
+    path(
+        "conversations/<int:pk>/delete/",
+        conversation.DeleteConversationView.as_view(),
+        name="delete-conversation",
+    ),
 ]

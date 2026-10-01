@@ -112,6 +112,10 @@ const uiStore = useUiStore()
   min-height: 40px !important;
   padding-inline-start: 12px !important;
   padding-inline-end: 12px !important;
+
+  .v-list-item-title {
+    min-width: 180px;
+  }
 }
 
 :deep(.v-navigation-drawer--rail .v-list-item) {

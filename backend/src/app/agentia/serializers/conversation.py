@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from app.agentia.models import Conversation, Message
@@ -28,7 +29,7 @@ class MinimumMessageSerializer(serializers.ModelSerializer):
         fields = (
             "role",
             "content",
-            "updated_at",
+            "conversation",
         )
 
 
@@ -37,6 +38,13 @@ class MessageSerializer(MinimumMessageSerializer):
         fields = (
             *MinimumMessageSerializer.Meta.fields,
             "id",
-            "conversation",
+            "updated_at",
             "created_at",
         )
+
+
+class DeleteConversationSerializer(serializers.Serializer):
+    def delete(self, conversation_id: int) -> None:
+        user = self.context["request"].user
+        conversation = get_object_or_404(Conversation, id=conversation_id, user=user)
+        conversation.delete()

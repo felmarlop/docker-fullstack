@@ -19,3 +19,7 @@ export function listMessages(params = {}) {
 export function getMessage(messageId) {
   return api.get(`conversation/messages/${messageId}/`)
 }
+
+export function deleteConversation(conversationId) {
+  return api.delete(`conversations/${conversationId}/delete/`)
+}

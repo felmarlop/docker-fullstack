@@ -1,12 +1,7 @@
 export default [
   {
     title: 'Lia Agent',
-    icon: 'mdi-robot',
+    icon: 'mdi-robot-outline',
     to: { name: 'hub-agent' },
-  },
-  {
-    title: 'Account',
-    icon: 'mdi-account-outline',
-    to: { name: 'account' },
   },
 ]

@@ -1,19 +1,28 @@
+import logging
+
 from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
+from rest_framework import status
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from app.agentia.models import Conversation, Message
 from app.agentia.serializers.conversation import (
     ConversationSerializer,
+    DeleteConversationSerializer,
     MessageSerializer,
     MinimumConversationSerializer,
     MinimumMessageSerializer,
 )
 from app.agentia.views.filters import MessageFilter
 from app.core.pagination import DefaultPagination
+
+logger = logging.getLogger(__name__)
 
 
 @extend_schema(
@@ -81,3 +90,26 @@ class MessageListView(ListAPIView):
         return Message.objects.filter(conversation__user=self.request.user).order_by(
             "-created_at"
         )
+
+
+@extend_schema(
+    summary="Delete conversation",
+    description="Delete conversation with the AI agent.",
+    request=DeleteConversationSerializer,
+    tags=["AgentIA"],
+)
+class DeleteConversationView(APIView):
+    serializer_class = DeleteConversationSerializer
+    permission_classes = [IsAuthenticated]  # noqa
+
+    def delete(self, request: Request, pk: int) -> Response:
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+
+        serializer.delete(conversation_id=pk)  # type: ignore
+
+        username = request.user.username
+        logger.info(f"{username} deleted their conversation {pk} with the AI agent.")  # type: ignore
+        return Response(status=status.HTTP_204_NO_CONTENT)
