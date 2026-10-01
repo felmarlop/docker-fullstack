@@ -175,8 +175,3 @@ watch(
 )
 </script>
 
-<style scoped>
-.account-content {
-  max-width: 640px;
-}
-</style>

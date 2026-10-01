@@ -1,5 +1,10 @@
 export default [
   {
+    title: 'Back to Hub',
+    icon: 'mdi-view-dashboard',
+    to: { name: 'hub' },
+  },
+  {
     title: 'Personal information',
     icon: 'mdi-account-outline',
     to: { name: 'account-profile' },

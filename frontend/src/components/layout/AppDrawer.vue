@@ -41,6 +41,7 @@
           :disabled="!uiStore.drawerRail"
         >
           <template #activator="{ props }">
+            <v-divider v-if="item.to.name == 'account'" class="my-2" />
             <v-list-item
               v-bind="props"
               :to="item.to"
@@ -59,6 +60,7 @@
                 </span>
               </template>
             </v-list-item>
+            <v-divider v-if="item.to.name == 'hub'" class="my-2" />
           </template>
         </v-tooltip>
       </v-list>

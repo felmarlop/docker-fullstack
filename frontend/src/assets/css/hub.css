@@ -1,0 +1,13 @@
+.hub-content,
+.v-overlay__content {
+  max-width: 90%;
+
+  .hub-card {
+    min-height: 500px;
+    border-color: rgba(var(--v-theme-primary), 0.3) !important;
+
+    &:hover {
+      border-color: rgba(var(--v-theme-primary), 0.6) !important;
+    }
+  }
+}

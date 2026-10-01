@@ -3,13 +3,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 import accountRoutes from './modules/account'
+import hubRoutes from './modules/hub'
 import baseRoutes from './modules/base'
 import authRoutes from './modules/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 
-  routes: [...baseRoutes, ...authRoutes, ...accountRoutes],
+  routes: [...baseRoutes, ...authRoutes, ...accountRoutes, ...hubRoutes],
 
   scrollBehavior() {
     return { top: 0 }
@@ -24,7 +25,7 @@ router.beforeEach((to) => {
   }
 
   if (to.meta.guestOnly && auth.isAuthenticated) {
-    return { name: 'account-profile' }
+    return { name: 'hub' }
   }
 })
 

@@ -21,9 +21,7 @@
           <BrandLogo :size="20" />
         </v-avatar>
 
-        <span class="font-weight-bold text-title-medium text-md-title-large text-no-wrap">
-          Docker Fullstack Boilerplate
-        </span>
+        <span class="font-weight-bold text-heading-large text-no-wrap"> Docker Fullstack Boilerplate </span>
       </RouterLink>
     </v-app-bar-title>
 
