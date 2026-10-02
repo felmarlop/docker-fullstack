@@ -2,7 +2,7 @@
   <v-container class="py-10 py-md-14" fluid>
     <div class="mx-auto hub-content">
       <div class="text-md-headline-large text-headline-small font-weight-bold tracking-tight text-high-emphasis mb-8">
-        LIA Agent
+        Agent
       </div>
 
       <v-card variant="outlined" class="hub-card d-flex flex-column">
@@ -61,7 +61,7 @@
         <v-card-actions class="pa-4 bg-surface">
           <v-textarea
             v-model="prompt"
-            placeholder="Ask Lia"
+            placeholder="Ask LIA"
             rows="1"
             max-rows="3"
             auto-grow

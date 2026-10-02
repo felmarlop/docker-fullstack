@@ -1,6 +1,6 @@
 export default [
   {
-    title: 'LIA Agent',
+    title: 'Agent',
     icon: 'mdi-robot-outline',
     to: { name: 'hub-agent' },
   },

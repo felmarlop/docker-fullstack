@@ -1,3 +1,3 @@
-from .api import GeminiAPI
+from .api import AgentAPI
 
-api = GeminiAPI()
+api = AgentAPI()

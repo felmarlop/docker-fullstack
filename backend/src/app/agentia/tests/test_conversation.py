@@ -54,3 +54,32 @@ def test_conversation_and_messages(
 
     assert user_message_qs.first().content == prompt_1
     assert ai_message_qs.last().content == "Great job!"
+
+
+@pytest.mark.django_db
+def test_delete_conversation(authenticated_api_client: APIClient, user: User) -> None:
+    prompt_1 = "reply only with `Great job!`"
+    response = authenticated_api_client.post(
+        reverse("ai-agent"),
+        {
+            "prompt": prompt_1,
+        },
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "prompt" in response.data
+    assert "answer" in response.data
+    assert response.data["answer"]["content"] == "Great job!"
+
+    conversations = Conversation.objects.filter(user=user)
+    assert conversations.exists()
+    assert conversations.count() == 1
+
+    conversation = conversations.first()
+    response = authenticated_api_client.delete(
+        reverse("delete-conversation", kwargs={"pk": conversation.id})
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert Conversation.objects.filter(user=user).count() == 0

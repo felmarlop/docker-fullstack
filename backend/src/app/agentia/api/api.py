@@ -22,19 +22,23 @@ SYS_INSTRUCTION = (
 )
 
 
-class GeminiAPI:
+class AgentAPI:
     def __init__(self) -> None:
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-        config = types.GenerateContentConfig(
+        self.config = types.GenerateContentConfig(
             system_instruction=SYS_INSTRUCTION,
             temperature=0.3,  # temperature for API routing, function calling, math...
         )
-        self.chat = self.client.chats.create(model=GEMINI_MODEL, config=config)
+        self.chat = self._initialize_chat()
+
         logger.info(f"{settings.AI_AGENT_NAME} has been initialized successfully.")
 
     def __str__(self) -> str:
-        return f"GeminiAPI(model={GEMINI_MODEL})"
+        return f"AgentAPI(model={GEMINI_MODEL})"
+
+    def _initialize_chat(self) -> genai.chats.Chat:
+        return self.client.chats.create(model=GEMINI_MODEL, config=self.config)
 
     def send_message(self, prompt: str) -> str:
         try:
