@@ -9,7 +9,7 @@ Ready-to-use development environment for modern Django and Vue applications.
 
 The goal of this project is to provide a clean, reusable and scalable foundation for future applications, following modern development practices and software architecture principles.
 
-<p align="center">
+<p align="center" style="margin: 40px 0 40px 0;">
   <img
     src="assets/images/home.png"
     width="600"
@@ -279,6 +279,15 @@ The payment flow includes:
 - Webhook-based synchronization of payments and subscriptions.
 - Automatic subscription activation, cancellation and activation emails.
 - Frontend synchronization and automated tests for payment flows.
+
+<p align="center" style="margin: 40px 0 40px 0;">
+  <img
+    src="assets/images/subscriptions.png"
+    width="600"
+    alt="Docker Fullstack Subscriptions"
+    style="border:1px solid #30363d;border-radius:6px;"
+  >
+</p>
 
 ### Configuration
 
