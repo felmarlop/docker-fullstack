@@ -317,6 +317,35 @@ stripe listen \
   --forward-to http://localhost:8088/api/subscriptions/stripe/webhook/
 ```
 
+## 🤖 AI Agent Integration
+
+Intelligent chat assistant powered by `gemini-3.1-flash-lite` via the official `google-genai` SDK.
+
+The agent uses **tool calling (function calling)** to dynamically query, inspect, and answer questions directly from the application database.
+
+It includes:
+
+- **Tool Calling Architecture:** The agent executes server-side Python methods to safely query database models based on user prompts.
+- **Persistent Conversation Audit:** Every conversation turn (user inputs and agent replies) is saved to the PostgreSQL `Message` table as the single source of truth.
+- **Configurable System Instructions:** Global persona, system prompt rules, and temperature parameters are applied dynamically across chat sessions.
+
+### Configuration
+
+Add your Gemini API key to your `.env` file:
+
+```env
+GEMINI_API_KEY=your-gemini-api-key
+```
+
+<p align="center" style="margin: 40px 0 40px 0;">
+  <img
+    src="assets/images/agent.png"
+    width="600"
+    alt="Docker Fullstack AI agent"
+    style="border:1px solid #30363d;border-radius:6px;"
+  >
+</p>
+
 ## 🚦 Continuous Integration
 
 Every push and pull request automatically runs the backend quality checks using GitHub Actions.
