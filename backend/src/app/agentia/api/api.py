@@ -32,10 +32,12 @@ class AgentAPI:
         )
         self.chat = self._initialize_chat()
 
-        logger.info(f"{settings.AI_AGENT_NAME} has been initialized successfully.")
+        logger.info(
+            f"{settings.AI_AGENT_NAME} initialized successfully. (LLM: {GEMINI_MODEL})"
+        )
 
     def __str__(self) -> str:
-        return f"AgentAPI(model={GEMINI_MODEL})"
+        return f"AgentAPI(LLM={GEMINI_MODEL})"
 
     def _initialize_chat(self) -> genai.chats.Chat:
         return self.client.chats.create(model=GEMINI_MODEL, config=self.config)

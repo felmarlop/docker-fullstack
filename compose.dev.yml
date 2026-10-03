@@ -9,6 +9,10 @@ services:
     env_file:
       - .env
 
+    environment:
+      # Needed to run tests in GitHub Actions, defined in GitHub secrets.
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+
     build:
       # Send the content in /backend to daemon
       context: ./backend
