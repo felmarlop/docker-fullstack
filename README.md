@@ -51,38 +51,7 @@ flowchart LR
     Worker --> Email
 ```
 
-## 🛠️ Tech Stack
-
-### Backend
-
-- Python 3.13
-- Django 5.2
-- Django REST Framework
-- PostgreSQL
-- Redis
-- Celery
-
-### Frontend
-
-- Vue 3
-
-### Infrastructure
-
-- Docker
-- Docker Compose
-- Nginx
-- Makefile
-
-### Development Tools
-
-- pyenv
-- VS Code
-- Pylance
-- Ruff
-- Pyright
-- Pytest
-
-## 📂 Project Structure
+## 📂 Project Overall Structure
 
 ```text
 .
@@ -91,7 +60,10 @@ flowchart LR
 ├── nginx/
 ├── compose.dev.yml
 ├── compose.prod.yml
-├── Makefile
+├── .env.ci
+├── .env.example
+├── compose.prod.yml
+├── makefile
 └── README.md
 ```
 
@@ -114,7 +86,41 @@ cd docker-fullstack
 cp .env.example .env
 ```
 
-Review the `.env` file and adjust the configuration to match your local environment if needed.
+Review the `.env` file and adjust the configuration to match your local environment:
+
+```bash
+# Set GitHub client ID for OAuth2 authentication
+# https://github.com/settings/applications/new
+VITE_GITHUB_CLIENT_ID=change-me
+
+# Set Google client ID for OAuth2 authentication
+# https://console.cloud.google.com/apis/credentials
+VITE_GOOGLE_CLIENT_ID=change-me
+
+# Set Stripe publishable key for payment processing
+# https://dashboard.stripe.com/test/apikeys
+VITE_STRIPE_PUBLISHABLE_KEY=change-me
+
+# Run `make generate-django-secret-key` to generate a new secret key.
+SECRET_KEY=change-me
+
+# Set GitHub secret key for OAuth2 authentication
+# https://github.com/settings/applications/new
+GITHUB_SECRET_KEY=change-me
+
+# Set Stripe secret key for payment processing if needed
+# https://dashboard.stripe.com/test/apikeys
+STRIPE_SECRET_KEY=change-me
+STRIPE_WEBHOOK_SECRET=change-me
+
+# Example subscriptions defined in backend/src/app/subscription/views/subscription.py
+STRIPE_PRO_LIFETIME_PRICE_ID=change-me
+STRIPE_PLUS_LIFETIME_PRICE_ID=change-me
+
+# Set Gemini API key for AI integration
+# https://aistudio.google.com/api-keys
+GEMINI_API_KEY=change-me
+```
 
 Build the development environment and create a Django superuser:
 
@@ -326,8 +332,8 @@ The agent uses **tool calling (function calling)** to dynamically query, inspect
 It includes:
 
 - **Tool Calling Architecture:** The agent executes server-side Python methods to safely query database models based on user prompts.
-- **Persistent Conversation Audit:** Every conversation turn (user inputs and agent replies) is saved to the PostgreSQL `Message` table as the single source of truth.
-- **Configurable System Instructions:** Global persona, system prompt rules, and temperature parameters are applied dynamically across chat sessions.
+- **Persistent Conversation:** Every conversation turn (user inputs and agent replies) is saved to the PostgreSQL `Message` table.
+- **Configurable System Instructions:** Agent name, system prompt rules, and temperature parameters are applied dynamically across chat sessions.
 
 ### Configuration
 
